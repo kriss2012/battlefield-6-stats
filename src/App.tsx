@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import ProtectedRoute from './components/ProtectedRoute';
+import Layout from './components/Layout';
 import Home from './pages/Home';
 import PlayerSearch from './pages/PlayerSearch';
 import ServerBrowser from './pages/ServerBrowser';
@@ -15,24 +16,26 @@ function App() {
   return (
     <BrowserRouter>
       <Navigation />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/player" element={<PlayerSearch />} />
-        <Route path="/servers" element={<ServerBrowser />} />
-        <Route path="/analytics" element={<PlayerAnalytics />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/head-to-head" element={<HeadToHead />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/player" element={<PlayerSearch />} />
+          <Route path="/servers" element={<ServerBrowser />} />
+          <Route path="/analytics" element={<PlayerAnalytics />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/head-to-head" element={<HeadToHead />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 }
