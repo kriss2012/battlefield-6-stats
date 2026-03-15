@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import TacticalMap from '../components/TacticalMap';
 
 export default function Home() {
   const { isAuthenticated, user } = useAuth();
@@ -40,13 +41,26 @@ export default function Home() {
           )}
         </div>
 
-        <div className="text-center mb-24 animate-fade-in relative">
-          <h1 className="text-7xl md:text-8xl font-black mb-6 italic tracking-tighter">
-            BF6 <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">STATS HUB</span>
-          </h1>
-          <p className="text-xl text-gray-500 font-medium max-w-2xl mx-auto">
-            Advanced performance tracking, real-time server telemetry, and global competitive analytics.
-          </p>
+        <div className="flex flex-col lg:flex-row items-center gap-16 mb-32">
+          <div className="flex-1 text-left animate-fade-in relative">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="h-[1px] w-8 bg-blue-500" />
+              <span className="text-[10px] font-mono text-blue-400 tracking-[0.4em] uppercase">Tactical Intelligence Hub</span>
+            </div>
+            <h1 className="text-7xl md:text-8xl font-black mb-6 italic tracking-tighter chromatic-aberration animate-glitch-v2 leading-none">
+              BF6 <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">STATS HUB</span>
+            </h1>
+            <p className="text-xl text-gray-500 font-medium max-w-xl dof-blur mb-8 leading-relaxed">
+              Advanced performance tracking, real-time server telemetry, and global competitive analytics.
+            </p>
+            <div className="flex gap-4">
+              <button className="px-8 py-3 bg-blue-600 rounded-xl font-black italic text-xs uppercase tracking-widest hover:bg-blue-500 transition-all">Launch Theater</button>
+              <button className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl font-black italic text-xs uppercase tracking-widest hover:bg-white/10 transition-all">Manuals</button>
+            </div>
+          </div>
+          <div className="flex-1 w-full lg:max-w-2xl">
+            <TacticalMap />
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
@@ -55,6 +69,7 @@ export default function Home() {
             { to: "/analytics", icon: "📈", title: "Telemetry", desc: "Visualize historical trends with skill signatures and performance stability charts.", color: "purple" },
             { to: "/leaderboard", icon: "🏆", title: "Rankings", desc: "Global ranking system tracking the most lethal operators in the combat theater.", color: "amber" },
             { to: "/servers", icon: "🎮", title: "Network", desc: "Scan active combat zones for server availability and real-time player density.", color: "emerald" },
+            { to: "/forge", icon: "🧬", title: "Neural Forge", desc: "AI-driven development of tactical textures, characters, and combat narratives.", color: "blue" },
           ].map((item, i) => (
             <motion.div
               key={item.to}
