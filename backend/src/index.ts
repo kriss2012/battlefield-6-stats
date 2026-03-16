@@ -6,6 +6,8 @@ import pool from './config/database';
 import statsRoutes from './routes/stats';
 import leaderboardRoutes from './routes/leaderboard';
 import authRoutes from './routes/auth';
+import socialRoutes from './routes/social';
+import notificationRoutes from './routes/notifications';
 import { startCronJobs } from './services/cronJobs';
 
 dotenv.config();
@@ -25,6 +27,8 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/social', socialRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {
