@@ -1,0 +1,2140 @@
+﻿
+> bf6-stats-app@0.0.0 dev
+> vite
+
+
+  [32m[1mVITE[22m v7.2.1[39m  [2mready in [0m[1m1202[22m[2m[0m ms[22m
+
+  [32mΓ₧£[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[2m  [32mΓ₧£[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m[32m  Γ₧£[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+node.exe : [baseline-b
+rowser-mapping] The 
+data in this module 
+is over two months 
+old.  To ensure 
+accurate Baseline 
+data, please update: 
+`npm i baseline-browse
+r-mapping@latest -D`
+At E:\npm.ps1:29 
+char:3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: ([baseline-   
+ brows...ping@late    
+st -D`:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/cartesia
+nAxisSlice.js:6:48:
+      6 Γöé import { 
+createSlice, 
+prepareAutoBatched } 
+from 
+'@reduxjs/toolkit';
+        Γò╡           
+                      
+                
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not 
+resolve 
+"./useKeyboard.mjs"
+
+    node_modules/@reac
+t-aria/interactions/di
+st/import.mjs:8:71:
+      8 Γöé ...46d819f
+cbaf35654$export$8f716
+54801c2f7cd} from 
+"./useKeyboard.mjs";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not 
+resolve 
+"./useMove.mjs"
+
+    node_modules/@reac
+t-aria/interactions/di
+st/import.mjs:9:67:
+      9 Γöé ...as $e8a
+7022cf87cba2a$export$3
+6da96379f79f245} from 
+"./useMove.mjs";
+        Γò╡           
+                      
+                      
+~~~~~~~~~~~~~~~
+
+X [ERROR] Could not 
+resolve 
+"./usePress.mjs"
+
+    node_modules/@reac
+t-aria/interactions/di
+st/import.mjs:10:68:
+      10 Γöé ... $f6c3
+1cce2adf654f$export$45
+712eceda6fad21} from 
+"./usePress.mjs";
+         Γò╡          
+                      
+                     
+~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not 
+resolve 
+"./useScrollWheel.mjs"
+
+    node_modules/@reac
+t-aria/interactions/di
+st/import.mjs:11:73:
+      11 Γöé ...a636d7
+a4dcefd$export$2123ff2
+b87c81ca} from "./useS
+crollWheel.mjs";
+         Γò╡          
+                      
+               
+~~~~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not 
+resolve 
+"./useLongPress.mjs"
+
+    node_modules/@reac
+t-aria/interactions/di
+st/import.mjs:12:72:
+      12 Γöé ...26561d
+2877236e$export$c24ed0
+104d07eab9} from 
+"./useLongPress.mjs";
+         Γò╡          
+                      
+                 
+~~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not 
+resolve 
+"./usePress.mjs"
+
+    node_modules/@reac
+t-aria/interactions/di
+st/Pressable.mjs:1:68:
+      1 Γöé ...s $f6c3
+1cce2adf654f$export$45
+712eceda6fad21} from 
+"./usePress.mjs";
+        Γò╡           
+                      
+                     
+~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/optionsS
+lice.js:1:28:
+      1 Γöé import { 
+createSlice } from 
+'@reduxjs/toolkit';
+        Γò╡           
+                  
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not 
+resolve "./utils.mjs"
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusVisible.mjs
+:1:76:
+      1 Γöé ...t as $8
+a9cb279dc87e130$export
+$fda7da73ab5d4c48} 
+from "./utils.mjs";
+        Γò╡           
+                      
+                      
+  ~~~~~~~~~~~~~
+
+X [ERROR] Could not 
+resolve "./utils.mjs"
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusWithin.mjs:
+1:208:
+      1 Γöé ...t as $8
+a9cb279dc87e130$export
+$715c682d09d639cc} 
+from "./utils.mjs";
+        Γò╡           
+                      
+                      
+  ~~~~~~~~~~~~~
+
+X [ERROR] Expected 
+")" but found end of 
+file
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useInteractOutside.
+mjs:43:57:
+      43 Γöé          
+       if 
+(state.isPointerDown 
+&& $e0b6e0b68ec7f
+         Γöé          
+                      
+                      
+    ^
+         Γò╡          
+                      
+                      
+    )
+
+X [ERROR] Could not 
+resolve 
+"./useKeyboard.mjs"
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusable.mjs:3:
+71:
+      3 Γöé ...46d819f
+cbaf35654$export$8f716
+54801c2f7cd} from 
+"./useKeyboard.mjs";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useHover.mjs:1:144:
+      1 Γöé ...ent, 
+nodeContains as 
+$AWxnT$nodeContains} 
+from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not 
+resolve "./utils.mjs"
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocus.mjs:1:81:
+      1 Γöé ...t as $8
+a9cb279dc87e130$export
+$715c682d09d639cc} 
+from "./utils.mjs";
+        Γò╡           
+                      
+                      
+  ~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/interactions/di
+st/Pressable.mjs:3:190
+:
+      3 Γöé 
+...ergeProps, 
+mergeRefs as 
+$hhDyF$mergeRefs} 
+from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/legendSl
+ice.js:1:57:
+      1 Γöé 
+...createSlice, 
+current, 
+prepareAutoBatched } 
+from 
+'@reduxjs/toolkit';
+        Γò╡           
+                      
+                   
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/interactions/di
+st/PressResponder.mjs:
+2:116:
+      2 Γöé 
+...geProps, 
+useSyncRef as 
+$87RPk$useSyncRef} 
+from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/store.js
+:1:67:
+      1 Γöé 
+...nhancer, 
+combineReducers, 
+configureStore } from 
+'@reduxjs/toolkit';
+        Γò╡           
+                      
+                   
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusVisible.mjs
+:2:163:
+      2 Γöé 
+...OwnerDocument as $2
+8AnR$getOwnerDocument}
+ from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/layoutSl
+ice.js:1:28:
+      1 Γöé import { 
+createSlice } from 
+'@reduxjs/toolkit';
+        Γò╡           
+                  
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/tooltipS
+lice.js:1:57:
+      1 Γöé 
+...createSlice, 
+current, 
+prepareAutoBatched } 
+from 
+'@reduxjs/toolkit';
+        Γò╡           
+                      
+                   
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusable.mjs:4:
+223:
+      4 Γöé 
+...Focusable, 
+mergeRefs as 
+$fcPuG$mergeRefs} 
+from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/polarAxi
+sSlice.js:1:28:
+      1 Γöé import { 
+createSlice } from 
+'@reduxjs/toolkit';
+        Γò╡           
+                  
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/focus/dist/impo
+rt.mjs:6:69:
+      6 Γöé ... $d48f9
+7c9d1a8e323$re_export$
+isFocusable} from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusWithin.mjs:
+3:230:
+      3 Γöé ...get, 
+nodeContains as 
+$3b9Q0$nodeContains} 
+from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/interactions/di
+st/focusSafely.mjs:2:2
+07:
+      2 Γöé 
+...crolling as $k50bp$
+focusWithoutScrolling}
+ from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/referenc
+eElementsSlice.js:1:37
+:
+      1 Γöé import { 
+createSlice, current 
+} from 
+'@reduxjs/toolkit';
+        Γò╡           
+                      
+     
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/errorBar
+Slice.js:1:28:
+      1 Γöé import { 
+createSlice } from 
+'@reduxjs/toolkit';
+        Γò╡           
+                  
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/zIndexSl
+ice.js:10:48:
+      10 Γöé import { 
+createSlice, 
+prepareAutoBatched } 
+from 
+'@reduxjs/toolkit';
+         Γò╡          
+                      
+                 
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocus.mjs:3:144:
+      3 Γöé ... 
+getEventTarget as $hf0
+lj$getEventTarget} 
+from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/chartDat
+aSlice.js:1:28:
+      1 Γöé import { 
+createSlice } from 
+'@reduxjs/toolkit';
+        Γò╡           
+                  
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/mouseEve
+ntsMiddleware.js:1:55:
+      1 Γöé ...{ 
+createAction, createLi
+stenerMiddleware } 
+from 
+'@reduxjs/toolkit';
+        Γò╡           
+                      
+                   
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/graphica
+lItemsSlice.js:1:57:
+      1 Γöé 
+...createSlice, 
+current, 
+prepareAutoBatched } 
+from 
+'@reduxjs/toolkit';
+        Γò╡           
+                      
+                   
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/brushSli
+ce.js:1:28:
+      1 Γöé import { 
+createSlice } from 
+'@reduxjs/toolkit';
+        Γò╡           
+                  
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/polarOpt
+ionsSlice.js:1:28:
+      1 Γöé import { 
+createSlice } from 
+'@reduxjs/toolkit';
+        Γò╡           
+                  
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/focus/dist/virt
+ualFocus.mjs:1:103:
+      1 Γöé 
+...ActiveElement as $h
+pDQO$getActiveElement}
+ from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/focus/dist/useH
+asTabbableChild.mjs:2:
+56:
+      2 Γöé 
+...seLayoutEffect as $
+hGAaG$useLayoutEffect}
+ from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/touchEve
+ntsMiddleware.js:1:55:
+      1 Γöé ...{ 
+createAction, createLi
+stenerMiddleware } 
+from 
+'@reduxjs/toolkit';
+        Γò╡           
+                      
+                   
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/keyboard
+EventsMiddleware.js:1:
+55:
+      1 Γöé ...{ 
+createAction, createLi
+stenerMiddleware } 
+from 
+'@reduxjs/toolkit';
+        Γò╡           
+                      
+                   
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/rootProp
+sSlice.js:1:28:
+      1 Γöé import { 
+createSlice } from 
+'@reduxjs/toolkit';
+        Γò╡           
+                  
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/focus/dist/Focu
+sScope.mjs:1:372:
+      1 Γöé 
+...eWalker as $cgawC$c
+reateShadowTreeWalker}
+ from 
+"@react-aria/utils";
+        Γò╡           
+                      
+                  
+~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/recha
+rts/es6/state/external
+EventsMiddleware.js:1:
+55:
+      1 Γöé ...{ 
+createAction, createLi
+stenerMiddleware } 
+from 
+'@reduxjs/toolkit';
+        Γò╡           
+                      
+                   
+~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Failed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json. [plugin 
+vite:dep-pre-bundle]
+
+    node_modules/@reac
+t-aria/focus/dist/Focu
+sRing.mjs:3:46:
+      3 Γöé import 
+{mergeProps as 
+$hAmeg$mergeProps} 
+from 
+"@react-aria/utils";
+        Γò╡           
+                      
+              
+~~~~~~~~~~~~~~~~~~~
+
+D:\all files\A\project
+s\10\battlefield-6-sta
+ts\node_modules\esbuil
+d\lib\main.js:1467
+  let error = new 
+Error(text);
+              ^
+
+Error: [31mError 
+during dependency 
+optimization:
+
+[39m[31mX [41;31m[
+[41;97mERROR[41;31m]
+[0m [1mFailed to 
+resolve entry for 
+package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/focus/dist/Focu
+sRing.mjs:3:46:
+[37m      3 Γöé 
+import {mergeProps as 
+$hAmeg$mergeProps} 
+from [32m"@react-aria
+/utils"[37m;
+        Γò╡           
+                      
+              [32m~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/focus/dist/Focu
+sScope.mjs:1:372:
+[37m      1 Γöé 
+...eWalker as $cgawC$c
+reateShadowTreeWalker}
+ from [32m"@react-ari
+a/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/focus/dist/impo
+rt.mjs:6:69:
+[37m      6 Γöé ... $
+d48f97c9d1a8e323$re_ex
+port$isFocusable} 
+from [32m"@react-aria
+/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/focus/dist/useH
+asTabbableChild.mjs:2:
+56:
+[37m      2 Γöé 
+...seLayoutEffect as $
+hGAaG$useLayoutEffect}
+ from [32m"@react-ari
+a/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/focus/dist/virt
+ualFocus.mjs:1:103:
+[37m      1 Γöé 
+...ActiveElement as $h
+pDQO$getActiveElement}
+ from [32m"@react-ari
+a/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/PressResponder.mjs:
+2:116:
+[37m      2 Γöé 
+...geProps, 
+useSyncRef as 
+$87RPk$useSyncRef} 
+from [32m"@react-aria
+/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mCould not resolve 
+"./usePress.mjs"[0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/Pressable.mjs:1:68:
+[37m      1 Γöé ...s 
+$f6c31cce2adf654f$expo
+rt$45712eceda6fad21} 
+from [32m"./usePress.
+mjs"[37m;
+        Γò╡           
+                      
+                     
+[32m~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/Pressable.mjs:3:190
+:
+[37m      3 Γöé 
+...ergeProps, 
+mergeRefs as 
+$hhDyF$mergeRefs} 
+from [32m"@react-aria
+/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/focusSafely.mjs:2:2
+07:
+[37m      2 Γöé 
+...crolling as $k50bp$
+focusWithoutScrolling}
+ from [32m"@react-ari
+a/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mCould not resolve 
+"./useKeyboard.mjs"[0
+m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/import.mjs:8:71:
+[37m      8 Γöé ...46
+d819fcbaf35654$export$
+8f71654801c2f7cd} 
+from [32m"./useKeyboa
+rd.mjs"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mCould not resolve 
+"./useMove.mjs"[0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/import.mjs:9:67:
+[37m      9 Γöé 
+...as $e8a7022cf87cba2
+a$export$36da96379f79f
+245} from [32m"./useM
+ove.mjs"[37m;
+        Γò╡           
+                      
+                      
+[32m~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mCould not resolve 
+"./usePress.mjs"[0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/import.mjs:10:68:
+[37m      10 Γöé ... 
+$f6c31cce2adf654f$expo
+rt$45712eceda6fad21} 
+from [32m"./usePress.
+mjs"[37m;
+         Γò╡          
+                      
+                     
+[32m~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mCould not resolve 
+"./useScrollWheel.mjs"
+[0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/import.mjs:11:73:
+[37m      11 Γöé ...a
+636d7a4dcefd$export$21
+23ff2b87c81ca} from [
+32m"./useScrollWheel.m
+js"[37m;
+         Γò╡          
+                      
+               [32m~~
+~~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mCould not resolve 
+"./useLongPress.mjs"[
+0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/import.mjs:12:72:
+[37m      12 Γöé ...2
+6561d2877236e$export$c
+24ed0104d07eab9} from 
+[32m"./useLongPress.m
+js"[37m;
+         Γò╡          
+                      
+                 [32m
+~~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mCould not resolve 
+"./utils.mjs"[0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocus.mjs:1:81:
+[37m      1 Γöé ...t 
+as $8a9cb279dc87e130$e
+xport$715c682d09d639cc
+} from [32m"./utils.m
+js"[37m;
+        Γò╡           
+                      
+                      
+  
+[32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocus.mjs:3:144:
+[37m      3 Γöé ... 
+getEventTarget as $hf0
+lj$getEventTarget} 
+from [32m"@react-aria
+/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mCould not resolve 
+"./utils.mjs"[0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusVisible.mjs
+:1:76:
+[37m      1 Γöé ...t 
+as $8a9cb279dc87e130$e
+xport$fda7da73ab5d4c48
+} from [32m"./utils.m
+js"[37m;
+        Γò╡           
+                      
+                      
+  
+[32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusVisible.mjs
+:2:163:
+[37m      2 Γöé 
+...OwnerDocument as $2
+8AnR$getOwnerDocument}
+ from [32m"@react-ari
+a/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mCould not resolve 
+"./utils.mjs"[0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusWithin.mjs:
+1:208:
+[37m      1 Γöé ...t 
+as $8a9cb279dc87e130$e
+xport$715c682d09d639cc
+} from [32m"./utils.m
+js"[37m;
+        Γò╡           
+                      
+                      
+  
+[32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusWithin.mjs:
+3:230:
+[37m      3 Γöé 
+...get, nodeContains 
+as 
+$3b9Q0$nodeContains} 
+from [32m"@react-aria
+/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mCould not resolve 
+"./useKeyboard.mjs"[0
+m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusable.mjs:3:
+71:
+[37m      3 Γöé ...46
+d819fcbaf35654$export$
+8f71654801c2f7cd} 
+from [32m"./useKeyboa
+rd.mjs"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useFocusable.mjs:4:
+223:
+[37m      4 Γöé 
+...Focusable, 
+mergeRefs as 
+$fcPuG$mergeRefs} 
+from [32m"@react-aria
+/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@react-aria/utils". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useHover.mjs:1:144:
+[37m      1 Γöé 
+...ent, nodeContains 
+as 
+$AWxnT$nodeContains} 
+from [32m"@react-aria
+/utils"[37m;
+        Γò╡           
+                      
+                  [32
+m~~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mExpected ")" but 
+found end of file[0m
+
+    node_modules/@reac
+t-aria/interactions/di
+st/useInteractOutside.
+mjs:43:57:
+[37m      43 Γöé     
+            if 
+(state.isPointerDown 
+&& $e0b6e0b68ec7f[32m
+[37m
+         Γöé          
+                      
+                      
+    [32m^[37m
+         Γò╡          
+                      
+                      
+    [32m)[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/brushSli
+ce.js:1:28:
+[37m      1 Γöé 
+import { createSlice 
+} from [32m'@reduxjs/
+toolkit'[37m;
+        Γò╡           
+                  [32
+m~~~~~~~~~~~~~~~~~~[0
+m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/cartesia
+nAxisSlice.js:6:48:
+[37m      6 Γöé 
+import { createSlice, 
+prepareAutoBatched } 
+from [32m'@reduxjs/to
+olkit'[37m;
+        Γò╡           
+                      
+                [32m~
+~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/chartDat
+aSlice.js:1:28:
+[37m      1 Γöé 
+import { createSlice 
+} from [32m'@reduxjs/
+toolkit'[37m;
+        Γò╡           
+                  [32
+m~~~~~~~~~~~~~~~~~~[0
+m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/errorBar
+Slice.js:1:28:
+[37m      1 Γöé 
+import { createSlice 
+} from [32m'@reduxjs/
+toolkit'[37m;
+        Γò╡           
+                  [32
+m~~~~~~~~~~~~~~~~~~[0
+m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/external
+EventsMiddleware.js:1:
+55:
+[37m      1 Γöé ...{ 
+createAction, createLi
+stenerMiddleware } 
+from [32m'@reduxjs/to
+olkit'[37m;
+        Γò╡           
+                      
+                   [3
+2m~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/graphica
+lItemsSlice.js:1:57:
+[37m      1 Γöé 
+...createSlice, 
+current, 
+prepareAutoBatched } 
+from [32m'@reduxjs/to
+olkit'[37m;
+        Γò╡           
+                      
+                   [3
+2m~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/keyboard
+EventsMiddleware.js:1:
+55:
+[37m      1 Γöé ...{ 
+createAction, createLi
+stenerMiddleware } 
+from [32m'@reduxjs/to
+olkit'[37m;
+        Γò╡           
+                      
+                   [3
+2m~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/layoutSl
+ice.js:1:28:
+[37m      1 Γöé 
+import { createSlice 
+} from [32m'@reduxjs/
+toolkit'[37m;
+        Γò╡           
+                  [32
+m~~~~~~~~~~~~~~~~~~[0
+m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/legendSl
+ice.js:1:57:
+[37m      1 Γöé 
+...createSlice, 
+current, 
+prepareAutoBatched } 
+from [32m'@reduxjs/to
+olkit'[37m;
+        Γò╡           
+                      
+                   [3
+2m~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/mouseEve
+ntsMiddleware.js:1:55:
+[37m      1 Γöé ...{ 
+createAction, createLi
+stenerMiddleware } 
+from [32m'@reduxjs/to
+olkit'[37m;
+        Γò╡           
+                      
+                   [3
+2m~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/optionsS
+lice.js:1:28:
+[37m      1 Γöé 
+import { createSlice 
+} from [32m'@reduxjs/
+toolkit'[37m;
+        Γò╡           
+                  [32
+m~~~~~~~~~~~~~~~~~~[0
+m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/polarAxi
+sSlice.js:1:28:
+[37m      1 Γöé 
+import { createSlice 
+} from [32m'@reduxjs/
+toolkit'[37m;
+        Γò╡           
+                  [32
+m~~~~~~~~~~~~~~~~~~[0
+m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/polarOpt
+ionsSlice.js:1:28:
+[37m      1 Γöé 
+import { createSlice 
+} from [32m'@reduxjs/
+toolkit'[37m;
+        Γò╡           
+                  [32
+m~~~~~~~~~~~~~~~~~~[0
+m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/referenc
+eElementsSlice.js:1:37
+:
+[37m      1 Γöé 
+import { createSlice, 
+current } from [32m'@
+reduxjs/toolkit'[37m;
+        Γò╡           
+                      
+     [32m~~~~~~~~~~~~
+~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/rootProp
+sSlice.js:1:28:
+[37m      1 Γöé 
+import { createSlice 
+} from [32m'@reduxjs/
+toolkit'[37m;
+        Γò╡           
+                  [32
+m~~~~~~~~~~~~~~~~~~[0
+m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/store.js
+:1:67:
+[37m      1 Γöé 
+...nhancer, 
+combineReducers, 
+configureStore } from 
+[32m'@reduxjs/toolkit
+'[37m;
+        Γò╡           
+                      
+                   [3
+2m~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/tooltipS
+lice.js:1:57:
+[37m      1 Γöé 
+...createSlice, 
+current, 
+prepareAutoBatched } 
+from [32m'@reduxjs/to
+olkit'[37m;
+        Γò╡           
+                      
+                   [3
+2m~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/touchEve
+ntsMiddleware.js:1:55:
+[37m      1 Γöé ...{ 
+createAction, createLi
+stenerMiddleware } 
+from [32m'@reduxjs/to
+olkit'[37m;
+        Γò╡           
+                      
+                   [3
+2m~~~~~~~~~~~~~~~~~~[
+0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mFailed to resolve 
+entry for package 
+"@reduxjs/toolkit". 
+The package may have 
+incorrect 
+main/module/exports 
+specified in its 
+package.json.[0m 
+[1m[35m[plugin vite:
+dep-pre-bundle][0m
+
+    node_modules/recha
+rts/es6/state/zIndexSl
+ice.js:10:48:
+[37m      10 Γöé 
+import { createSlice, 
+prepareAutoBatched } 
+from [32m'@reduxjs/to
+olkit'[37m;
+         Γò╡          
+                      
+                 [32m
+~~~~~~~~~~~~~~~~~~[0m
+
+
+    at 
+failureErrorWithLog 
+(D:\all files\A\projec
+ts\10\battlefield-6-st
+ats\node_modules\esbui
+ld\lib\main.js:1467:15
+)
+    at D:\all files\A\
+projects\10\battlefiel
+d-6-stats\node_modules
+\esbuild\lib\main.js:9
+26:25
+    at D:\all files\A\
+projects\10\battlefiel
+d-6-stats\node_modules
+\esbuild\lib\main.js:1
+345:9
+    at process.process
+TicksAndRejections (no
+de:internal/process/ta
+sk_queues:105:5) {
+  errors: 
+[Getter/Setter],
+  warnings: 
+[Getter/Setter]
+}
+
+Node.js v22.17.0
