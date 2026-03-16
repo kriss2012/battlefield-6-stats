@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { notificationApi } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useSocket } from '../context/SocketContext';
 
 interface Notification {
   id: number;
@@ -16,6 +17,7 @@ interface Notification {
 
 export default function NotificationCenter() {
   const { token, isAuthenticated } = useAuth();
+  const { socket } = useSocket();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -24,11 +26,24 @@ export default function NotificationCenter() {
   useEffect(() => {
     if (isAuthenticated && token) {
       loadNotifications();
-      // Polling for new notifications every 30 seconds
-      const interval = setInterval(loadNotifications, 30000);
-      return () => clearInterval(interval);
     }
   }, [isAuthenticated, token]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('new_notification', (notification: Notification) => {
+        setNotifications(prev => [notification, ...prev].slice(0, 10));
+        setUnreadCount(prev => prev + 1);
+        
+        // Optional: Play a tactical sound or show a toast
+        console.log('📬 New Tactical Alert:', notification.title);
+      });
+
+      return () => {
+        socket.off('new_notification');
+      };
+    }
+  }, [socket]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
