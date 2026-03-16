@@ -93,7 +93,7 @@ export default function WinRateTrendChart({ playerId, days = 30 }: WinRateTrendC
               }}
               itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase' }}
               labelStyle={{ color: '#6b7280', fontSize: '10px', marginBottom: '4px', fontFamily: 'monospace' }}
-              formatter={(value: number | string | undefined) => [`${Number(value).toFixed(1)}%`, 'WIN RATE']}
+              formatter={(value: any) => [`${Number(value).toFixed(1)}%`, 'WIN RATE']}
             />
             <Area 
               type="monotone" 
