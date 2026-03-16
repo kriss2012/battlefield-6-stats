@@ -6,6 +6,7 @@ import PlayerComparison from '../components/PlayerComparison';
 import RadarChart from '../components/RadarChart';
 import { analyticsApi, playerApi } from '../services/api';
 import { Skeleton } from '../components/Skeleton';
+import LoadoutAdvisor from '../components/LoadoutAdvisor';
 
 export default function PlayerAnalytics() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -150,6 +151,10 @@ export default function PlayerAnalytics() {
               <div className="glass-card p-6 min-h-[400px]">
                 <WinRateTrendChart playerId={playerId} days={days} />
               </div>
+            </div>
+
+            <div className="mb-8 animate-fade-in" style={{ animationDelay: '0.25s' }}>
+              <LoadoutAdvisor playerId={playerId} />
             </div>
 
             <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
