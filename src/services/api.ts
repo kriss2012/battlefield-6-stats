@@ -177,6 +177,17 @@ export const analyticsApi = {
       return { error: error instanceof Error ? error.message : 'An error occurred' };
     }
   },
+
+  getAIRecommendations: async (playerId: string) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/stats/ai/recommendations/${playerId}`);
+      if (!response.ok) throw new Error('Failed to fetch AI recommendations');
+      return await response.json();
+    } catch (error) {
+      console.error('Analytics API Error:', error);
+      return { error: error instanceof Error ? error.message : 'An error occurred' };
+    }
+  },
 };
 
 // Leaderboard API
