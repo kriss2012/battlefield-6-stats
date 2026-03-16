@@ -70,6 +70,7 @@ export default function Home() {
             { to: "/leaderboard", icon: "🏆", title: "Rankings", desc: "Global ranking system tracking the most lethal operators in the combat theater.", color: "amber" },
             { to: "/servers", icon: "🎮", title: "Network", desc: "Scan active combat zones for server availability and real-time player density.", color: "emerald" },
             { to: "/forge", icon: "🧬", title: "Neural Forge", desc: "AI-driven development of tactical textures, characters, and combat narratives.", color: "blue" },
+            { to: "/friends", icon: "👥", title: "Friends", desc: "Manage your tactical network and coordinate with fellow operators.", color: "purple" },
           ].map((item, i) => (
             <motion.div
               key={item.to}
@@ -117,13 +118,18 @@ export default function Home() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
-              className="glass-card p-6 opacity-30 cursor-not-allowed flex items-center gap-6 saturate-0"
             >
-              <div className="text-4xl">👥</div>
-              <div>
-                <h3 className="text-lg font-black italic uppercase tracking-widest">Clan Systems</h3>
-                <p className="text-gray-500 text-sm font-medium">DECRYPTING... Available in future combat cycle.</p>
-              </div>
+              <Link
+                to="/squads"
+                className="glass-card p-6 group hover:bg-white/10 flex items-center gap-6 relative overflow-hidden block"
+              >
+                <div className="text-4xl group-hover:rotate-12 transition-transform">👥</div>
+                <div>
+                  <h3 className="text-lg font-black italic uppercase tracking-widest group-hover:text-emerald-400 transition-colors">Clan Systems</h3>
+                  <p className="text-gray-500 text-sm font-medium">Coordinate with divisions and dominate the leaderboard together.</p>
+                </div>
+                <div className="absolute top-0 right-0 p-2 opacity-5 translate-x-1/4 -translate-y-1/4 grayscale pointer-events-none text-8xl">👥</div>
+              </Link>
             </motion.div>
           </div>
         </div>
