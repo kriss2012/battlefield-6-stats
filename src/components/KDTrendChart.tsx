@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, defs, linearGradient, stop } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { analyticsApi } from '../services/api';
 
 interface KDTrendChartProps {
@@ -56,7 +56,12 @@ export default function KDTrendChart({ playerId, days = 30 }: KDTrendChartProps)
         </div>
       </div>
 
-      <div className="flex-1 min-h-[250px] -ml-6">
+      <div className="flex-1 min-h-[250px] -ml-6 relative">
+        {error && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-10 rounded-2xl">
+            <p className="text-[10px] font-mono uppercase tracking-widest text-red-400/60">{error}</p>
+          </div>
+        )}
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>
             <defs>
@@ -88,6 +93,7 @@ export default function KDTrendChart({ playerId, days = 30 }: KDTrendChartProps)
               }}
               itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase' }}
               labelStyle={{ color: '#6b7280', fontSize: '10px', marginBottom: '4px', fontFamily: 'monospace' }}
+              formatter={(value: any) => [value.toFixed(2), 'K/D RATIO']}
             />
             <Area 
               type="monotone" 
