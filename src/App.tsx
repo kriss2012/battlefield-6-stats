@@ -7,7 +7,6 @@ import Home from './pages/Home';
 import PlayerSearch from './pages/PlayerSearch';
 import ServerBrowser from './pages/ServerBrowser';
 import PlayerAnalytics from './pages/PlayerAnalytics';
-import Leaderboard from './pages/Leaderboard';
 import HeadToHead from './pages/HeadToHead';
 import Login from './pages/Login';
 import Register from './pages/Register';
