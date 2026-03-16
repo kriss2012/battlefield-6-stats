@@ -1,6 +1,7 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import NotificationCenter from './NotificationCenter';
 
 export default function Navigation() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -12,12 +13,15 @@ export default function Navigation() {
   };
 
   const navLinks = [
+    { to: "/leaderboard", label: "RANKS" },
     { to: "/player", label: "PLAYER" },
     { to: "/analytics", label: "ANALYSIS" },
     { to: "/leaderboard", label: "RANKINGS" },
     { to: "/servers", label: "NETWORKS" },
     { to: "/head-to-head", label: "H2H" },
     { to: "/forge", label: "NEURAL FORGE" },
+    { to: "/friends", label: "FRIENDS" },
+    { to: "/squads", label: "SQUADS" },
   ];
 
   return (
@@ -69,6 +73,7 @@ export default function Navigation() {
         <div className="h-4 w-[1px] bg-white/10 mx-2" />
 
         <div className="flex items-center gap-2">
+          {isAuthenticated && <NotificationCenter />}
           {isAuthenticated ? (
             <div className="flex items-center gap-1">
               <Link
