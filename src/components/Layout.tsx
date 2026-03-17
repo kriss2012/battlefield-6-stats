@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import Footer from './Footer';
 import TacticalOverlay from './TacticalOverlay';
 import GlobalAmbience from './GlobalAmbience';
+import TacticalHUD from './TacticalHUD';
 import { Canvas } from '@react-three/fiber';
 
 interface LayoutProps {
@@ -25,6 +26,7 @@ const Layout = ({ children }: LayoutProps) => {
       </div>
 
       <TacticalOverlay />
+      <TacticalHUD />
       
       {/* Main Content */}
       <main className="flex-1 relative z-10 w-full">
