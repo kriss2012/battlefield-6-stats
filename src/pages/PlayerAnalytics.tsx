@@ -3,7 +3,6 @@ import { useSearchParams, Link } from 'react-router-dom';
 import KDTrendChart from '../components/KDTrendChart';
 import WinRateTrendChart from '../components/WinRateTrendChart';
 import PlayerComparison from '../components/PlayerComparison';
-import RadarChart from '../components/RadarChart';
 import { analyticsApi, playerApi } from '../services/api';
 import { Skeleton } from '../components/Skeleton';
 import LoadoutAdvisor from '../components/LoadoutAdvisor';
