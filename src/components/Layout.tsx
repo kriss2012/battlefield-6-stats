@@ -3,7 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import Footer from './Footer';
 import TacticalOverlay from './TacticalOverlay';
-import IntroSequence from './IntroSequence';
+import GlobalAmbience from './GlobalAmbience';
+import { Canvas } from '@react-three/fiber';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,9 +14,16 @@ const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-x-hidden bg-black selection:bg-blue-500/30 selection:text-blue-200">
-      <div className="noise-overlay" />
-      <IntroSequence />
+    <div className="min-h-screen relative flex flex-col overflow-x-hidden bg-black selection:bg-blue-500/30 selection:text-blue-200">
+      <div className="fixed inset-0 -z-20 bg-neutral-950" />
+      
+      {/* Global 3D Ambience Background */}
+      <div className="fixed inset-0 -z-10 pointer-events-none opacity-40">
+        <Canvas camera={{ position: [0, 0, 10] }}>
+          <GlobalAmbience />
+        </Canvas>
+      </div>
+
       <TacticalOverlay />
       
       {/* Main Content */}
