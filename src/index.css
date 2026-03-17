@@ -148,3 +148,51 @@
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
+
+/* 3D Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Clear 3D Image Effects */
+.clear-3d-image {
+  @apply relative overflow-hidden rounded-2xl transition-all duration-500;
+  transform: translateZ(20px);
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+.clear-3d-image::after {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent opacity-0 transition-opacity duration-500;
+}
+
+.clear-3d-image:hover {
+  transform: translateZ(40px) scale(1.02);
+  box-shadow: 
+    0 20px 50px -15px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(59, 130, 246, 0.4);
+}
+
+.clear-3d-image:hover::after {
+  @apply opacity-100;
+}
+
+.floating-3d {
+  animation: floating 6s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+  33% { transform: translateY(-10px) rotateX(2deg) rotateY(-2deg); }
+  66% { transform: translateY(5px) rotateX(-1deg) rotateY(3deg); }
+}
