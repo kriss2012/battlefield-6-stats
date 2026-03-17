@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Box, Sphere, Text } from '@react-three/drei';
+import { Box, Text } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface HologramChartProps {
