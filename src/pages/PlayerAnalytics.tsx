@@ -11,6 +11,17 @@ import { Suspense } from 'react';
 import { OrbitControls } from '@react-three/drei';
 import HologramChart from '../components/HologramChart';
 
+interface PlayerData {
+  playerCount: number;
+  userName: string;
+  stats?: {
+    kd?: number;
+    winRate?: number;
+    accuracy?: number;
+    spm?: number;
+  };
+}
+
 export default function PlayerAnalytics() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialPlayerId = searchParams.get('playerId') || '';
@@ -18,7 +29,7 @@ export default function PlayerAnalytics() {
 
   const [playerId, setPlayerId] = useState(initialPlayerId);
   const [playerName, setPlayerName] = useState(initialPlayerName);
-  const [playerData, setPlayerData] = useState<any>(null);
+  const [playerData, setPlayerData] = useState<PlayerData | null>(null);
   const [searchInput, setSearchInput] = useState('');
   const [days, setDays] = useState(30);
   const [tracking, setTracking] = useState(false);
@@ -31,7 +42,7 @@ export default function PlayerAnalytics() {
         setLoading(true);
         const response = await playerApi.getPlayerStats(playerName);
         if (response.data) {
-          setPlayerData(response.data);
+          setPlayerData(response.data as PlayerData);
         }
         setLoading(false);
       }
@@ -44,6 +55,7 @@ export default function PlayerAnalytics() {
       setPlayerId(searchInput.trim());
       setPlayerName(searchInput.trim());
       setSearchParams({ playerId: searchInput.trim(), playerName: searchInput.trim() });
+      setPlayerData(null); // Reset data on new search
     }
   };
 
