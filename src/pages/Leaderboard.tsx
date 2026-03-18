@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { leaderboardApi } from '../services/api';
 
@@ -17,11 +17,7 @@ export default function Leaderboard() {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'kd_ratio' | 'score' | 'wins' | 'level'>('kd_ratio');
 
-  useEffect(() => {
-    loadLeaderboard();
-  }, [sortBy]);
-
-  const loadLeaderboard = async () => {
+  const loadLeaderboard = useCallback(async () => {
     setLoading(true);
     try {
       const res = await leaderboardApi.getLeaderboard(sortBy, 50);
@@ -33,7 +29,11 @@ export default function Leaderboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [sortBy]);
+
+  useEffect(() => {
+    loadLeaderboard();
+  }, [loadLeaderboard]);
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white pt-24 pb-12 px-4 relative overflow-hidden">
@@ -56,7 +56,7 @@ export default function Leaderboard() {
             {(['kd_ratio', 'wins', 'level'] as const).map((stat) => (
               <button
                 key={stat}
-                onClick={() => setSortBy(stat as any)}
+                onClick={() => setSortBy(stat)}
                 className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
                   sortBy === stat ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/20' : 'text-gray-500 hover:text-white'
                 }`}
