@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue, useVelocity } from 'framer-motion';
 
 const TacticalOverlay: React.FC = () => {
@@ -21,18 +21,18 @@ const TacticalOverlay: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleMouseMove = (e: React.MouseEvent | MouseEvent) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent | MouseEvent) => {
     const { clientX, clientY } = e as MouseEvent;
     const moveX = (clientX - window.innerWidth / 2) / 25;
     const moveY = (clientY - window.innerHeight / 2) / 25;
     mouseX.set(moveX);
     mouseY.set(moveY);
-  };
+  }, [mouseX, mouseY]);
 
   useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [handleMouseMove]);
 
   const smoothMouseX = useSpring(mouseX, { stiffness: 50, damping: 20 });
   const smoothMouseY = useSpring(mouseY, { stiffness: 50, damping: 20 });
