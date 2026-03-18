@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { notificationApi } from '../services/api';
@@ -23,11 +23,25 @@ export default function NotificationCenter() {
   const [unreadCount, setUnreadCount] = useState(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const loadNotifications = useCallback(async () => {
+    try {
+      const res = await notificationApi.getNotifications(token!, { limit: 5 });
+      if (res.notifications) {
+        setNotifications(res.notifications);
+        const unread = res.notifications.filter((n: Notification) => !n.is_read).length;
+        // In a real app we'd fetch the total unread count from backend
+        setUnreadCount(unread); 
+      }
+    } catch (error) {
+      console.error('Failed to load notifications:', error);
+    }
+  }, [token]);
+
   useEffect(() => {
     if (isAuthenticated && token) {
       loadNotifications();
     }
-  }, [isAuthenticated, token]);
+  }, [isAuthenticated, token, loadNotifications]);
 
   useEffect(() => {
     if (socket) {
@@ -54,20 +68,6 @@ export default function NotificationCenter() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const loadNotifications = async () => {
-    try {
-      const res = await notificationApi.getNotifications(token!, { limit: 5 });
-      if (res.notifications) {
-        setNotifications(res.notifications);
-        const unread = res.notifications.filter((n: Notification) => !n.is_read).length;
-        // In a real app we'd fetch the total unread count from backend
-        setUnreadCount(unread); 
-      }
-    } catch (error) {
-      console.error('Failed to load notifications:', error);
-    }
-  };
 
   const handleMarkAsRead = async (id: number) => {
     try {
