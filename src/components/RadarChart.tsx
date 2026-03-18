@@ -6,8 +6,17 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+interface RadarChartData {
+  kills?: number; // Player kills count
+  winRate?: number;
+  accuracy?: number;
+  headshotPercentage?: number;
+  kdRatio?: number;
+  level?: number;
+}
+
 interface RadarChartProps {
-  data: any;
+  data: RadarChartData;
   title?: string;
 }
 
