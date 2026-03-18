@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { analyticsApi } from '../services/api';
 
@@ -20,13 +20,7 @@ export default function LoadoutAdvisor({ playerId }: { playerId: string }) {
   const [recommendation, setRecommendation] = useState<AIRecommendation | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (playerId) {
-      loadRecommendations();
-    }
-  }, [playerId]);
-
-  const loadRecommendations = async () => {
+  const loadRecommendations = useCallback(async () => {
     setLoading(true);
     try {
       const res = await analyticsApi.getAIRecommendations(playerId);
@@ -38,7 +32,13 @@ export default function LoadoutAdvisor({ playerId }: { playerId: string }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [playerId]);
+
+  useEffect(() => {
+    if (playerId) {
+      loadRecommendations();
+    }
+  }, [playerId, loadRecommendations]);
 
   if (loading) return (
     <div className="glass-card p-8 animate-pulse flex flex-col gap-4">
