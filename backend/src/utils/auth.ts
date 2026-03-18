@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt, { SignOptions } from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || '7d') as string;
 const BCRYPT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS || '10');
 
 export interface JWTPayload {
@@ -19,17 +19,25 @@ export async function comparePassword(password: string, hash: string): Promise<b
   return await bcrypt.compare(password, hash);
 }
 
-export function generateToken(payload: JWTPayload): string {
-  return jwt.sign(payload, JWT_SECRET, {
+export const generateToken = (user: { id: number; username: string }): string => {
+  const payload: JWTPayload = {
+    userId: user.id,
+    username: user.username,
+    email: '', // Assuming email is not available or can be empty for this token
+  };
+  const options: SignOptions = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expiresIn: JWT_EXPIRES_IN as any,
-  });
+  };
+  return jwt.sign(payload, JWT_SECRET, options);
 }
 
 export function verifyToken(token: string): JWTPayload | null {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
     return decoded;
-  } catch (error) {
+  } catch (_error) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return null;
   }
 }
