@@ -12,22 +12,22 @@ const router = express.Router();
 // Get leaderboard with pagination and sorting
 router.get('/', async (req, res) => {
   try {
-    const { orderBy = 'kd_ratio', limit = 100, offset = 0 } = req.query;
+    const { orderBy = 'kd_ratio', limit = '100', offset = '0' } = req.query as { orderBy?: string; limit?: string; offset?: string };
 
     const validOrderBy = ['kd_ratio', 'score', 'wins', 'level'];
-    const sortBy = validOrderBy.includes(orderBy as string) ? (orderBy as any) : 'kd_ratio';
+    const sortBy = (validOrderBy.includes(orderBy) ? orderBy : 'kd_ratio') as 'kd_ratio' | 'score' | 'wins' | 'level';
 
     const leaderboard = await getLeaderboard(
       sortBy,
-      Math.min(parseInt(limit as string) || 100, 500),
-      parseInt(offset as string) || 0
+      Math.min(parseInt(limit) || 100, 500),
+      parseInt(offset) || 0
     );
 
     res.json({
       leaderboard,
       orderBy: sortBy,
-      limit: parseInt(limit as string) || 100,
-      offset: parseInt(offset as string) || 0,
+      limit: parseInt(limit) || 100,
+      offset: parseInt(offset) || 0,
     });
   } catch (error) {
     console.error('Error fetching leaderboard:', error);
@@ -39,10 +39,10 @@ router.get('/', async (req, res) => {
 router.get('/rank/:playerId', async (req, res) => {
   try {
     const { playerId } = req.params;
-    const { orderBy = 'kd_ratio' } = req.query;
+    const { orderBy = 'kd_ratio' } = req.query as { orderBy?: string };
 
     const validOrderBy = ['kd_ratio', 'score', 'wins', 'level'];
-    const sortBy = validOrderBy.includes(orderBy as string) ? (orderBy as any) : 'kd_ratio';
+    const sortBy = (validOrderBy.includes(orderBy) ? orderBy : 'kd_ratio') as 'kd_ratio' | 'score' | 'wins' | 'level';
 
     const rank = await getPlayerRank(playerId, sortBy);
 
