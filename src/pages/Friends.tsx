@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { socialApi } from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -29,13 +29,7 @@ export default function Friends() {
   const [searchUsername, setSearchUsername] = useState('');
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
-  useEffect(() => {
-    if (token) {
-      loadSocialData();
-    }
-  }, [token]);
-
-  const loadSocialData = async () => {
+  const loadSocialData = useCallback(async () => {
     setLoading(true);
     try {
       const [friendsRes, requestsRes] = await Promise.all([
@@ -45,12 +39,18 @@ export default function Friends() {
 
       if (friendsRes.friends) setFriends(friendsRes.friends);
       if (requestsRes.requests) setRequests(requestsRes.requests);
-    } catch (error) {
-      console.error('Failed to load social data:', error);
+    } catch (_error) {
+      console.error('Failed to load social data:', _error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      loadSocialData();
+    }
+  }, [token, loadSocialData]);
 
   const handleSendRequest = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,8 +64,8 @@ export default function Friends() {
         setMessage({ text: 'Friend request sent!', type: 'success' });
         setSearchUsername('');
       }
-    } catch (error) {
-      setMessage({ text: 'Failed to send request', type: 'error' });
+    } catch (_error) {
+      setMessage({ text: 'Deployment failed', type: 'error' });
     }
 
     setTimeout(() => setMessage(null), 3000);
