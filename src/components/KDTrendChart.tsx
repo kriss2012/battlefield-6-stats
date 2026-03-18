@@ -93,7 +93,8 @@ export default function KDTrendChart({ playerId, days = 30 }: KDTrendChartProps)
               }}
               itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase' }}
               labelStyle={{ color: '#6b7280', fontSize: '10px', marginBottom: '4px', fontFamily: 'monospace' }}
-              formatter={(value: any) => [value.toFixed(2), 'K/D RATIO']}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              formatter={(value: any) => [Number(value).toFixed(2), 'K/D RATIO']}
             />
             <Area 
               type="monotone" 
