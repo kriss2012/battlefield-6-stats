@@ -45,7 +45,8 @@ app.get('/health', async (req, res) => {
   try {
     await pool.query('SELECT NOW()');
     res.json({ status: 'ok', database: 'connected' });
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_error) {
     res.status(500).json({ status: 'error', database: 'disconnected' });
   }
 });
