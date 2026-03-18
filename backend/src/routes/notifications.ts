@@ -11,7 +11,7 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
     const { limit = 20, unreadOnly = false } = req.query;
 
     let query = 'SELECT * FROM notifications WHERE user_id = $1';
-    const params: any[] = [userId];
+    const params: (string | number | undefined)[] = [userId];
 
     if (unreadOnly === 'true') {
       query += ' AND is_read = false';
