@@ -13,13 +13,14 @@ export default function Navigation() {
   };
 
   const navLinks = [
-    { to: "/leaderboard", label: "RANKS" },
+    { to: "/campaign", label: "CAMPAIGN" },
+    { to: "/simulation", label: "SIMULATION" },
+    { to: "/armory", label: "ARMORY" },
     { to: "/player", label: "PLAYER" },
     { to: "/analytics", label: "ANALYSIS" },
     { to: "/leaderboard", label: "RANKINGS" },
     { to: "/servers", label: "NETWORKS" },
     { to: "/head-to-head", label: "H2H" },
-    { to: "/armory", label: "ARMORY" },
     { to: "/forge", label: "NEURAL FORGE" },
     { to: "/friends", label: "FRIENDS" },
     { to: "/squads", label: "SQUADS" },
