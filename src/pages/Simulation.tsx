@@ -8,7 +8,6 @@ import {
   PerspectiveCamera,
   useKeyboardControls,
   KeyboardControls,
-  Box,
   Sphere,
   Plane
 } from '@react-three/drei';
