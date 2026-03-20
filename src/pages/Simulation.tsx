@@ -19,7 +19,7 @@ const Target: React.FC<{ position: [number, number, number]; onHit: () => void }
   const [hit, setHit] = useState(false);
   const meshRef = useRef<THREE.Group>(null!);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (hit) {
       meshRef.current.scale.lerp(new THREE.Vector3(0, 0, 0), 0.1);
       if (meshRef.current.scale.x < 0.01) {
