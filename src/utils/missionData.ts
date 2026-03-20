@@ -16,68 +16,68 @@ export interface Mission {
 export const missions: Mission[] = [
   {
     id: 'm1',
-    title: 'OPERATION NEON SHADOW',
-    location: 'DOHA, QATAR',
+    title: 'THE TEXTILE DISTRICT',
+    location: 'NAGPUR, INDIA',
     difficulty: 'EASY',
     status: 'AVAILABLE',
-    description: 'Intercept encrypted data from a rogue PMC cell operating in the city center.',
+    description: 'Infiltrate ISF Safehouse 3 and extract the location of the high-value target.',
     objectives: [
-      'Infiltrate the server room at the Q-Center.',
-      'Download the classified "Icarus" protocols.',
-      'Extract via the rooftop helipad.'
+      'Bypass the perimeter security cameras.',
+      'Enter the building via the north service door.',
+      'Confront Veer Choudhary in the logistics office.'
     ],
     rewards: [
       '1500 XP',
-      'Attachment: Tactical Suppressor',
-      'Operator Skin: Night Stalker'
+      'Tactical Map: District 7',
+      'Skill: Spatial Awareness'
     ],
     briefing: {
-      commander: 'COLONEL VANCE',
-      text: 'Vanguard, we’ve tracked a rogue PMC cell to Doha. They’re sitting on data that could trigger a global blackout. Your job is simple: get in, grab the data, and get out before they realize the firewall is breached. Zero footprint. Over.'
+      commander: 'BALWANT SINGH',
+      text: 'Aryan, this is the first step. Safehouse 3 is where they took her initially. Find Veer Choudhary. He processes all transits. He’ll know exactly where she was moved. Remember your training: zero footprint.'
     }
   },
   {
     id: 'm2',
-    title: 'ARCTIC SILENCE',
-    location: 'SVALBARD, NORWAY',
+    title: 'THE FORTY-SEVENTH HOUR',
+    location: 'DISTRICT 7, NAGPUR',
     difficulty: 'MEDIUM',
     status: 'LOCKED',
-    description: 'Sabotage a secret research facility hidden beneath the ice.',
+    description: 'Bypass the garrison at the District 7 compound and rescue Savita Sharma.',
     objectives: [
-      'Neutralize the perimeter sentries.',
-      'Plant explosives on the cooling generators.',
-      'Escape before the facility self-destructs.'
+      'Infiltrate the north wall blind spot.',
+      'Descend to Basement Level 2.',
+      'Secure Savita Sharma and extract.'
     ],
     rewards: [
       '2500 XP',
-      'Weapon: SWS-10 Winter Camo',
-      'New Operator: Glacier'
+      'Weapon: Balwant’s Custom Sidearm',
+      'Trait: Unyielding Resolve'
     ],
     briefing: {
-      commander: 'MAJOR KORT',
-      text: 'It’s cold out there, Vanguard. The Arkangelsk Group is testing something they shouldn’t be in the Arctic circle. We need that facility offline. Move fast, the cold isn’t the only thing that kills up there.'
+      commander: 'BALWANT SINGH',
+      text: 'The forty-eight-hour window is closing. District 7 is a fortress, Aryan. They’re expecting trouble, but they’re not expecting you. Get in there, find her, and bring her home. No matter what happens, you don’t stop moving.'
     }
   },
   {
     id: 'm3',
-    title: 'TITAN FALL',
-    location: 'ORBITAL STATION',
+    title: 'THE HILLSIDE VILLA',
+    location: 'HILL STATION, NAGPUR',
     difficulty: 'HARD',
     status: 'LOCKED',
-    description: 'Reclaim control of a hijacked orbital kinetic weapon.',
+    description: 'Infiltrate Commander Hasan’s fortified estate and dismantle ISF’s military structure.',
     objectives: [
-      'Perform zero-G breach of the airlock.',
-      'Disable the manual override on the bridge.',
-      'Secure the station commander.'
+      'Eliminate the outer perimeter sentries.',
+      'Breach the main villa ground floor.',
+      'Neutralize Commander Hasan.'
     ],
     rewards: [
       '5000 XP',
-      'Title: Orbital Vanguard',
-      'Legendary Skin: Zero Gravity'
+      'Title: Shadow Rising',
+      'Legendary Gear: ISF Encryption Key'
     ],
     briefing: {
-      commander: 'GENERAL CHASE',
-      text: 'Listen up. The "Titan" orbital platform has been hijacked. If they fire that thing, millions die. You’re launching in 20 minutes. I expect results, not excuses. Good luck, soldier.'
+      commander: 'BALWANT SINGH',
+      text: 'This is it. Hasan is the one who ran the enforcement chain. He’s protected by a dozen professionals. If you take him down, the rest of the network will fracture. This won’t be a clean operation, Aryan. It will be war.'
     }
   }
 ];
