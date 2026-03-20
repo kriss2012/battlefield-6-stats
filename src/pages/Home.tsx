@@ -71,7 +71,7 @@ export default function Home() {
             { to: "/servers", icon: "🎮", title: "Network", desc: "Scan active combat zones for server availability and real-time player density.", color: "emerald" },
             { to: "/forge", icon: "🧬", title: "Neural Forge", desc: "AI-driven development of tactical textures, characters, and combat narratives.", color: "blue" },
             { to: "/friends", icon: "👥", title: "Friends", desc: "Manage your tactical network and coordinate with fellow operators.", color: "purple" },
-            { to: "/story", icon: "🎬", title: "Shadow Rising", desc: "Experience the interactive revenge saga of Aryan Malik.", color: "red" },
+            { to: "/story", icon: "🎬", title: "Shadow Rising", desc: "Experience the interactive revenge saga of Aryan Sharma.", color: "red" },
           ].map((item, i) => (
             <motion.div
               key={item.to}
