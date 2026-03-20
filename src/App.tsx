@@ -18,6 +18,7 @@ import Leaderboard from './pages/Leaderboard';
 import Armory from './pages/Armory';
 import Campaign from './pages/Campaign';
 import Simulation from './pages/Simulation';
+import ShadowRising from './pages/ShadowRising';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/armory" element={<Armory />} />
             <Route path="/campaign" element={<Campaign />} />
             <Route path="/simulation" element={<Simulation />} />
+            <Route path="/story" element={<ShadowRising />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route
