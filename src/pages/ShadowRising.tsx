@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { storyData } from '../utils/storyData';
 import type { Scene } from '../utils/storyData';
+import { CharacterPortraits } from '../utils/characterAssets';
 import TacticalHUD from '../components/TacticalHUD';
 
 const ShadowRising: React.FC = () => {
-  const [currentSceneKey, setCurrentSceneKey] = useState('s_prologue');
+  const [currentSceneKey, setCurrentSceneKey] = useState('s1_intro');
   const [state, setState] = useState({
     rage: 0,
     resolve: 'broken',
     path: 'shadow',
     chapter: 1,
+    skills: {
+      combat: false,
+      stealth: false,
+      intel: false,
+    },
+    gear: {
+      map: false,
+      drawing: true,
+      flashDrive: false,
+    },
     foughtBack: false,
     savedEvidence: false,
     hadAlliance: false,
@@ -18,16 +29,44 @@ const ShadowRising: React.FC = () => {
   });
   const [showOverlay, setShowOverlay] = useState<'JUSTICE' | 'VICTORY' | null>(null);
   const [flash, setFlash] = useState(false);
+  const [displayText, setDisplayText] = useState('');
+  const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const scene: Scene = storyData[currentSceneKey] || storyData['s_prologue'];
+  const scene: Scene = storyData[currentSceneKey] || storyData['s1_intro'];
+
+  useEffect(() => {
+    // Typing effect
+    let i = 0;
+    setDisplayText('');
+    if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+    
+    const fullText = scene.text;
+    typingIntervalRef.current = setInterval(() => {
+      setDisplayText((prev) => prev + fullText.charAt(i));
+      i++;
+      if (i >= fullText.length) {
+        if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+      }
+    }, 15);
+
+    return () => {
+      if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+    };
+  }, [currentSceneKey]);
 
   const handleChoice = (choice: any) => {
-    // Apply state changes
     const newState = { ...state };
+    
+    // Apply state changes
     if (choice.raiseRage && newState.rage < 5) newState.rage++;
+    if (choice.lowerRage && newState.rage > 0) newState.rage--;
     if (choice.setFought) newState.foughtBack = true;
     if (choice.saveEvidence) newState.savedEvidence = true;
     if (choice.setAlliance) newState.hadAlliance = true;
+    
+    if (choice.unlockSkill) {
+      newState.skills[choice.unlockSkill as keyof typeof newState.skills] = true;
+    }
 
     // Update path
     if (choice.tag === 'fight') newState.path = 'warrior';
@@ -56,12 +95,14 @@ const ShadowRising: React.FC = () => {
       resolve: 'broken',
       path: 'shadow',
       chapter: 1,
+      skills: { combat: false, stealth: false, intel: false },
+      gear: { map: false, drawing: true, flashDrive: false },
       foughtBack: false,
       savedEvidence: false,
       hadAlliance: false,
       motherDead: false,
     });
-    setCurrentSceneKey('s_prologue');
+    setCurrentSceneKey('s1_intro');
     setShowOverlay(null);
   };
 
@@ -73,9 +114,6 @@ const ShadowRising: React.FC = () => {
         <rect x="50" y="80" width="60" height="80" fill="#111" stroke="#1a1a1a"/>
         <rect x="160" y="70" width="80" height="90" fill="#111" stroke="#1a1a1a"/>
         <rect x="600" y="75" width="100" height="85" fill="#111" stroke="#1a1a1a"/>
-        <rect x="65" y="95" width="12" height="10" fill="#1a0f00" opacity="0.8"/>
-        <rect x="85" y="95" width="12" height="10" fill="#2a1500" opacity="0.9"/>
-        <rect x="175" y="88" width="15" height="11" fill="#1a0800"/>
         <rect x="0" y="185" width="800" height="35" fill="#0a0a0a" stroke="#151515"/>
         <ellipse cx="320" cy="190" rx="18" ry="5" fill="#050505"/>
         <line x1="320" y1="155" x2="320" y2="185" stroke="#1e1e1e" strokeWidth="2"/>
