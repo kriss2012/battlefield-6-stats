@@ -18,9 +18,9 @@ import * as THREE from 'three';
 // --- Target Component ---
 const Target: React.FC<{ position: [number, number, number]; onHit: () => void }> = ({ position, onHit }) => {
   const [hit, setHit] = useState(false);
-  const meshRef = useRef<THREE.Mesh>(null!);
+  const meshRef = useRef<THREE.Group>(null!);
 
-  useFrame(() => {
+  useFrame((state) => {
     if (hit) {
       meshRef.current.scale.lerp(new THREE.Vector3(0, 0, 0), 0.1);
       if (meshRef.current.scale.x < 0.01) {
@@ -29,7 +29,7 @@ const Target: React.FC<{ position: [number, number, number]; onHit: () => void }
         meshRef.current.scale.set(1, 1, 1);
         meshRef.current.position.set(
           (Math.random() - 0.5) * 20,
-          Math.random() * 5 + 1,
+          0,
           (Math.random() - 0.5) * 20
         );
       }
@@ -37,21 +37,29 @@ const Target: React.FC<{ position: [number, number, number]; onHit: () => void }
   });
 
   return (
-    <Sphere 
+    <group 
       ref={meshRef} 
-      args={[0.5, 32, 32]} 
       position={position}
       onClick={(e) => {
         e.stopPropagation();
         setHit(true);
       }}
     >
-      <meshStandardMaterial 
-        color={hit ? "#ef4444" : "#3b82f6"} 
-        emissive={hit ? "#ef4444" : "#3b82f6"} 
-        emissiveIntensity={2} 
-      />
-    </Sphere>
+      {/* Humanoid Silhouette */}
+      <mesh position={[0, 1.5, 0]} castShadow>
+        <capsuleGeometry args={[0.3, 1, 4, 8]} />
+        <meshStandardMaterial 
+          color={hit ? "#ef4444" : "#1e293b"} 
+          emissive={hit ? "#ef4444" : "#3b82f6"} 
+          emissiveIntensity={hit ? 5 : 0.5} 
+        />
+      </mesh>
+      {/* Tactical Glow Core */}
+      <mesh position={[0, 1.7, 0.1]}>
+        <sphereGeometry args={[0.1, 16, 16]} />
+        <meshStandardMaterial color="#3b82f6" emissive="#3b82f6" emissiveIntensity={2} />
+      </mesh>
+    </group>
   );
 };
 
