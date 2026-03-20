@@ -24,6 +24,7 @@ export default function Navigation() {
     { to: "/forge", label: "NEURAL FORGE" },
     { to: "/friends", label: "FRIENDS" },
     { to: "/squads", label: "SQUADS" },
+    { to: "/story", label: "STORY" },
   ];
 
   return (
