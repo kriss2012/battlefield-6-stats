@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { missions } from '../utils/missionData';
@@ -5,6 +6,7 @@ import type { Mission } from '../utils/missionData';
 import TacticalHUD from '../components/TacticalHUD';
 
 const Campaign: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
   const [view, setView] = useState<'map' | 'briefing'>('map');
 
@@ -181,7 +183,10 @@ const Campaign: React.FC = () => {
                       </div>
                     </div>
 
-                    <button className="w-full py-6 bg-blue-600 text-white rounded-3xl font-black italic uppercase tracking-widest hover:bg-blue-500 transition-all shadow-xl shadow-blue-500/20 active:scale-95 group">
+                    <button 
+                      onClick={() => navigate(`/simulation?missionId=${selectedMission?.id}`)}
+                      className="w-full py-6 bg-blue-600 text-white rounded-3xl font-black italic uppercase tracking-widest hover:bg-blue-500 transition-all shadow-xl shadow-blue-500/20 active:scale-95 group"
+                    >
                       INITIALIZE DEPLOYMENT
                       <span className="ml-3 group-hover:translate-x-2 transition-transform inline-block">→</span>
                     </button>
