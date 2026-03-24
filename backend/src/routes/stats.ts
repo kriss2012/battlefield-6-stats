@@ -3,6 +3,7 @@ import pool from '../config/database';
 import { fetchAndStorePlayerStats, addTrackedPlayer } from '../services/statsCollector';
 import { generateRecommendations } from '../services/aiAnalytics';
 import { collectAllTrackedPlayerStats } from '../services/cronJobs';
+import { authenticateToken } from '../middleware/auth';
 
 const router = express.Router();
 
@@ -132,7 +133,7 @@ router.post('/compare', async (req, res) => {
 });
 
 // Track a player (add to tracked players list)
-router.post('/track', async (req, res) => {
+router.post('/track', authenticateToken, async (req, res) => {
   try {
     const { playerId, playerName, platform = 'pc' } = req.body;
 
@@ -172,7 +173,7 @@ router.get('/tracked', async (req, res) => {
 });
 
 // Manually trigger stats collection for all tracked players
-router.post('/collect', async (req, res) => {
+router.post('/collect', authenticateToken, async (req, res) => {
   try {
     // Run collection in background
     collectAllTrackedPlayerStats().catch(console.error);
