@@ -19,12 +19,7 @@ export async function comparePassword(password: string, hash: string): Promise<b
   return await bcrypt.compare(password, hash);
 }
 
-export const generateToken = (user: { id: number; username: string }): string => {
-  const payload: JWTPayload = {
-    userId: user.id,
-    username: user.username,
-    email: '', // Assuming email is not available or can be empty for this token
-  };
+export const generateToken = (payload: JWTPayload): string => {
   const options: SignOptions = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expiresIn: JWT_EXPIRES_IN as any,
