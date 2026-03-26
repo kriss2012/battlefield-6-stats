@@ -45,7 +45,7 @@ export default function Home() {
           <div className="flex-1 text-left animate-fade-in relative preserve-3d">
             <div className="flex items-center gap-2 mb-4">
               <span className="h-[1px] w-8 bg-blue-500" />
-              <span className="text-[10px] font-mono text-blue-400 tracking-[0.4em] uppercase">Tactical Intelligence Hub</span>
+              <span className="text-xs font-mono text-blue-400 tracking-[0.4em] uppercase">Tactical Intelligence Hub</span>
             </div>
             <h1 className="text-7xl md:text-8xl font-black mb-6 italic tracking-tighter chromatic-aberration animate-glitch-v2 leading-none">
               BF6 <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">STATS HUB</span>
@@ -136,7 +136,7 @@ export default function Home() {
         </div>
 
         <div className="mt-24 text-center border-t border-white/5 pt-12">
-          <div className="inline-flex gap-8 text-[10px] font-black uppercase tracking-[0.3em] text-gray-600">
+          <div className="inline-flex gap-8 text-xs font-black uppercase tracking-[0.3em] text-gray-600">
             <span className="hover:text-blue-500 transition-colors cursor-default">Real-time Stats</span>
             <span className="hidden md:inline">•</span>
             <span className="hover:text-blue-500 transition-colors cursor-default">Analytics Feed</span>
