@@ -109,7 +109,7 @@ export default function Friends() {
           <div className="animate-fade-in">
             <div className="flex items-center gap-2 mb-2">
               <span className="h-[1px] w-8 bg-blue-500" />
-              <span className="text-[10px] font-mono text-blue-400 tracking-[0.4em] uppercase">Social Intelligence</span>
+              <span className="text-xs font-mono text-blue-400 tracking-[0.4em] uppercase">Social Intelligence</span>
             </div>
             <h1 className="text-5xl font-black italic tracking-tighter uppercase leading-none">
               Friend <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">Network</span>
@@ -126,7 +126,7 @@ export default function Friends() {
             />
             <button 
               type="submit"
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl transition-all font-black text-[10px] uppercase tracking-widest"
+              className="px-6 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl transition-all font-black text-xs uppercase tracking-widest"
             >
               SIGNAL
             </button>
@@ -184,7 +184,7 @@ export default function Friends() {
                         </div>
                         <div className="flex-1">
                           <h3 className="font-black italic uppercase tracking-wider text-sm">{friend.username}</h3>
-                          <p className="text-[10px] text-gray-500 font-mono tracking-tight">{friend.player_name || 'NO_LINKED_ACCOUNT'}</p>
+                          <p className="text-xs text-gray-500 font-mono tracking-tight">{friend.player_name || 'NO_LINKED_ACCOUNT'}</p>
                         </div>
                         <button 
                           onClick={() => handleRemoveFriend(friend.friendship_id)}
@@ -230,19 +230,19 @@ export default function Friends() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-black uppercase tracking-widest truncate">{request.username}</p>
-                        <p className="text-[8px] text-gray-500 font-mono uppercase truncate">{new Date(request.created_at).toLocaleDateString()}</p>
+                        <p className="text-[10px] text-gray-500 font-mono uppercase truncate">{new Date(request.created_at).toLocaleDateString()}</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <button 
                         onClick={() => handleRespond(request.friendship_id, 'accept')}
-                        className="py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/20 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all"
+                        className="py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/20 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
                       >
                         ACCEPT
                       </button>
                       <button 
                         onClick={() => handleRespond(request.friendship_id, 'reject')}
-                        className="py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/20 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all"
+                        className="py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/20 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
                       >
                         DECLINE
                       </button>
@@ -253,7 +253,7 @@ export default function Friends() {
               
               {requests.length === 0 && !loading && (
                 <div className="p-8 text-center bg-white/5 rounded-2xl border border-white/5 opacity-50">
-                  <p className="text-[9px] font-mono uppercase tracking-widest text-gray-600">Frequency clear.</p>
+                  <p className="text-xs font-mono uppercase tracking-widest text-gray-600">Frequency clear.</p>
                 </div>
               )}
             </div>
