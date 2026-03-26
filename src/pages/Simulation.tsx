@@ -259,6 +259,7 @@ const Simulation: React.FC = () => {
   const [missionComplete, setMissionComplete] = useState(false);
   const [isFiring, setIsFiring] = useState(false);
   const [isAlarmActive, setIsAlarmActive] = useState(false);
+  const [showHitMarker, setShowHitMarker] = useState(false);
   const controlsRef = useRef<any>(null);
 
   // Auto-lock controls when simulation starts
@@ -270,6 +271,8 @@ const Simulation: React.FC = () => {
 
   const handleHit = () => {
     setScore(s => s + 100);
+    setShowHitMarker(true);
+    setTimeout(() => setShowHitMarker(false), 150);
     if (mission && score + 100 >= 500) {
       setMissionComplete(true);
     }
@@ -293,7 +296,9 @@ const Simulation: React.FC = () => {
         { name: 'jump', keys: ['Space'] },
       ]}
     >
-      <div className="fixed inset-0 bg-black cursor-crosshair" onClick={handleShoot}>
+      <div className="fixed inset-0 bg-black cursor-crosshair" onMouseDown={() => {
+        if (isStarted && !missionComplete) handleShoot();
+      }}>
         <Canvas shadows>
           <PerspectiveCamera makeDefault position={[0, 2, 10]} fov={75} />
           <fog attach="fog" args={["#000", 10, 50]} />
@@ -359,6 +364,23 @@ const Simulation: React.FC = () => {
             <div className="w-8 h-[2px] bg-blue-400 absolute left-1/2 -translate-x-1/2" />
             <div className="h-8 w-[2px] bg-blue-400 absolute top-1/2 -translate-y-1/2" />
             <div className="w-1 h-1 bg-red-500 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            
+            {/* Hit Marker */}
+            {showHitMarker && (
+              <motion.div 
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1.5, opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+              >
+                <div className="w-8 h-8 relative">
+                  <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-red-500" />
+                  <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-red-500" />
+                  <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-red-500" />
+                  <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-red-500" />
+                </div>
+              </motion.div>
+            )}
           </div>
         </div>
 
