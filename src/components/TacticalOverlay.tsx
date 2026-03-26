@@ -80,17 +80,17 @@ const TacticalOverlay: React.FC = () => {
       {/* Left Telemetry Panel */}
       <div className="absolute bottom-12 left-12 flex flex-col gap-4 font-mono">
         <div className="flex flex-col">
-          <span className="text-[8px] text-gray-500 tracking-widest uppercase">Telemetry Status</span>
+          <span className="text-xs text-gray-500 tracking-widest uppercase">Telemetry Status</span>
           <div className="flex items-center gap-2">
             <span className="text-xl font-black italic text-blue-400">{fps}</span>
-            <span className="text-[10px] text-blue-400/50">FPS</span>
+            <span className="text-xs text-blue-400/50">FPS</span>
           </div>
         </div>
 
         <div className="flex flex-col w-32">
           <div className="flex justify-between items-center mb-1">
-            <span className="text-[8px] text-gray-500 tracking-widest uppercase">Neural Load</span>
-            <span className="text-[8px] text-white/60">{neuralLoad}%</span>
+            <span className="text-xs text-gray-500 tracking-widest uppercase">Neural Load</span>
+            <span className="text-xs text-white/60">{neuralLoad}%</span>
           </div>
           <div className="h-1 bg-white/5 rounded-full overflow-hidden border border-white/5">
             <motion.div 
@@ -104,7 +104,7 @@ const TacticalOverlay: React.FC = () => {
 
       {/* Compass / Heading Indicator */}
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-        <div className="flex items-center gap-12 font-mono text-[9px] tracking-[0.3em] text-white/40 mb-2">
+        <div className="flex items-center gap-12 font-mono text-[11px] tracking-[0.3em] text-white/40 mb-2">
           <span>N</span>
           <span>E</span>
           <span className="text-blue-400 font-bold">S</span>
@@ -120,7 +120,7 @@ const TacticalOverlay: React.FC = () => {
             <div className="w-2 h-2 rounded-full border border-blue-500 absolute -top-4" />
           </motion.div>
         </div>
-        <div className="font-mono text-[10px] font-black italic text-white/60 mt-2">
+        <div className="font-mono text-xs font-black italic text-white/60 mt-2">
           HDG // <motion.span>{useTransform(smoothHeading, (v) => v.toFixed(1))}</motion.span>°
         </div>
       </div>
@@ -137,7 +137,7 @@ const TacticalOverlay: React.FC = () => {
       </motion.div>
 
       {/* Top Bar Signal (Already handled by Nav mostly, but adding small detail) */}
-      <div className="absolute top-2 w-full flex justify-between px-12 font-mono text-[7px] text-white/20 tracking-[0.5em] uppercase pointer-events-none">
+      <div className="absolute top-2 w-full flex justify-between px-12 font-mono text-[10px] text-white/20 tracking-[0.5em] uppercase pointer-events-none">
         <div className="flex gap-4">
           <span>Uplink: Synchronized</span>
           <span>Encryption: AES-256</span>
@@ -149,7 +149,7 @@ const TacticalOverlay: React.FC = () => {
       </div>
 
       {/* Bottom Right Integrity Log */}
-      <div className="absolute bottom-12 right-12 w-48 font-mono text-[7px] text-white/20 uppercase tracking-widest flex flex-col gap-1 items-end text-right">
+      <div className="absolute bottom-12 right-12 w-48 font-mono text-[10px] text-white/20 uppercase tracking-widest flex flex-col gap-1 items-end text-right">
         <span className="text-blue-500/40 font-black mb-1">System_Integrity_Log</span>
         <motion.div animate={{ opacity: [0.2, 0.5, 0.2] }} transition={{ duration: 2, repeat: Infinity }}>
           - MEMORY_SYNC: OK<br/>
