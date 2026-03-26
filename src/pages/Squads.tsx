@@ -93,7 +93,7 @@ export default function Squads() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="h-[1px] w-8 bg-emerald-500" />
-              <span className="text-[10px] font-mono text-emerald-400 tracking-[0.4em] uppercase">Tactical Units</span>
+              <span className="text-xs font-mono text-emerald-400 tracking-[0.4em] uppercase">Tactical Units</span>
             </div>
             <h1 className="text-5xl font-black italic tracking-tighter uppercase leading-none">
               Squad <span className="bg-gradient-to-r from-emerald-400 to-blue-600 bg-clip-text text-transparent">Operations</span>
@@ -143,18 +143,18 @@ export default function Squads() {
                     className="glass-card p-6 group relative"
                   >
                     <div className="flex justify-between items-start mb-4">
-                      <div className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] font-mono text-blue-400">[{squad.tag}]</div>
-                      <div className="text-[10px] text-gray-500 uppercase tracking-widest">{squad.member_count} OPERATORS</div>
+                      <div className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-xs font-mono text-blue-400">[{squad.tag}]</div>
+                      <div className="text-xs text-gray-500 uppercase tracking-widest">{squad.member_count} OPERATORS</div>
                     </div>
                     <h3 className="text-xl font-black italic uppercase tracking-tighter mb-2">{squad.name}</h3>
                     <p className="text-xs text-gray-400 mb-6 line-clamp-2 h-8 leading-relaxed italic">{squad.description || 'No mission priority assigned.'}</p>
                     
                     <div className="flex items-center justify-between mt-auto">
-                      <span className="text-[10px] font-mono text-gray-600">CMD: {squad.owner_name}</span>
+                      <span className="text-xs font-mono text-gray-600">CMD: {squad.owner_name}</span>
                       {!mySquads.some(ms => ms.id === squad.id) && (
                         <button 
                           onClick={() => handleJoinSquad(squad.id)}
-                          className="px-4 py-1.5 bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/30 rounded-lg text-[9px] font-black tracking-widest transition-all"
+                          className="px-4 py-1.5 bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/30 rounded-lg text-[10px] font-black tracking-widest transition-all"
                         >
                           JOIN
                         </button>
@@ -178,12 +178,12 @@ export default function Squads() {
               {mySquads.map((squad) => (
                 <div key={squad.id} className="glass-card p-4 border-l-4 border-emerald-500 text-left">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-emerald-400 font-mono text-[10px]">[{squad.tag}]</span>
+                    <span className="text-emerald-400 font-mono text-xs">[{squad.tag}]</span>
                     <h3 className="font-black italic uppercase text-sm tracking-widest">{squad.name}</h3>
                   </div>
-                  <div className="flex justify-between items-center text-[10px] text-gray-500">
+                  <div className="flex justify-between items-center text-xs text-gray-500">
                     <span className="uppercase tracking-widest">MEMBERS: {squad.member_count}</span>
-                    <span className="px-2 py-0.5 bg-white/5 rounded text-[8px] font-black tracking-tighter">
+                    <span className="px-2 py-0.5 bg-white/5 rounded text-[10px] font-black tracking-tighter">
                       {squad.owner_user_id === user?.id ? 'COMMANDER' : 'OPERATOR'}
                     </span>
                   </div>
@@ -192,7 +192,7 @@ export default function Squads() {
               
               {mySquads.length === 0 && !loading && (
                 <div className="p-12 text-center border border-dashed border-white/5 rounded-2xl opacity-50">
-                  <p className="text-[10px] font-mono uppercase tracking-widest text-gray-600">Unassigned to any unit.</p>
+                  <p className="text-xs font-mono uppercase tracking-widest text-gray-600">Unassigned to any unit.</p>
                 </div>
               )}
             </div>
@@ -221,7 +221,7 @@ export default function Squads() {
               
               <form onSubmit={handleCreateSquad} className="space-y-6">
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-2">SQUAD_NAME</label>
+                  <label className="block text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-2">SQUAD_NAME</label>
                   <input 
                     type="text" 
                     required
@@ -234,7 +234,7 @@ export default function Squads() {
                 
                 <div className="grid grid-cols-2 gap-4 text-left">
                   <div>
-                    <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-2">IDENT_TAG</label>
+                    <label className="block text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-2">IDENT_TAG</label>
                     <input 
                       type="text" 
                       required
@@ -253,13 +253,13 @@ export default function Squads() {
                         onChange={(e) => setNewSquad(prev => ({ ...prev, isPublic: e.target.checked }))}
                         className="w-4 h-4 rounded bg-white/5 border-white/10 text-emerald-600 focus:ring-emerald-500/50"
                       />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 group-hover:text-emerald-400 transition-colors">Public Signal</span>
+                      <span className="text-xs font-black uppercase tracking-widest text-gray-500 group-hover:text-emerald-400 transition-colors">Public Signal</span>
                     </label>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-2">MISSION_OBJECTIVES</label>
+                  <label className="block text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-2">MISSION_OBJECTIVES</label>
                   <textarea 
                     value={newSquad.description}
                     onChange={(e) => setNewSquad(prev => ({ ...prev, description: e.target.value }))}
@@ -272,13 +272,13 @@ export default function Squads() {
                   <button 
                     type="button"
                     onClick={() => setShowCreateModal(false)}
-                    className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"
+                    className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-black uppercase tracking-[0.2em] transition-all"
                   >
                     ABORT
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all shadow-lg shadow-emerald-600/20"
+                    className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl text-xs font-black uppercase tracking-[0.2em] transition-all shadow-lg shadow-emerald-600/20"
                   >
                     DEPLOY UNIT
                   </button>
