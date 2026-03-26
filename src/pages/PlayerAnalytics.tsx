@@ -116,7 +116,7 @@ export default function PlayerAnalytics() {
 
           <div className="flex flex-wrap items-center gap-8 border-t border-white/5 pt-6">
             <div className="flex items-center gap-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Temporal Range</label>
+              <label className="text-xs font-black uppercase tracking-widest text-gray-500">Temporal Range</label>
               <select
                 value={days}
                 onChange={(e) => setDays(Number(e.target.value))}
@@ -140,7 +140,7 @@ export default function PlayerAnalytics() {
                   {tracking ? 'ESTABLISHING LINK...' : 'TRACK TARGET'}
                 </button>
                 {trackMessage && (
-                  <p className={`text-[10px] font-bold ${trackMessage.includes('Error') ? 'text-red-400' : 'text-green-400'}`}>
+                  <p className={`text-xs font-bold ${trackMessage.includes('Error') ? 'text-red-400' : 'text-green-400'}`}>
                     {trackMessage}
                   </p>
                 )}
@@ -179,7 +179,7 @@ export default function PlayerAnalytics() {
                   </Canvas>
                 </div>
                 <div className="relative z-10 pointer-events-none">
-                  <span className="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">Neural Analysis</span>
+                  <span className="text-xs font-mono text-blue-400 uppercase tracking-widest block mb-1">Neural Analysis</span>
                   <h3 className="text-xl font-black italic uppercase tracking-tighter">Live Telemetry</h3>
                 </div>
               </div>
