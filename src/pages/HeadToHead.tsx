@@ -148,79 +148,116 @@ export default function HeadToHead() {
         {player1Data && player2Data && (
           <>
             {/* Player Cards */}
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <div className="grid md:grid-cols-2 gap-8 mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
               {/* Player 1 Card */}
-              <div className="bg-gradient-to-br from-blue-900/50 to-gray-800 rounded-lg p-6 border-2 border-blue-500">
-                <div className="text-center mb-4">
-                  <h2 className="text-3xl font-bold mb-1">{player1Data.player_name}</h2>
-                  <div className="text-gray-400">{player1Data.rank}</div>
-                  <div className="text-2xl font-bold text-blue-400 mt-2">Level {player1Data.level}</div>
+              <div className="glass-card p-8 border-l-4 border-l-blue-500 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <span className="text-8xl grayscale tracking-tighter">01</span>
                 </div>
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div className="bg-gray-900/50 rounded p-3">
-                    <div className="text-gray-400">K/D Ratio</div>
-                    <div className="text-xl font-bold">{player1Data.kd_ratio.toFixed(2)}</div>
+                <div className="relative z-10">
+                  <div className="text-center mb-6">
+                    <h2 className="text-4xl font-black italic uppercase tracking-tighter mb-1 text-white">{player1Data.player_name}</h2>
+                    <div className="text-xs font-black uppercase tracking-[0.4em] text-blue-500/60 mb-4">{player1Data.rank}</div>
+                    <div className="inline-block px-4 py-1 bg-blue-600/10 border border-blue-500/20 rounded-full text-xs font-black text-blue-400">LEVEL {player1Data.level}</div>
                   </div>
-                  <div className="bg-gray-900/50 rounded p-3">
-                    <div className="text-gray-400">Win Rate</div>
-                    <div className="text-xl font-bold">{player1Data.win_rate.toFixed(1)}%</div>
-                  </div>
-                  <div className="bg-gray-900/50 rounded p-3">
-                    <div className="text-gray-400">Score</div>
-                    <div className="text-xl font-bold">{player1Data.score.toLocaleString()}</div>
-                  </div>
-                  <div className="bg-gray-900/50 rounded p-3">
-                    <div className="text-gray-400">Kills</div>
-                    <div className="text-xl font-bold">{player1Data.kills.toLocaleString()}</div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-white/5 rounded-2xl p-4 border border-white/5">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">K/D Ratio</div>
+                      <div className="text-2xl font-black italic text-white">{player1Data.kd_ratio.toFixed(2)}</div>
+                    </div>
+                    <div className="bg-white/5 rounded-2xl p-4 border border-white/5">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">Win Rate</div>
+                      <div className="text-2xl font-black italic text-white">{player1Data.win_rate.toFixed(1)}%</div>
+                    </div>
+                    <div className="bg-white/5 rounded-2xl p-4 border border-white/5">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">Score</div>
+                      <div className="text-2xl font-black italic text-white">{player1Data.score.toLocaleString()}</div>
+                    </div>
+                    <div className="bg-white/5 rounded-2xl p-4 border border-white/5">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">Kills</div>
+                      <div className="text-2xl font-black italic text-white">{player1Data.kills.toLocaleString()}</div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Player 2 Card */}
-              <div className="bg-gradient-to-br from-purple-900/50 to-gray-800 rounded-lg p-6 border-2 border-purple-500">
-                <div className="text-center mb-4">
-                  <h2 className="text-3xl font-bold mb-1">{player2Data.player_name}</h2>
-                  <div className="text-gray-400">{player2Data.rank}</div>
-                  <div className="text-2xl font-bold text-purple-400 mt-2">Level {player2Data.level}</div>
+              <div className="glass-card p-8 border-l-4 border-l-purple-500 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <span className="text-8xl grayscale tracking-tighter">02</span>
                 </div>
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div className="bg-gray-900/50 rounded p-3">
-                    <div className="text-gray-400">K/D Ratio</div>
-                    <div className="text-xl font-bold">{player2Data.kd_ratio.toFixed(2)}</div>
+                <div className="relative z-10">
+                  <div className="text-center mb-6">
+                    <h2 className="text-4xl font-black italic uppercase tracking-tighter mb-1 text-white">{player2Data.player_name}</h2>
+                    <div className="text-xs font-black uppercase tracking-[0.4em] text-purple-500/60 mb-4">{player2Data.rank}</div>
+                    <div className="inline-block px-4 py-1 bg-purple-600/10 border border-purple-500/20 rounded-full text-xs font-black text-purple-400">LEVEL {player2Data.level}</div>
                   </div>
-                  <div className="bg-gray-900/50 rounded p-3">
-                    <div className="text-gray-400">Win Rate</div>
-                    <div className="text-xl font-bold">{player2Data.win_rate.toFixed(1)}%</div>
-                  </div>
-                  <div className="bg-gray-900/50 rounded p-3">
-                    <div className="text-gray-400">Score</div>
-                    <div className="text-xl font-bold">{player2Data.score.toLocaleString()}</div>
-                  </div>
-                  <div className="bg-gray-900/50 rounded p-3">
-                    <div className="text-gray-400">Kills</div>
-                    <div className="text-xl font-bold">{player2Data.kills.toLocaleString()}</div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-white/5 rounded-2xl p-4 border border-white/5">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">K/D Ratio</div>
+                      <div className="text-2xl font-black italic text-white">{player2Data.kd_ratio.toFixed(2)}</div>
+                    </div>
+                    <div className="bg-white/5 rounded-2xl p-4 border border-white/5">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">Win Rate</div>
+                      <div className="text-2xl font-black italic text-white">{player2Data.win_rate.toFixed(1)}%</div>
+                    </div>
+                    <div className="bg-white/5 rounded-2xl p-4 border border-white/5">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">Score</div>
+                      <div className="text-2xl font-black italic text-white">{player2Data.score.toLocaleString()}</div>
+                    </div>
+                    <div className="bg-white/5 rounded-2xl p-4 border border-white/5">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">Kills</div>
+                      <div className="text-2xl font-black italic text-white">{player2Data.kills.toLocaleString()}</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Comparison Chart */}
-            <div className="bg-gray-800 rounded-lg p-6 mb-6">
-              <h3 className="text-xl font-semibold mb-4">Performance Comparison</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={getChartData()}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis dataKey="stat" stroke="#9CA3AF" />
-                  <YAxis stroke="#9CA3AF" />
-                  <Tooltip
-                    contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '0.375rem' }}
-                    labelStyle={{ color: '#F3F4F6' }}
-                  />
-                  <Legend />
-                  <Bar dataKey={player1Data.player_name} fill="#3B82F6" />
-                  <Bar dataKey={player2Data.player_name} fill="#8B5CF6" />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="glass-card p-8 mb-8 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                <h3 className="text-xs font-black uppercase tracking-[0.4em] text-blue-500/60">Performance Delta Chart</h3>
+              </div>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={getChartData()}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                    <XAxis 
+                      dataKey="stat" 
+                      stroke="#4b5563" 
+                      fontSize={10} 
+                      fontWeight="bold" 
+                      tick={{ fill: '#4b5563' }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis 
+                      stroke="#4b5563" 
+                      fontSize={10} 
+                      fontWeight="bold" 
+                      tick={{ fill: '#4b5563' }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <Tooltip
+                      cursor={{ fill: '#ffffff05' }}
+                      contentStyle={{ 
+                        backgroundColor: '#0a0a0a', 
+                        border: '1px solid #ffffff10', 
+                        borderRadius: '12px',
+                        fontSize: '10px',
+                        fontWeight: 'bold',
+                        textTransform: 'uppercase'
+                      }}
+                    />
+                    <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', fontWeight: 'bold' }} />
+                    <Bar dataKey={player1Data.player_name} fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey={player2Data.player_name} fill="#a855f7" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
 
             {/* Detailed Stats Table */}
