@@ -40,7 +40,7 @@ const Campaign: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="h-[1px] w-8 bg-blue-500" />
-                    <span className="text-[10px] font-mono text-blue-400 tracking-[0.4em] uppercase">Global Operations</span>
+                    <span className="text-xs font-mono text-blue-400 tracking-[0.4em] uppercase">Global Operations</span>
                   </div>
                   <h1 className="text-6xl font-black italic tracking-tighter mb-2 uppercase leading-none chromatic-aberration">
                     Campaign <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">Nexus</span>
@@ -65,14 +65,14 @@ const Campaign: React.FC = () => {
                   >
                     {/* Mission Header */}
                     <div className="flex justify-between items-start mb-6">
-                      <span className={`text-[10px] font-mono px-3 py-1 rounded-full border ${
+                      <span className={`text-xs font-mono px-3 py-1 rounded-full border ${
                         mission.difficulty === 'EASY' ? 'border-emerald-500/50 text-emerald-400' :
                         mission.difficulty === 'MEDIUM' ? 'border-yellow-500/50 text-yellow-400' :
                         'border-red-500/50 text-red-400'
                       }`}>
                         {mission.difficulty}
                       </span>
-                      <span className="text-[10px] font-mono text-gray-500">
+                      <span className="text-xs font-mono text-gray-500">
                         {mission.location}
                       </span>
                     </div>
@@ -87,11 +87,11 @@ const Campaign: React.FC = () => {
                     <div className="flex items-center justify-between mt-auto">
                       <div className="flex gap-2">
                         {mission.status === 'COMPLETED' ? (
-                          <span className="text-[10px] font-black text-emerald-500 uppercase">Mission Status: COMPLETED</span>
+                          <span className="text-xs font-black text-emerald-500 uppercase">Mission Status: COMPLETED</span>
                         ) : mission.status === 'LOCKED' ? (
-                          <span className="text-[10px] font-black text-red-500/50 uppercase">Mission Status: LOCKED</span>
+                          <span className="text-xs font-black text-red-500/50 uppercase">Mission Status: LOCKED</span>
                         ) : (
-                          <span className="text-[10px] font-black text-blue-500 uppercase animate-pulse">Mission Status: AVAILABLE</span>
+                          <span className="text-xs font-black text-blue-500 uppercase animate-pulse">Mission Status: AVAILABLE</span>
                         )}
                       </div>
                       {mission.status !== 'LOCKED' && (
@@ -123,7 +123,7 @@ const Campaign: React.FC = () => {
             >
               <button 
                 onClick={() => setView('map')}
-                className="mb-8 text-[10px] font-black italic uppercase text-gray-500 hover:text-white transition-colors flex items-center gap-2"
+                className="mb-8 text-xs font-black italic uppercase text-gray-500 hover:text-white transition-colors flex items-center gap-2"
               >
                 ← BACK TO NEXUS
               </button>
@@ -134,11 +134,11 @@ const Campaign: React.FC = () => {
                 
                 <div className="flex flex-col md:flex-row justify-between items-start mb-12 border-b border-white/10 pb-8 gap-4">
                   <div>
-                    <span className="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-2">Transmission Received</span>
+                    <span className="text-xs font-mono text-blue-400 uppercase tracking-widest block mb-2">Transmission Received</span>
                     <h2 className="text-4xl font-black italic uppercase">{selectedMission?.title}</h2>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] font-mono text-gray-500 uppercase block">Commander</span>
+                    <span className="text-xs font-mono text-gray-500 uppercase block">Commander</span>
                     <span className="text-lg font-black italic uppercase text-white">{selectedMission?.briefing.commander}</span>
                   </div>
                 </div>
@@ -146,7 +146,7 @@ const Campaign: React.FC = () => {
                 <div className="grid md:grid-cols-2 gap-12">
                   <div className="space-y-8">
                     <div>
-                      <h4 className="text-[10px] font-black italic uppercase text-gray-500 tracking-[0.2em] mb-4">Intelligence Brief</h4>
+                      <h4 className="text-xs font-black italic uppercase text-gray-500 tracking-[0.2em] mb-4">Intelligence Brief</h4>
                       <div className="bg-black/40 p-6 rounded-2xl border border-white/5 font-mono text-xs leading-loose text-blue-100/80">
                         <motion.p
                           initial={{ opacity: 0 }}
@@ -159,7 +159,7 @@ const Campaign: React.FC = () => {
                     </div>
 
                     <div>
-                      <h4 className="text-[10px] font-black italic uppercase text-gray-500 tracking-[0.2em] mb-4">Priority Objectives</h4>
+                      <h4 className="text-xs font-black italic uppercase text-gray-500 tracking-[0.2em] mb-4">Priority Objectives</h4>
                       <ul className="space-y-3">
                         {selectedMission?.objectives.map((obj, i) => (
                           <li key={i} className="flex items-start gap-3 text-sm font-medium">
@@ -173,7 +173,7 @@ const Campaign: React.FC = () => {
 
                   <div className="space-y-8">
                     <div>
-                      <h4 className="text-[10px] font-black italic uppercase text-gray-500 tracking-[0.2em] mb-4">Mission Rewards</h4>
+                      <h4 className="text-xs font-black italic uppercase text-gray-500 tracking-[0.2em] mb-4">Mission Rewards</h4>
                       <div className="grid gap-3">
                         {selectedMission?.rewards.map((reward, i) => (
                           <div key={i} className="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-xs font-black italic uppercase text-purple-400">
@@ -190,7 +190,7 @@ const Campaign: React.FC = () => {
                       INITIALIZE DEPLOYMENT
                       <span className="ml-3 group-hover:translate-x-2 transition-transform inline-block">→</span>
                     </button>
-                    <p className="text-[9px] text-center font-mono text-gray-600 uppercase tracking-widest">
+                    <p className="text-[11px] text-center font-mono text-gray-600 uppercase tracking-widest">
                       Warning: Deployment is irreversible once initialized.
                     </p>
                   </div>
