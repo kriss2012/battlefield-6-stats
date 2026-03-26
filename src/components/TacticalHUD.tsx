@@ -19,7 +19,7 @@ const TacticalHUD: React.FC = () => {
            <div className="absolute top-0 left-0 w-8 h-[2px] bg-blue-400" />
            <div className="absolute top-0 left-0 w-[2px] h-8 bg-blue-400" />
         </div>
-        <div className="flex flex-col gap-1 font-mono text-[9px] text-blue-400/60 uppercase tracking-widest pl-2">
+        <div className="flex flex-col gap-1 font-mono text-[11px] text-blue-400/60 uppercase tracking-widest pl-2">
            <span className="animate-pulse">OS_VER: BF_6.0.42</span>
            <span>SYS_STATUS: OPTIMAL</span>
         </div>
@@ -31,7 +31,7 @@ const TacticalHUD: React.FC = () => {
            <div className="absolute top-0 right-0 w-8 h-[2px] bg-blue-400" />
            <div className="absolute top-0 right-0 w-[2px] h-8 bg-blue-400" />
         </div>
-        <div className="flex flex-col items-end gap-1 font-mono text-[9px] text-blue-400/60 uppercase tracking-widest pr-2">
+        <div className="flex flex-col items-end gap-1 font-mono text-[11px] text-blue-400/60 uppercase tracking-widest pr-2">
            <span className="text-blue-300 font-bold">{timestamp}</span>
            <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
@@ -49,7 +49,7 @@ const TacticalHUD: React.FC = () => {
         <motion.div 
           animate={{ x: [0, 5, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="mt-4 flex flex-col gap-1 font-mono text-[8px] text-purple-400/60 uppercase tracking-[0.3em] pl-2"
+          className="mt-4 flex flex-col gap-1 font-mono text-[10px] text-purple-400/60 uppercase tracking-[0.3em] pl-2"
         >
           <span>UPLINK_BANDWIDTH: 1.2 GBPS</span>
           <span>PACKET_LOSS: 0.00%</span>
@@ -65,7 +65,7 @@ const TacticalHUD: React.FC = () => {
         <motion.div 
           animate={{ x: [0, -5, 0] }}
           transition={{ duration: 3, repeat: Infinity }}
-          className="mt-4 flex flex-col items-end gap-1 font-mono text-[8px] text-blue-400/60 uppercase tracking-[0.3em] pr-2"
+          className="mt-4 flex flex-col items-end gap-1 font-mono text-[10px] text-blue-400/60 uppercase tracking-[0.3em] pr-2"
         >
           <span>LATENCY: 12MS</span>
           <span>GEO_SYNC: VALIDATED</span>
