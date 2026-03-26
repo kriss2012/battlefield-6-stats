@@ -259,6 +259,14 @@ const Simulation: React.FC = () => {
   const [missionComplete, setMissionComplete] = useState(false);
   const [isFiring, setIsFiring] = useState(false);
   const [isAlarmActive, setIsAlarmActive] = useState(false);
+  const controlsRef = useRef<any>(null);
+
+  // Auto-lock controls when simulation starts
+  useEffect(() => {
+    if (isStarted && controlsRef.current) {
+      controlsRef.current.lock();
+    }
+  }, [isStarted]);
 
   const handleHit = () => {
     setScore(s => s + 100);
@@ -331,10 +339,8 @@ const Simulation: React.FC = () => {
             ))}
 
             <Player />
-            <PerspectiveCamera makeDefault position={[0, 2, 10]} fov={75}>
-               <Weapon isFiring={isFiring} />
-            </PerspectiveCamera>
-            <PointerLockControls />
+            <Weapon isFiring={isFiring} />
+            <PointerLockControls ref={controlsRef} />
             <Environment preset="night" />
             <Warehouse />
             
@@ -359,7 +365,7 @@ const Simulation: React.FC = () => {
         {/* STEALTH HUD */}
         <div className="absolute top-10 right-10 flex flex-col items-end gap-2">
           <div className="flex gap-1 items-center">
-            <span className="text-[10px] font-mono text-gray-500 uppercase">Detection Level</span>
+            <span className="text-xs font-mono text-gray-500 uppercase">Detection Level</span>
             <div className="w-32 h-1 bg-white/10 rounded-full overflow-hidden">
               <motion.div 
                 animate={{ width: isAlarmActive ? '100%' : '0%' }}
@@ -381,11 +387,11 @@ const Simulation: React.FC = () => {
         {/* Simulation UI */}
         <div className="absolute top-24 left-10 space-y-4">
           <div className="flex flex-col">
-            <span className="text-[10px] font-mono text-blue-400 uppercase tracking-widest">Score</span>
+            <span className="text-xs font-mono text-blue-400 uppercase tracking-widest">Score</span>
             <span className="text-4xl font-black italic text-white leading-none">{score}</span>
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] font-mono text-blue-400 uppercase tracking-widest">Ammo</span>
+            <span className="text-xs font-mono text-blue-400 uppercase tracking-widest">Ammo</span>
             <div className="flex items-end gap-1">
               <span className="text-2xl font-black italic text-white leading-none">{ammo}</span>
               <span className="text-xs text-gray-500 font-mono mb-1">/ 30</span>
