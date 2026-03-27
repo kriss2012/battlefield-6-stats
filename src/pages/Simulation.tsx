@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import TacticalHUD from '../components/TacticalHUD';
 import * as THREE from 'three';
 import { missions } from '../utils/missionData';
+import { BACKEND_URL } from '../services/api';
 
 // --- First-Person Weapon ---
 const Weapon: React.FC<{ isFiring: boolean }> = ({ isFiring }) => {
@@ -459,11 +460,11 @@ const Simulation: React.FC = () => {
               <button 
                 onClick={async () => {
                   try {
-                    await fetch('/api/game/save', {
+                    const response = await fetch(`${BACKEND_URL}/api/game/save`, {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({
-                        userId: 'guest_user', // Fallback for demo
+                        userId: 'guest_user',
                         currentScene: 's8_shadow_ascendant',
                         rage: 50,
                         resolve: 50,
@@ -471,8 +472,11 @@ const Simulation: React.FC = () => {
                         itemIds: ['map']
                       })
                     });
+                    
+                    if (!response.ok) throw new Error('Save failed');
                     navigate('/campaign');
                   } catch (e) {
+                    console.error('Save failed, navigating anyway:', e);
                     navigate('/campaign');
                   }
                 }}
