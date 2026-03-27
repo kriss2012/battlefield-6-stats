@@ -13,17 +13,18 @@ const NeuralForge: React.FC = () => {
 
   // Neural Load Management
   useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
     if (isGenerating) {
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         setNeuralLoad(prev => Math.min(prev + Math.random() * 5, 95));
       }, 200);
-      return () => clearInterval(interval);
     } else {
       const timeout = setTimeout(() => {
         setNeuralLoad(12 + Math.random() * 5);
       }, 1000);
       return () => clearTimeout(timeout);
     }
+    return () => clearInterval(interval);
   }, [isGenerating]);
 
   const addLog = (msg: string) => {
