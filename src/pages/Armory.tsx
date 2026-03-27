@@ -1,12 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ArmoryView from '../components/ArmoryView';
+import { useAuth } from '../context/AuthContext';
+import { authApi, leaderboardApi } from '../services/api';
 
 const Armory: React.FC = () => {
+  const { user, token } = useAuth();
   const [activeTab, setActiveTab] = useState<'operators' | 'arsenal'>('operators');
   const [selectedId, setSelectedId] = useState(1);
   const [customColor, setCustomColor] = useState('#3b82f6');
+  const [liveStats, setLiveStats] = useState({ level: 1, rank: 9999, xp: 0 });
   
+  // Fetch live stats if logged in
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (token && user) {
+        try {
+          const profile = await authApi.getMe(token);
+          if (profile.data) {
+            // Update level from profile, and rank from leaderboard
+            const rankData = await leaderboardApi.getPlayerRank(user.id.toString());
+            setLiveStats({
+              level: profile.data.level || 1,
+              rank: rankData.rank || 124 * (selectedId + 1), // Fallback if no rank
+              xp: profile.data.xp || 15
+            });
+          }
+        } catch (err) {
+          console.error("Failed to fetch live armory stats", err);
+        }
+      }
+    };
+    fetchStats();
+  }, [token, user, selectedId]);
+
   // Advanced Attachment System
   const [attachments, setAttachments] = useState<{ [key: string]: string }>({
     optic: 'none',
@@ -95,16 +122,16 @@ const Armory: React.FC = () => {
               <div className="absolute top-8 left-8 space-y-4">
                 <div className="flex flex-col">
                   <span className="text-xs font-mono text-blue-400 uppercase tracking-widest">Global Ranking</span>
-                  <span className="text-2xl font-black italic">#{selectedItem.id * 124}</span>
+                  <span className="text-2xl font-black italic">#{liveStats.rank}</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-mono text-blue-400 uppercase tracking-widest">Mastery Level</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-xl font-black italic">LVL {selectedItem.level}</span>
+                    <span className="text-xl font-black italic">LVL {liveStats.level}</span>
                     <div className="w-24 h-1 bg-white/10 rounded-full overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
-                        animate={{ width: `${selectedItem.xp}%` }}
+                        animate={{ width: `${liveStats.xp || selectedItem.xp}%` }}
                         className="h-full bg-blue-500" 
                       />
                     </div>
