@@ -6,14 +6,17 @@ import * as THREE from 'three';
 const GlobalAmbience: React.FC = () => {
   const pointsRef = useRef<THREE.Points>(null!);
   
-  // Generate random positions for the star-field/grid
-  const particlesCount = 2000;
-  const positions = new Float32Array(particlesCount * 3);
-  for (let i = 0; i < particlesCount; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 50;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 50;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
-  }
+  // Generate random positions for the star-field/grid (Memoized to prevent flickering)
+  const positions = React.useMemo(() => {
+    const particlesCount = 2000;
+    const pos = new Float32Array(particlesCount * 3);
+    for (let i = 0; i < particlesCount; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 50;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 50;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 50;
+    }
+    return pos;
+  }, []);
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
