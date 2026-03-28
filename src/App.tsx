@@ -19,6 +19,8 @@ import Armory from './pages/Armory';
 import Campaign from './pages/Campaign';
 import Simulation from './pages/Simulation';
 import ShadowRising from './pages/ShadowRising';
+import Codex from './pages/Codex';
+import WorldLore from './pages/WorldLore';
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
             <Route path="/campaign" element={<Campaign />} />
             <Route path="/simulation" element={<Simulation />} />
             <Route path="/story" element={<ShadowRising />} />
+            <Route path="/codex" element={<Codex />} />
+            <Route path="/explore" element={<WorldLore />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route
