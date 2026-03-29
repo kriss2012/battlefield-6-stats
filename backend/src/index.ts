@@ -91,16 +91,41 @@ app.get('/health', async (req, res) => {
   }
 });
 
+// WebSocket Rate Limiter Configuration
+const MAX_CONNECTIONS_PER_IP = 5;
+const socketConnections = new Map<string, number>();
+
+// Socket Event Validation Schema
+const joinRoomSchema = z.string().uuid().or(z.string().min(1));
+
 // WebSocket Handlers
 io.on('connection', (socket: Socket) => {
+  const clientIp = socket.handshake.address;
+  const currentConnections = socketConnections.get(clientIp) || 0;
+
+  if (currentConnections >= MAX_CONNECTIONS_PER_IP) {
+    socket.disconnect(true);
+    return;
+  }
+  socketConnections.set(clientIp, currentConnections + 1);
+
   console.log('📡 Tactical Uplink Established:', socket.id);
 
-  socket.on('join_user_room', (userId: string) => {
-    socket.join(`user_${userId}`);
-    console.log(`👤 User ${userId} synchronized to secure channel`);
+  socket.on('join_user_room', (userId: unknown) => {
+    try {
+      const validUserId = joinRoomSchema.parse(userId);
+      socket.join(`user_${validUserId}`);
+      console.log(`👤 User ${validUserId} synchronized to secure channel`);
+    } catch (e) {
+      console.error(`⚠️ Invalid socket payload received from ${socket.id}`, e);
+    }
   });
 
   socket.on('disconnect', () => {
+    const connections = socketConnections.get(clientIp) || 0;
+    if (connections > 0) {
+      socketConnections.set(clientIp, connections - 1);
+    }
     console.log('📡 Tactical Uplink Terminated:', socket.id);
   });
 });
