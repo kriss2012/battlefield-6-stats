@@ -62,36 +62,38 @@ const Armory: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white pt-24 pb-20 px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-tactical-dark text-white pt-24 pb-20 px-4 relative overflow-hidden">
       {/* Background Ambience handled by Layout but adding local flare */}
-      <div className="absolute top-0 left-0 w-full h-[500px] bg-blue-600/5 blur-[120px] rounded-full -z-10" />
+      <div className="absolute inset-0 bg-tactical-grid bg-grid-lg opacity-10 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-[500px] bg-tactical-primary/10 blur-[120px] rounded-full -z-10" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-tactical-secondary/10 blur-[150px] rounded-full -z-10" />
       
-      <div className="container mx-auto max-w-7xl relative">
+      <div className="container mx-auto max-w-7xl relative z-10">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8 animate-fade-in">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <span className="h-[1px] w-8 bg-blue-500" />
-              <span className="text-xs font-mono text-blue-400 tracking-[0.4em] uppercase">Tactical Arsenal</span>
+              <span className="h-[2px] w-12 bg-tactical-primary tactical-glow" />
+              <span className="text-xs font-hud text-tactical-primary tracking-[0.4em] uppercase">Tactical Arsenal</span>
             </div>
-            <h1 className="text-6xl font-black italic tracking-tighter mb-2 uppercase leading-none chromatic-aberration animate-glitch-v2">
-              The <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">Armory</span>
+            <h1 className="text-6xl font-display font-black tracking-tighter mb-2 uppercase leading-none chromatic-aberration animate-glitch-v2 text-glow">
+              The <span className="text-white">Armory</span>
             </h1>
             <p className="text-gray-500 font-medium max-w-xl">
               Customize your combat readiness with high-fidelity 3D previews and advanced modular synthesis.
             </p>
           </div>
 
-          <div className="flex gap-1 p-1 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md">
+          <div className="flex gap-1 p-1 glass-card">
             <button 
               onClick={() => { setActiveTab('operators'); setSelectedId(1); }}
-              className={`px-8 py-2 rounded-xl text-xs font-black italic uppercase transition-all ${activeTab === 'operators' ? 'bg-blue-600 shadow-lg shadow-blue-500/20' : 'hover:bg-white/5 text-gray-400'}`}
+              className={`px-8 py-2 rounded-xl text-xs font-hud uppercase transition-all ${activeTab === 'operators' ? 'bg-tactical-primary/20 border border-tactical-primary text-tactical-primary shadow-neon-blue' : 'hover:bg-white/5 text-gray-400'}`}
             >
               Operators
             </button>
             <button 
               onClick={() => { setActiveTab('arsenal'); setSelectedId(1); }}
-              className={`px-8 py-2 rounded-xl text-xs font-black italic uppercase transition-all ${activeTab === 'arsenal' ? 'bg-purple-600 shadow-lg shadow-purple-500/20' : 'hover:bg-white/5 text-gray-400'}`}
+              className={`px-8 py-2 rounded-xl text-xs font-hud uppercase transition-all ${activeTab === 'arsenal' ? 'bg-tactical-secondary/20 border border-tactical-secondary text-tactical-secondary shadow-neon-purple' : 'hover:bg-white/5 text-gray-400'}`}
             >
               Arsenal
             </button>
@@ -101,7 +103,7 @@ const Armory: React.FC = () => {
         <div className="grid lg:grid-cols-12 gap-12 items-start">
           {/* 3D Preview */}
           <div className="lg:col-span-7 relative group">
-            <div className="aspect-square bg-black/40 border border-white/10 rounded-[40px] overflow-hidden relative backdrop-blur-xl">
+            <div className="aspect-square glass-panel">
               <ArmoryView 
                 type={activeTab === 'operators' ? 'operator' : 'weapon'} 
                 color={customColor === '#3b82f6' ? selectedItem.color : customColor} 
@@ -109,30 +111,30 @@ const Armory: React.FC = () => {
               />
               
               {/* Controls UI overlay */}
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 px-6 py-3 bg-black/60 border border-white/10 rounded-full backdrop-blur-xl">
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 px-6 py-3 bg-black/80 border border-tactical-primary/30 rounded-full backdrop-blur-xl shadow-neon-blue">
                 <div className="flex flex-col items-center gap-1 group/control">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-                  <span className="text-[10px] font-mono text-gray-500 uppercase">3D_LOCKED</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-tactical-primary animate-pulse" />
+                  <span className="text-[10px] font-hud text-tactical-primary uppercase">3D_LOCKED</span>
                 </div>
-                <div className="w-[1px] h-4 bg-white/10" />
-                <span className="text-xs font-black italic text-white/60 tracking-widest uppercase">Rotate to Inspect</span>
+                <div className="w-[1px] h-4 bg-white/20" />
+                <span className="text-xs font-hud text-white/80 tracking-widest uppercase mt-0.5">Rotate to Inspect</span>
               </div>
 
               {/* Stats Overlay */}
               <div className="absolute top-8 left-8 space-y-4">
                 <div className="flex flex-col">
-                  <span className="text-xs font-mono text-blue-400 uppercase tracking-widest">Global Ranking</span>
-                  <span className="text-2xl font-black italic">#{liveStats.rank}</span>
+                  <span className="text-[10px] font-hud text-tactical-primary uppercase tracking-widest">Global Ranking</span>
+                  <span className="text-2xl font-display font-medium text-white text-glow">#{liveStats.rank}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs font-mono text-blue-400 uppercase tracking-widest">Mastery Level</span>
+                  <span className="text-[10px] font-hud text-tactical-primary uppercase tracking-widest">Mastery Level</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-xl font-black italic">LVL {liveStats.level}</span>
-                    <div className="w-24 h-1 bg-white/10 rounded-full overflow-hidden">
+                    <span className="text-xl font-display font-medium text-white text-glow">LVL {liveStats.level}</span>
+                    <div className="w-32 h-1 bg-white/10 rounded-full overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${liveStats.xp || selectedItem.xp}%` }}
-                        className="h-full bg-blue-500" 
+                        className="h-full bg-tactical-primary shadow-neon-blue" 
                       />
                     </div>
                   </div>
