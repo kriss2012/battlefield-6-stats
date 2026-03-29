@@ -6,7 +6,7 @@ export interface AuthRequest extends Request {
 }
 
 export function authenticateToken(req: AuthRequest, res: Response, next: NextFunction): void {
-  const token = extractTokenFromHeader(req.headers.authorization);
+  const token = req.cookies?.token || extractTokenFromHeader(req.headers.authorization);
 
   if (!token) {
     res.status(401).json({ error: 'Access denied. No token provided.' });
@@ -25,7 +25,7 @@ export function authenticateToken(req: AuthRequest, res: Response, next: NextFun
 }
 
 export function optionalAuth(req: AuthRequest, res: Response, next: NextFunction): void {
-  const token = extractTokenFromHeader(req.headers.authorization);
+  const token = req.cookies?.token || extractTokenFromHeader(req.headers.authorization);
 
   if (token) {
     const decoded = verifyToken(token);
