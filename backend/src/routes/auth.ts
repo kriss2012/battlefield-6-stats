@@ -42,6 +42,13 @@ router.post('/register', validate(registerSchema), async (req, res) => {
       email: newUser?.email,
     });
 
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
     res.status(201).json({
       message: 'User registered successfully',
       token,
@@ -89,6 +96,13 @@ router.post('/login', validate(loginSchema), async (req, res) => {
       userId: user?.id,
       username: user?.username,
       email: user?.email,
+    });
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
 
     res.json({
@@ -227,6 +241,12 @@ router.get('/users/:userId', async (req, res) => {
     console.error('Get user error:', error);
     res.status(500).json({ error: 'Failed to fetch user' });
   }
+});
+
+// Logout
+router.post('/logout', (req, res) => {
+  res.clearCookie('token');
+  res.json({ message: 'Logged out successfully' });
 });
 
 export default router;
