@@ -47,7 +47,7 @@ export default function Home() {
               <span className="h-[1px] w-8 bg-blue-500" />
               <span className="text-xs font-mono text-blue-400 tracking-[0.4em] uppercase">Tactical Intelligence Hub</span>
             </div>
-            <h1 className="text-7xl md:text-8xl font-black mb-2 italic tracking-tighter chromatic-aberration animate-glitch-v2 leading-none uppercase">
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black mb-2 italic tracking-tighter chromatic-aberration animate-glitch-v2 leading-none uppercase">
               SPECTRE <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">DIVISION</span>
             </h1>
             <p className="text-xs font-mono text-blue-400/80 tracking-[0.45em] mb-6 uppercase">SHADOW RECKONING</p>
@@ -55,8 +55,18 @@ export default function Home() {
               Advanced tactical performance tracking, real-time command center telemetry, and cyber-espionage analytics for Spectre operatives.
             </p>
             <div className="flex gap-4">
-              <button className="px-8 py-3 bg-blue-600 rounded-xl font-black italic text-xs uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20">Launch Theater</button>
-              <button className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl font-black italic text-xs uppercase tracking-widest hover:bg-white/10 transition-all">Manuals</button>
+              <Link 
+                to="/campaign" 
+                className="px-8 py-3 bg-blue-600 rounded-xl font-black italic text-xs uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 inline-block text-center"
+              >
+                Launch Theater
+              </Link>
+              <Link 
+                to="/codex" 
+                className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl font-black italic text-xs uppercase tracking-widest hover:bg-white/10 transition-all inline-block text-center"
+              >
+                Manuals
+              </Link>
             </div>
           </div>
           <div className="flex-1 w-full lg:max-w-2xl floating-3d">
