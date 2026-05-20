@@ -1,8 +1,8 @@
 version: 0.0.0
 files:
-  - url: Battlefield-6-Setup-0.0.0.exe
-    sha512: e0Jjz5g4xrVlgsDUoNvaskSoFU4cjW4rP4UrwKYBoUtTUzieVarRxDqaETFo4PaN39hLLfXLbUDqa1wpN9KM2g==
-    size: 129881979
-path: Battlefield-6-Setup-0.0.0.exe
-sha512: e0Jjz5g4xrVlgsDUoNvaskSoFU4cjW4rP4UrwKYBoUtTUzieVarRxDqaETFo4PaN39hLLfXLbUDqa1wpN9KM2g==
-releaseDate: '2026-05-20T11:16:24.640Z'
+  - url: Spectre-Division-Shadow-Reckoning-Setup-0.0.0.exe
+    sha512: EA9kWQ/TtsNMw9vweQUGiTMxgffzu4Zp3YKyW42wjJgSgnjXOnfBOG2vUxVV8z4qUZrLIcZZDzLNEuCgkn5oPQ==
+    size: 129890055
+path: Spectre-Division-Shadow-Reckoning-Setup-0.0.0.exe
+sha512: EA9kWQ/TtsNMw9vweQUGiTMxgffzu4Zp3YKyW42wjJgSgnjXOnfBOG2vUxVV8z4qUZrLIcZZDzLNEuCgkn5oPQ==
+releaseDate: '2026-05-20T14:00:37.719Z'
