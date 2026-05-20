@@ -167,14 +167,14 @@ export default function PlayerSearch() {
           {/* Hero Section */}
           {!playerStats && (
             <div className="text-center mb-16 animate-fade-in">
-              <h1 className="text-6xl md:text-7xl font-black mb-6 tracking-tighter">
+              <h1 className="text-6xl md:text-7xl font-black mb-6 tracking-tighter uppercase">
                 <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent italic">
-                  BATTLEFIELD
+                  SPECTRE
                 </span>
-                <span className="ml-4">2042</span>
+                <span className="ml-4">DIVISION</span>
               </h1>
               <p className="text-xl text-gray-400 font-medium">
-                Advanced performance tracking and global player search
+                Advanced performance tracking and global operative search
               </p>
             </div>
           )}
@@ -410,7 +410,7 @@ export default function PlayerSearch() {
                 <div className="text-8xl mb-8 group-hover:scale-110 transition-transform duration-500">🛰️</div>
                 <h3 className="text-2xl font-black mb-4 uppercase italic">Ready for Deployment</h3>
                 <p className="text-gray-400 max-w-md mx-auto font-medium">
-                  Scan the BF2042 network for combat performance data and tactical statistics.
+                  Scan the Spectre network nodes for operator combat performance data and tactical statistics.
                 </p>
 
                 <div className="grid grid-cols-3 gap-8 mt-16">
