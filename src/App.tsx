@@ -21,10 +21,34 @@ import Simulation from './pages/Simulation';
 import ShadowRising from './pages/ShadowRising';
 import Codex from './pages/Codex';
 import WorldLore from './pages/WorldLore';
+import OpeningCredits from './components/OpeningCredits';
+import { audio } from './utils/audio';
+import { useState } from 'react';
 
 function App() {
+  const [showCredits, setShowCredits] = useState(true);
+  const [started, setStarted] = useState(false);
+
+  if (!started) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-black">
+        <button
+          className="px-8 py-4 text-xl font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-500 transition-colors shadow-[0_0_20px_rgba(37,99,235,0.5)]"
+          onClick={() => {
+            audio.init();
+            audio.playStartupSound();
+            setStarted(true);
+          }}
+        >
+          START GAME
+        </button>
+      </div>
+    );
+  }
+
   return (
     <BrowserRouter>
+      {showCredits && <OpeningCredits onComplete={() => setShowCredits(false)} />}
       <Navigation />
       <ErrorBoundary>
         <Layout>
