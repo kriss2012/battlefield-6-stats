@@ -4,6 +4,8 @@ import { Box, Cylinder, Sphere, MeshDistortMaterial } from '@react-three/drei';
 import ThreeScene from './ThreeScene';
 import * as THREE from 'three';
 
+import CharacterModel from './CharacterModel';
+
 interface ArmoryViewProps {
   type: 'operator' | 'weapon';
   color?: string;
@@ -15,41 +17,24 @@ const OperatorModel: React.FC<{ color: string }> = ({ color }) => {
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
-    groupRef.current.position.y = Math.sin(time) * 0.1;
+    groupRef.current.rotation.y = time * 0.4;
+    groupRef.current.position.y = Math.sin(time) * 0.08 - 0.1;
   });
 
   return (
     <group ref={groupRef}>
-      {/* Tactical Base */}
-      <Cylinder args={[1.5, 1.8, 0.2, 32]} position={[0, -2, 0]}>
-        <meshStandardMaterial color="#0a0a0a" metalness={1} roughness={0.1} />
+      {/* Hologram Base */}
+      <Cylinder args={[1.2, 1.3, 0.15, 32]} position={[0, -1.3, 0]}>
+        <meshStandardMaterial color="#0b0f19" metalness={0.9} roughness={0.1} />
+      </Cylinder>
+      <Cylinder args={[1.1, 1.1, 0.05, 32]} position={[0, -1.2, 0]}>
+        <meshStandardMaterial color="#3b82f6" emissive="#3b82f6" emissiveIntensity={2} />
       </Cylinder>
       
-      {/* Body Surrogate */}
-      <Box args={[1, 2, 0.5]} position={[0, -0.5, 0]}>
-        <meshStandardMaterial color={color} metalness={0.7} roughness={0.05} emissive={color} emissiveIntensity={0.1} />
-      </Box>
-      
-      {/* head/Helmet */}
-      <Box args={[0.6, 0.6, 0.6]} position={[0, 1, 0]}>
-        <meshStandardMaterial color="#222" metalness={0.9} roughness={0.05} emissive="#3b82f6" emissiveIntensity={0.05} />
-      </Box>
-
-      {/* Shoulder pads */}
-      <Box args={[0.5, 0.4, 0.6]} position={[0.7, 0.3, 0]}>
-        <meshStandardMaterial color="#111" metalness={0.8} />
-      </Box>
-      <Box args={[0.5, 0.4, 0.6]} position={[-0.7, 0.3, 0]}>
-        <meshStandardMaterial color="#111" metalness={0.8} />
-      </Box>
-
-      {/* Tactical Glow Elements */}
-      <Sphere args={[0.05]} position={[0.15, 1.05, 0.31]}>
-        <meshStandardMaterial color="#3b82f6" emissive="#3b82f6" emissiveIntensity={20} />
-      </Sphere>
-      <Sphere args={[0.05]} position={[-0.15, 1.05, 0.31]}>
-        <meshStandardMaterial color="#3b82f6" emissive="#3b82f6" emissiveIntensity={20} />
-      </Sphere>
+      {/* Detailed Character Model */}
+      <group position={[0, -0.05, 0]}>
+        <CharacterModel color={color} type="player" isMoving={false} scale={1.1} />
+      </group>
     </group>
   );
 };
