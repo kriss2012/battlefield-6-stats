@@ -159,7 +159,7 @@ export default function Register() {
                     value={playerId}
                     onChange={(e) => setPlayerId(e.target.value)}
                     className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-emerald-500/30 text-white font-black italic uppercase text-xs transition-all"
-                    placeholder="BF6_ID"
+                    placeholder="SPECTRE_ID"
                   />
                 </div>
               </div>
