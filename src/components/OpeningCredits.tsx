@@ -41,10 +41,10 @@ export default function OpeningCredits({ onComplete }: { onComplete: () => void 
             transition={{ duration: 1 }}
             className="text-white text-center"
           >
-            <h1 className="text-5xl font-black tracking-tighter text-blue-500 shadow-blue-500/50 drop-shadow-lg">
-              BATTLEFIELD 6
+            <h1 className="text-6xl font-black tracking-[0.25em] bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent filter drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+              SPECTRE DIVISION
             </h1>
-            <p className="mt-2 text-xl text-blue-200 tracking-widest uppercase">The Next Generation</p>
+            <p className="mt-4 text-xs font-mono text-gray-400 tracking-[0.5em] uppercase">SHADOW RECKONING</p>
           </motion.div>
         )}
       </AnimatePresence>
