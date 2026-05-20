@@ -3,11 +3,31 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:electron": "cross-env NODE_ENV=development electron .",
+    "dev:exe": "concurrently -k \"npm run dev\" \"wait-on tcp:5173 && npm run start:electron\"",
+    "build:exe": "npm run build && electron-builder -c.extraMetadata.main=electron/main.cjs"
+  },
+  "build": {
+    "appId": "com.kiri.bf6game",
+    "productName": "Battlefield 6",
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ]
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
