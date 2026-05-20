@@ -52,13 +52,13 @@ export default function Navigation() {
         
         <div className="h-4 w-[1px] bg-white/10 mx-2" />
 
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden md:flex items-center gap-1 overflow-x-auto max-w-[50vw] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {navLinks.map((link) => (
             <NavLink 
               key={link.to}
               to={link.to} 
               className={({ isActive }: { isActive: boolean }) => `
-                px-5 py-2 rounded-xl text-xs font-black tracking-[0.2em] transition-all duration-300 relative
+                px-5 py-2 rounded-xl text-xs font-black tracking-[0.2em] transition-all duration-300 relative whitespace-nowrap shrink-0
                 ${isActive ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' : 'text-gray-400 hover:text-white hover:bg-white/5'}
               `}
             >
