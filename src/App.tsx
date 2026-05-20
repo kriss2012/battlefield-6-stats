@@ -23,11 +23,36 @@ import Codex from './pages/Codex';
 import WorldLore from './pages/WorldLore';
 import OpeningCredits from './components/OpeningCredits';
 import { audio } from './utils/audio';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
   const [showCredits, setShowCredits] = useState(true);
   const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    if (!started) return;
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'BUTTON' || target.closest('button') || target.tagName === 'A' || target.closest('a')) {
+        audio.playHoverSound();
+      }
+    };
+    
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'BUTTON' || target.closest('button') || target.tagName === 'A' || target.closest('a')) {
+        audio.playClickSound();
+      }
+    };
+
+    window.addEventListener('mouseover', handleMouseOver);
+    window.addEventListener('click', handleClick);
+
+    return () => {
+      window.removeEventListener('mouseover', handleMouseOver);
+      window.removeEventListener('click', handleClick);
+    };
+  }, [started]);
 
   if (!started) {
     return (
