@@ -74,9 +74,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      {showCredits && <OpeningCredits onComplete={() => setShowCredits(false)} />}
-      <Navigation />
       <ErrorBoundary>
+        {showCredits && <OpeningCredits onComplete={() => setShowCredits(false)} />}
+        <Navigation />
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
