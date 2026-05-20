@@ -1,5 +1,5 @@
 {
-  "name": "bf6-stats-app",
+  "name": "spectre-division-game",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -14,8 +14,8 @@
     "build:exe": "npm run build && electron-builder -c.extraMetadata.main=electron/main.cjs"
   },
   "build": {
-    "appId": "com.kiri.bf6game",
-    "productName": "Battlefield 6",
+    "appId": "com.kiri.spectredivision",
+    "productName": "Spectre Division Shadow Reckoning",
     "directories": {
       "output": "release"
     },
