@@ -1,0 +1,15 @@
+directories:
+  output: release
+  buildResources: build
+appId: com.kiri.bf6game
+productName: Battlefield 6
+win:
+  target:
+    - nsis
+files:
+  - filter:
+      - dist/**/*
+      - electron/**/*
+extraMetadata:
+  main: electron/main.cjs
+electronVersion: 42.2.0
