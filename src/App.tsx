@@ -21,6 +21,7 @@ import Simulation from './pages/Simulation';
 import ShadowRising from './pages/ShadowRising';
 import Codex from './pages/Codex';
 import WorldLore from './pages/WorldLore';
+import Operatives from './pages/Operatives';
 import OpeningCredits from './components/OpeningCredits';
 import { audio } from './utils/audio';
 import { useState, useEffect } from 'react';
@@ -90,7 +91,8 @@ function App() {
             <Route path="/simulation" element={<Simulation />} />
             <Route path="/story" element={<ShadowRising />} />
             <Route path="/codex" element={<Codex />} />
-            <Route path="/explore" element={<WorldLore />} />
+             <Route path="/explore" element={<WorldLore />} />
+            <Route path="/operatives" element={<Operatives />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route
