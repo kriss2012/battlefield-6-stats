@@ -14,7 +14,7 @@ const TacticalHUD: React.FC = () => {
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
       {/* Dynamic Corner UI Brackets - Top Left */}
-      <div className="absolute top-8 left-8 flex flex-col gap-2">
+      <div className="absolute top-8 left-8 hidden md:flex flex-col gap-2">
         <div className="w-40 h-40 border-l-2 border-t-2 border-blue-500/40 rounded-tl-3xl relative">
            <div className="absolute top-0 left-0 w-8 h-[2px] bg-blue-400" />
            <div className="absolute top-0 left-0 w-[2px] h-8 bg-blue-400" />
@@ -26,7 +26,7 @@ const TacticalHUD: React.FC = () => {
       </div>
 
       {/* Top Right - Clock & Connectivity */}
-      <div className="absolute top-8 right-8 flex flex-col items-end gap-2">
+      <div className="absolute top-8 right-8 hidden md:flex flex-col items-end gap-2">
         <div className="w-40 h-40 border-r-2 border-t-2 border-blue-500/40 rounded-tr-3xl relative">
            <div className="absolute top-0 right-0 w-8 h-[2px] bg-blue-400" />
            <div className="absolute top-0 right-0 w-[2px] h-8 bg-blue-400" />
@@ -41,7 +41,7 @@ const TacticalHUD: React.FC = () => {
       </div>
 
       {/* Bottom Left - Telemetry 1 */}
-      <div className="absolute bottom-16 left-8">
+      <div className="absolute bottom-16 left-8 hidden md:block">
         <div className="w-32 h-32 border-l-2 border-b-2 border-blue-500/40 rounded-bl-3xl relative">
            <div className="absolute bottom-0 left-0 w-8 h-[2px] bg-blue-400" />
            <div className="absolute bottom-0 left-0 w-[2px] h-8 bg-blue-400" />
@@ -57,7 +57,7 @@ const TacticalHUD: React.FC = () => {
       </div>
 
       {/* Bottom Right - Telemetry 2 */}
-      <div className="absolute bottom-16 right-8 flex flex-col items-end">
+      <div className="absolute bottom-16 right-8 hidden md:flex flex-col items-end">
         <div className="w-32 h-32 border-r-2 border-b-2 border-blue-500/40 rounded-br-3xl relative">
            <div className="absolute bottom-0 right-0 w-8 h-[2px] bg-blue-400" />
            <div className="absolute bottom-0 right-0 w-[2px] h-8 bg-blue-400" />
