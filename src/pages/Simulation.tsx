@@ -15,6 +15,166 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import { missions } from '../utils/missionData';
 import { BACKEND_URL } from '../services/api';
+import { audio } from '../utils/audio';
+import CharacterModel from '../components/CharacterModel';
+
+// --- Level Themes Config ---
+interface LevelConfig {
+  gridColor: string;
+  skyColor: string;
+  ambientIntensity: number;
+  spotlightColor: string;
+  wallColor: string;
+  floorColor: string;
+  fogColor: string;
+  ambientPreset: 'night' | 'studio' | 'warehouse';
+}
+
+const getLevelConfig = (missionId: string | null): LevelConfig => {
+  switch (missionId) {
+    case 'm0': // The Workshop Shed
+      return {
+        gridColor: '#eab308',
+        skyColor: '#0c0802',
+        ambientIntensity: 0.3,
+        spotlightColor: '#f59e0b',
+        wallColor: '#27272a',
+        floorColor: '#18181b',
+        fogColor: '#0c0802',
+        ambientPreset: 'studio',
+      };
+    case 'm1': // The Textile District
+      return {
+        gridColor: '#3b82f6',
+        skyColor: '#020617',
+        ambientIntensity: 0.15,
+        spotlightColor: '#3b82f6',
+        wallColor: '#1e293b',
+        floorColor: '#0f172a',
+        fogColor: '#020617',
+        ambientPreset: 'warehouse',
+      };
+    case 'm2': // The Forty-Seventh Hour
+      return {
+        gridColor: '#ef4444',
+        skyColor: '#0a0002',
+        ambientIntensity: 0.35,
+        spotlightColor: '#ef4444',
+        wallColor: '#4c0519',
+        floorColor: '#1c0005',
+        fogColor: '#0a0002',
+        ambientPreset: 'night',
+      };
+    case 'm3': // The Hillside Villa
+      return {
+        gridColor: '#a855f7',
+        skyColor: '#0b001a',
+        ambientIntensity: 0.25,
+        spotlightColor: '#a855f7',
+        wallColor: '#311042',
+        floorColor: '#12001a',
+        fogColor: '#0b001a',
+        ambientPreset: 'night',
+      };
+    default: // Training / Neural Forge
+      return {
+        gridColor: '#10b981',
+        skyColor: '#020617',
+        ambientIntensity: 0.25,
+        spotlightColor: '#10b981',
+        wallColor: '#1f2937',
+        floorColor: '#111827',
+        fogColor: '#020617',
+        ambientPreset: 'studio',
+      };
+  }
+};
+
+const getTargetScore = (missionId: string | null): number => {
+  switch (missionId) {
+    case 'm0': return 300;
+    case 'm1': return 500;
+    case 'm2': return 800;
+    case 'm3': return 1200;
+    default: return 99999;
+  }
+};
+
+// --- Enemy State Interface ---
+interface EnemyState {
+  id: string;
+  name: string;
+  type: 'enemy' | 'boss';
+  position: [number, number, number];
+  waypoints: [number, number, number][];
+  health: number;
+}
+
+const getInitialEnemies = (missionId: string | null): EnemyState[] => {
+  switch (missionId) {
+    case 'm0':
+      return [
+        { id: 'dev', name: 'DEV', type: 'enemy', position: [-10, 0, -18], waypoints: [[-10, 0, -18], [5, 0, -18]], health: 100 },
+        { id: 'prashant', name: 'PRASHANT', type: 'enemy', position: [12, 0, -28], waypoints: [[12, 0, -28], [12, 0, -12]], health: 100 },
+        { id: 'kabir_boss', name: 'KABIR RAO', type: 'boss', position: [0, 0, -42], waypoints: [[0, 0, -42], [5, 0, -38], [-5, 0, -40]], health: 250 },
+      ];
+    case 'm1':
+      return [
+        { id: 'sentry_a', name: 'SENTRY ALPHA', type: 'enemy', position: [-16, 0, -12], waypoints: [[-16, 0, -12], [-16, 0, -32]], health: 100 },
+        { id: 'sentry_b', name: 'SENTRY BETA', type: 'enemy', position: [16, 0, -15], waypoints: [[16, 0, -15], [16, 0, -35]], health: 100 },
+        { id: 'sentry_c', name: 'SENTRY GAMMA', type: 'enemy', position: [0, 0, -22], waypoints: [[0, 0, -22], [10, 0, -22]], health: 100 },
+        { id: 'veer_boss', name: 'VEER CHOUDHARY', type: 'boss', position: [0, 0, -38], waypoints: [[0, 0, -38], [-8, 0, -35]], health: 300 },
+      ];
+    case 'm2':
+      return [
+        { id: 'elite_a', name: 'ELITE VANGUARD A', type: 'enemy', position: [-12, 0, -10], waypoints: [[-12, 0, -10], [-5, 0, -20]], health: 120 },
+        { id: 'elite_b', name: 'ELITE VANGUARD B', type: 'enemy', position: [12, 0, -15], waypoints: [[12, 0, -15], [5, 0, -25]], health: 120 },
+        { id: 'elite_c', name: 'ELITE HACKER', type: 'enemy', position: [-25, 0, -28], waypoints: [[-25, 0, -28], [-15, 0, -28]], health: 100 },
+        { id: 'elite_d', name: 'ELITE HEAVY', type: 'enemy', position: [25, 0, -30], waypoints: [[25, 0, -30], [15, 0, -30]], health: 150 },
+        { id: 'compound_boss', name: 'GARRISON COMMANDER', type: 'boss', position: [0, 0, -45], waypoints: [[0, 0, -45], [5, 0, -40]], health: 450 },
+      ];
+    case 'm3':
+      return [
+        { id: 'commando_a', name: 'COMMANDO ALPHA', type: 'enemy', position: [-18, 0, -15], waypoints: [[-18, 0, -15], [-18, 0, -35]], health: 150 },
+        { id: 'commando_b', name: 'COMMANDO BETA', type: 'enemy', position: [18, 0, -15], waypoints: [[18, 0, -15], [18, 0, -35]], health: 150 },
+        { id: 'commando_c', name: 'ESTATE GUARD A', type: 'enemy', position: [-5, 0, -25], waypoints: [[-5, 0, -25], [10, 0, -25]], health: 120 },
+        { id: 'commando_d', name: 'ESTATE GUARD B', type: 'enemy', position: [5, 0, -30], waypoints: [[5, 0, -30], [-10, 0, -30]], health: 120 },
+        { id: 'commando_e', name: 'ESTATE SNIPER', type: 'enemy', position: [0, 0, -10], waypoints: [[0, 0, -10], [5, 0, -8]], health: 100 },
+        { id: 'hasan_boss', name: 'COMMANDER HASAN', type: 'boss', position: [0, 0, -46], waypoints: [[0, 0, -46], [8, 0, -42], [-8, 0, -42]], health: 600 },
+      ];
+    default:
+      return [];
+  }
+};
+
+// --- Boundary Collisions Check ---
+const checkCollision = (pos: THREE.Vector3) => {
+  pos.x = THREE.MathUtils.clamp(pos.x, -49, 49);
+  pos.z = THREE.MathUtils.clamp(pos.z, -49, 49);
+  
+  // Outer containers
+  if (pos.x > -18 && pos.x < -12 && pos.z > -20 && pos.z < -10) {
+    if (Math.abs(pos.x - -15) > Math.abs(pos.z - -15)) {
+      pos.x = pos.x > -15 ? -12 : -18;
+    } else {
+      pos.z = pos.z > -15 ? -10 : -20;
+    }
+  }
+  if (pos.x > 12 && pos.x < 18 && pos.z > -25 && pos.z < -15) {
+    if (Math.abs(pos.x - 15) > Math.abs(pos.z - -20)) {
+      pos.x = pos.x > 15 ? 18 : 12;
+    } else {
+      pos.z = pos.z > -20 ? -15 : -25;
+    }
+  }
+  if (pos.x > -1.5 && pos.x < 1.5 && pos.z > -6.5 && pos.z < -3.5) {
+    if (Math.abs(pos.x) > Math.abs(pos.z - -5)) {
+      pos.x = pos.x > 0 ? 1.5 : -1.5;
+    } else {
+      pos.z = pos.z > -5 ? -3.5 : -6.5;
+    }
+  }
+};
 
 // --- First-Person Weapon ---
 const Weapon: React.FC<{ isFiring: boolean }> = ({ isFiring }) => {
@@ -23,81 +183,133 @@ const Weapon: React.FC<{ isFiring: boolean }> = ({ isFiring }) => {
   useFrame((state) => {
     const { mouse } = state;
     // Weapon sway
-    meshRef.current.position.x = THREE.MathUtils.lerp(meshRef.current.position.x, 0.5 + -mouse.x * 0.1, 0.1);
-    meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, -0.4 + mouse.y * 0.1, 0.1);
+    meshRef.current.position.x = THREE.MathUtils.lerp(meshRef.current.position.x, 0.45 + -mouse.x * 0.08, 0.1);
+    meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, -0.35 + mouse.y * 0.08, 0.1);
     if (isFiring) {
-      meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, -0.7, 0.5);
+      meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, -0.65, 0.5);
     } else {
-      meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, -0.8, 0.1);
+      meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, -0.75, 0.15);
     }
   });
 
   return (
-    <group ref={meshRef} position={[0.5, -0.4, -0.8]}>
-      {/* Muzzle Flash */}
+    <group ref={meshRef} position={[0.45, -0.35, -0.75]}>
+      {/* Muzzle Flash Pointlight */}
       {isFiring && (
-        <pointLight position={[0, 0.05, -1]} intensity={5} color="#fbbf24" distance={5} />
+        <pointLight position={[0, 0.05, -0.8]} intensity={6} color="#f59e0b" distance={6} />
       )}
       {/* Gun Body */}
-      <mesh rotation={[0, 0, 0]} castShadow>
-        <boxGeometry args={[0.12, 0.2, 0.8]} />
-        <meshStandardMaterial color="#111" metalness={0.9} roughness={0.1} />
+      <mesh castShadow>
+        <boxGeometry args={[0.09, 0.16, 0.7]} />
+        <meshStandardMaterial color="#0f172a" metalness={0.9} roughness={0.1} />
       </mesh>
-      {/* Barrel */}
-      <mesh position={[0, 0.05, -0.45]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.02, 0.02, 1, 16]} />
-        <meshStandardMaterial color="#222" metalness={1} roughness={0} />
+      {/* Long barrel */}
+      <mesh position={[0, 0.04, -0.4]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.015, 0.015, 0.8, 16]} />
+        <meshStandardMaterial color="#1e293b" metalness={1} roughness={0.1} />
       </mesh>
-      {/* Scope */}
-      <mesh position={[0, 0.12, -0.1]} castShadow>
-        <boxGeometry args={[0.04, 0.06, 0.3]} />
-        <meshStandardMaterial color="#444" emissive="#3b82f6" emissiveIntensity={0.5} />
+      {/* Hologram Scope */}
+      <mesh position={[0, 0.1, -0.1]} castShadow>
+        <boxGeometry args={[0.03, 0.05, 0.25]} />
+        <meshStandardMaterial color="#374151" emissive="#00f3ff" emissiveIntensity={0.8} />
       </mesh>
     </group>
   );
 };
 
+// --- Glowing Tracer Mesh ---
+const TracerMesh: React.FC<{ start: THREE.Vector3; end: THREE.Vector3 }> = ({ start, end }) => {
+  const distance = start.distanceTo(end);
+  const position = start.clone().add(end).multiplyScalar(0.5);
+  const direction = end.clone().sub(start).normalize();
+  
+  const quaternion = new THREE.Quaternion();
+  quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
+  
+  return (
+    <mesh position={position} quaternion={quaternion}>
+      <cylinderGeometry args={[0.018, 0.018, distance, 4]} />
+      <meshBasicMaterial color="#ef4444" toneMapped={false} />
+    </mesh>
+  );
+};
+
 // --- Guard AI Component ---
 const Guard: React.FC<{ 
+  id: string;
+  name: string;
+  type: 'enemy' | 'boss';
   position: [number, number, number]; 
   waypoints: [number, number, number][];
+  health: number;
+  playerPosRef: React.MutableRefObject<THREE.Vector3>;
+  isAlarmActive: boolean;
   onDetect: () => void;
   onHit: () => void;
-}> = ({ position, waypoints, onDetect, onHit }) => {
+  onShootPlayer: (start: THREE.Vector3, end: THREE.Vector3) => void;
+}> = ({ id: _id, name: _name, type, position, waypoints, health, playerPosRef, isAlarmActive, onDetect, onHit, onShootPlayer }) => {
   const meshRef = useRef<THREE.Group>(null!);
   const [targetIdx, setTargetIdx] = useState(0);
-  const [hit, setHit] = useState(false);
+  const [isShooting, setIsShooting] = useState(false);
   const detectionRef = useRef(0);
+  const lastShotTimeRef = useRef(0);
 
   useFrame((state, delta) => {
-    if (hit) {
+    if (health <= 0) {
       meshRef.current.scale.lerp(new THREE.Vector3(0, 0, 0), 0.1);
+      meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, -1, 0.1);
       return;
     }
 
-    // Patrolling logic
-    const target = new THREE.Vector3(...waypoints[targetIdx]);
-    const dir = target.clone().sub(meshRef.current.position).normalize();
-    if (meshRef.current.position.distanceTo(target) < 0.5) {
-      setTargetIdx((targetIdx + 1) % waypoints.length);
-    } else {
-      meshRef.current.position.add(dir.multiplyScalar(delta * 2));
-      meshRef.current.lookAt(target);
-    }
-
-    // Detection logic
-    const playerPos = state.camera.position;
+    const playerPos = playerPosRef.current;
     const dist = meshRef.current.position.distanceTo(playerPos);
-    if (dist < 15) {
+    
+    // Core detection vision cone
+    let playerDetected = false;
+    if (dist < 18) {
       const guardToPlayer = playerPos.clone().sub(meshRef.current.position).normalize();
       const guardForward = new THREE.Vector3(0, 0, 1).applyQuaternion(meshRef.current.quaternion);
       const angle = guardForward.angleTo(guardToPlayer);
       
-      if (angle < Math.PI / 4) { // 45 degree vision cone
-        detectionRef.current += delta * 2;
-        if (detectionRef.current >= 1) onDetect();
+      if (angle < Math.PI / 4.5) { // ~40 degree vision cone
+        detectionRef.current += delta * 2.2;
+        if (detectionRef.current >= 1.0) {
+          playerDetected = true;
+          onDetect();
+        }
       } else {
-        detectionRef.current = Math.max(0, detectionRef.current - delta);
+        detectionRef.current = Math.max(0, detectionRef.current - delta * 0.8);
+      }
+    }
+
+    // Shoots back if alarm active or detected
+    if ((isAlarmActive || playerDetected) && dist < 22) {
+      // Turn directly towards player
+      meshRef.current.lookAt(playerPos.x, meshRef.current.position.y, playerPos.z);
+      
+      const now = state.clock.getElapsedTime();
+      if (now - lastShotTimeRef.current > 1.3) {
+        lastShotTimeRef.current = now;
+        setIsShooting(true);
+        setTimeout(() => setIsShooting(false), 80);
+        
+        // Weapon coordinates offset
+        const gunMuzzle = meshRef.current.position.clone().add(new THREE.Vector3(0.3, 0.7, 0.4).applyQuaternion(meshRef.current.quaternion));
+        const playerChest = playerPos.clone().add(new THREE.Vector3(0, 1.1, 0));
+        
+        onShootPlayer(gunMuzzle, playerChest);
+      }
+    } else {
+      // Patrolling waypoint paths
+      if (waypoints.length > 0) {
+        const target = new THREE.Vector3(...waypoints[targetIdx]);
+        const dir = target.clone().sub(meshRef.current.position).normalize();
+        if (meshRef.current.position.distanceTo(target) < 0.6) {
+          setTargetIdx((targetIdx + 1) % waypoints.length);
+        } else {
+          meshRef.current.position.add(dir.multiplyScalar(delta * 1.8));
+          meshRef.current.lookAt(target.x, meshRef.current.position.y, target.z);
+        }
       }
     }
   });
@@ -106,86 +318,99 @@ const Guard: React.FC<{
     <group 
       ref={meshRef} 
       position={position}
-      onClick={(e) => { e.stopPropagation(); setHit(true); onHit(); }}
+      onClick={(e) => { e.stopPropagation(); onHit(); }}
     >
-      <mesh position={[0, 1.5, 0]} castShadow>
-        <capsuleGeometry args={[0.4, 1.2, 8, 12]} />
-        <meshStandardMaterial color="#1e293b" metalness={0.5} roughness={0.5} />
-      </mesh>
-      {/* Vision Cone (Visual helper) */}
-      <mesh position={[0, 1.8, 1]} rotation={[Math.PI / 2, 0, 0]}>
-        <coneGeometry args={[1.5, 3, 32]} />
-        <meshBasicMaterial color="#ef4444" transparent opacity={0.1} />
-      </mesh>
+      {/* 3D Humanoid Soldier Model */}
+      <group rotation={[0, Math.PI, 0]}>
+        <CharacterModel 
+          color={type === 'boss' ? '#991b1b' : '#374151'} 
+          type={type} 
+          isMoving={health > 0 && waypoints.length > 0 && !isShooting} 
+          isFiring={isShooting} 
+          scale={type === 'boss' ? 1.25 : 0.95} 
+        />
+      </group>
+
+      {/* Red Alert / Danger Search Ring */}
+      {health > 0 && (
+        <mesh position={[0, 0.05, 1.2]} rotation={[Math.PI / 2, 0, 0]}>
+          <coneGeometry args={[0.9, 3.2, 16]} />
+          <meshBasicMaterial 
+            color={isAlarmActive ? "#ef4444" : "#f59e0b"} 
+            transparent 
+            opacity={isAlarmActive ? 0.06 : 0.02} 
+          />
+        </mesh>
+      )}
     </group>
   );
 };
 
-// --- Industrial Assets ---
+// --- Industrial Warehouse Layout ---
 const Warehouse: React.FC = () => {
   return (
     <group>
-      {/* Perimeter Walls */}
+      {/* Structural boundary walls */}
       <mesh position={[0, 10, -50]}>
-        <boxGeometry args={[100, 20, 1]} />
-        <meshStandardMaterial color="#1a1a1a" roughness={0.9} />
+        <boxGeometry args={[100, 20, 1.5]} />
+        <meshStandardMaterial color="#1e293b" roughness={0.8} />
       </mesh>
       <mesh position={[50, 10, 0]} rotation={[0, -Math.PI / 2, 0]}>
-        <boxGeometry args={[100, 20, 1]} />
-        <meshStandardMaterial color="#1a1a1a" roughness={0.9} />
+        <boxGeometry args={[100, 20, 1.5]} />
+        <meshStandardMaterial color="#1e293b" roughness={0.8} />
       </mesh>
       <mesh position={[-50, 10, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[100, 20, 1]} />
-        <meshStandardMaterial color="#1a1a1a" roughness={0.9} />
+        <boxGeometry args={[100, 20, 1.5]} />
+        <meshStandardMaterial color="#1e293b" roughness={0.8} />
       </mesh>
 
-      {/* Structural Pillars */}
-      {[-40, -20, 0, 20, 40].map((x) => (
+      {/* Pillars */}
+      {[-35, -15, 15, 35].map((x) => (
         <React.Fragment key={x}>
-          <mesh position={[x, 10, -25]}>
-            <boxGeometry args={[2, 20, 2]} />
-            <meshStandardMaterial color="#2d2d2d" metalness={0.8} roughness={0.2} />
+          <mesh position={[x, 10, -25]} castShadow receiveShadow>
+            <boxGeometry args={[2.5, 20, 2.5]} />
+            <meshStandardMaterial color="#0f172a" metalness={0.7} roughness={0.3} />
           </mesh>
-          <mesh position={[x, 10, 25]}>
-            <boxGeometry args={[2, 20, 2]} />
-            <meshStandardMaterial color="#2d2d2d" metalness={0.8} roughness={0.2} />
+          <mesh position={[x, 10, 25]} castShadow receiveShadow>
+            <boxGeometry args={[2.5, 20, 2.5]} />
+            <meshStandardMaterial color="#0f172a" metalness={0.7} roughness={0.3} />
           </mesh>
         </React.Fragment>
       ))}
 
-      {/* Shipping Containers / Crates */}
-      <mesh position={[-15, 2, -15]} rotation={[0, 0.2, 0]}>
+      {/* Cargo Crates */}
+      <mesh position={[-15, 2, -15]} rotation={[0, 0.2, 0]} castShadow receiveShadow>
         <boxGeometry args={[4, 4, 8]} />
-        <meshStandardMaterial color="#1e3a8a" metalness={0.5} roughness={0.5} />
+        <meshStandardMaterial color="#1d4ed8" metalness={0.4} roughness={0.5} />
       </mesh>
-      <mesh position={[15, 2, -20]} rotation={[0, -0.1, 0]}>
+      <mesh position={[15, 2, -20]} rotation={[0, -0.15, 0]} castShadow receiveShadow>
         <boxGeometry args={[4, 4, 8]} />
-        <meshStandardMaterial color="#7f1d1d" metalness={0.5} roughness={0.5} />
+        <meshStandardMaterial color="#991b1b" metalness={0.4} roughness={0.5} />
       </mesh>
-      <mesh position={[0, 1, -5]}>
+      <mesh position={[0, 1, -5]} castShadow receiveShadow>
         <boxGeometry args={[2, 2, 2]} />
-        <meshStandardMaterial color="#444" roughness={1} />
+        <meshStandardMaterial color="#334155" roughness={0.9} />
       </mesh>
     </group>
   );
 };
 
-// --- Target Component ---
+// --- Target Dummy (Training Mode) ---
 const Target: React.FC<{ position: [number, number, number]; onHit: () => void }> = ({ position, onHit }) => {
   const [hit, setHit] = useState(false);
   const meshRef = useRef<THREE.Group>(null!);
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (hit) {
-      meshRef.current.scale.lerp(new THREE.Vector3(0, 0, 0), 0.1);
-      if (meshRef.current.scale.x < 0.01) {
+      meshRef.current.scale.lerp(new THREE.Vector3(0, 0, 0), delta * 15);
+      if (meshRef.current.scale.x < 0.05) {
         setHit(false);
         onHit();
         meshRef.current.scale.set(1, 1, 1);
         meshRef.current.position.set(
-          (Math.random() - 0.5) * 20,
+          (Math.random() - 0.5) * 30,
           0,
-          (Math.random() - 0.5) * 20
+          (Math.random() - 0.5) * 30
         );
       }
     }
@@ -200,52 +425,132 @@ const Target: React.FC<{ position: [number, number, number]; onHit: () => void }
         setHit(true);
       }}
     >
-      {/* Humanoid Silhouette */}
-      <mesh position={[0, 1.5, 0]} castShadow>
-        <capsuleGeometry args={[0.3, 1, 4, 8]} />
-        <meshStandardMaterial 
+      {/* Humanoid 3D silhouette */}
+      <group position={[0, 0, 0]}>
+        <CharacterModel 
           color={hit ? "#ef4444" : "#1e293b"} 
-          emissive={hit ? "#ef4444" : "#3b82f6"} 
-          emissiveIntensity={hit ? 5 : 0.5} 
+          type="enemy" 
+          isMoving={false} 
+          isFiring={false} 
+          scale={0.8} 
         />
-      </mesh>
-      {/* Tactical Glow Core */}
-      <mesh position={[0, 1.7, 0.1]}>
-        <sphereGeometry args={[0.1, 16, 16]} />
-        <meshStandardMaterial color="#3b82f6" emissive="#3b82f6" emissiveIntensity={2} />
+      </group>
+      {/* Hologram Floating health node */}
+      <mesh position={[0, 1.6, 0]}>
+        <sphereGeometry args={[0.07, 16, 16]} />
+        <meshBasicMaterial color={hit ? "#ef4444" : "#00f3ff"} />
       </mesh>
     </group>
   );
 };
 
-// --- Player Character (Camera Logic) ---
-const Player: React.FC = () => {
+// --- Player Camera & Movement Controller ---
+interface PlayerProps {
+  cameraMode: 'first-person' | 'third-person';
+  playerPosRef: React.MutableRefObject<THREE.Vector3>;
+  isMovingRef: React.MutableRefObject<boolean>;
+  shakeRef: React.MutableRefObject<number>;
+  touchMovementRef: React.MutableRefObject<{ forward: boolean; backward: boolean; left: boolean; right: boolean }>;
+}
+
+const Player: React.FC<PlayerProps> = ({ cameraMode, playerPosRef, isMovingRef, shakeRef, touchMovementRef }) => {
   const [, getKeys] = useKeyboardControls();
   const velocity = useRef(new THREE.Vector3());
   const direction = useRef(new THREE.Vector3());
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     const { forward, backward, left, right } = getKeys();
     
-    // Movement logic
-    direction.current.set(
-      Number(right) - Number(left),
-      0,
-      Number(backward) - Number(forward)
-    ).normalize();
+    // Camera forward projected horizontally
+    const camForward = new THREE.Vector3(0, 0, -1).applyQuaternion(state.camera.quaternion);
+    camForward.y = 0;
+    camForward.normalize();
+    
+    const camRight = new THREE.Vector3(1, 0, 0).applyQuaternion(state.camera.quaternion);
+    camRight.y = 0;
+    camRight.normalize();
 
-    if (forward || backward) velocity.current.z -= direction.current.z * 0.1;
-    if (left || right) velocity.current.x -= direction.current.x * 0.1;
+    // Map keyboard inputs + touch thumbstick
+    direction.current.set(0, 0, 0);
+    if (forward || touchMovementRef.current.forward) direction.current.add(camForward);
+    if (backward || touchMovementRef.current.backward) direction.current.sub(camForward);
+    if (left || touchMovementRef.current.left) direction.current.sub(camRight);
+    if (right || touchMovementRef.current.right) direction.current.add(camRight);
 
-    state.camera.translateX(-velocity.current.x);
-    state.camera.translateZ(-velocity.current.z);
+    const isMoving = direction.current.lengthSq() > 0;
+    isMovingRef.current = isMoving;
 
-    velocity.current.multiplyScalar(0.9); // Friction
+    if (isMoving) {
+      direction.current.normalize();
+      velocity.current.addScaledVector(direction.current, delta * 30);
+    }
+
+    // Velocity decay friction
+    velocity.current.multiplyScalar(0.8);
+
+    // Apply translation delta
+    playerPosRef.current.addScaledVector(velocity.current, delta);
+    
+    // Clamp to map boundaries
+    checkCollision(playerPosRef.current);
+
+    // Set camera coordinates
+    if (cameraMode === 'first-person') {
+      state.camera.position.copy(playerPosRef.current).add(new THREE.Vector3(0, 1.6, 0));
+    } else {
+      // 3rd Person: Offset 3.5m back along look vector, 1.8m up
+      state.camera.position.copy(playerPosRef.current)
+        .addScaledVector(camForward, -3.4)
+        .add(new THREE.Vector3(0, 1.8, 0));
+    }
+
+    // Apply damage or recoil screen shakes
+    if (shakeRef.current > 0.002) {
+      shakeRef.current = THREE.MathUtils.lerp(shakeRef.current, 0, delta * 12);
+      const s = shakeRef.current;
+      state.camera.position.x += (Math.random() - 0.5) * s;
+      state.camera.position.y += (Math.random() - 0.5) * s;
+      state.camera.position.z += (Math.random() - 0.5) * s;
+    }
   });
 
   return null;
 };
 
+// --- Player 3D Mesh (visible in 3rd Person) ---
+interface PlayerModelMeshProps {
+  cameraMode: 'first-person' | 'third-person';
+  playerPosRef: React.MutableRefObject<THREE.Vector3>;
+  isMovingRef: React.MutableRefObject<boolean>;
+  isFiring: boolean;
+  color: string;
+}
+
+const PlayerCharacterModelMesh: React.FC<PlayerModelMeshProps> = ({ cameraMode, playerPosRef, isMovingRef, isFiring, color }) => {
+  const groupRef = useRef<THREE.Group>(null!);
+
+  useFrame((state) => {
+    groupRef.current.position.copy(playerPosRef.current);
+    
+    // Rotate character mesh to align with camera forward look
+    const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(state.camera.quaternion);
+    forward.y = 0;
+    forward.normalize();
+    
+    const angle = Math.atan2(forward.x, forward.z);
+    groupRef.current.rotation.y = angle;
+  });
+
+  if (cameraMode === 'first-person') return null;
+
+  return (
+    <group ref={groupRef}>
+      <CharacterModel color={color} type="player" isMoving={isMovingRef.current} isFiring={isFiring} scale={0.95} />
+    </group>
+  );
+};
+
+// === MAIN SIMULATION MODULE ===
 const Simulation: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -253,37 +558,213 @@ const Simulation: React.FC = () => {
   const missionId = queryParams.get('missionId');
   const mission = missions.find(m => m.id === missionId);
 
+  // Gameplay variables
   const [score, setScore] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
   const [ammo, setAmmo] = useState(30);
+  const [health, setHealth] = useState(100);
+  const [isDead, setIsDead] = useState(false);
   const [missionComplete, setMissionComplete] = useState(false);
+  
+  // Animation states
   const [isFiring, setIsFiring] = useState(false);
   const [isAlarmActive, setIsAlarmActive] = useState(false);
   const [showHitMarker, setShowHitMarker] = useState(false);
+  const [hitFlash, setHitFlash] = useState(false);
+  const [cameraMode, setCameraMode] = useState<'first-person' | 'third-person'>('third-person');
+
+  // Input states (touch screens)
+  const [isTouch, setIsTouch] = useState(false);
+  const [joystickActive, setJoystickActive] = useState(false);
+  const [joystickPos, setJoystickPos] = useState({ x: 0, y: 0 });
+
+  // Refs for canvas-loop communications
+  const playerPosRef = useRef(new THREE.Vector3(0, 0, 5));
+  const isMovingRef = useRef(false);
+  const shakeRef = useRef(0);
   const controlsRef = useRef<any>(null);
+  
+  // Mobile touch references
+  const joystickStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lastLookTouchRef = useRef<{ x: number; y: number } | null>(null);
+  const touchMovementRef = useRef({ forward: false, backward: false, left: false, right: false });
+  const touchLookRef = useRef({ yaw: 0, pitch: 0 });
 
-  // Auto-lock controls when simulation starts
+  // Custom targets configuration
+  const [enemies, setEnemies] = useState<EnemyState[]>([]);
+  const [tracers, setTracers] = useState<{ id: number; start: THREE.Vector3; end: THREE.Vector3 }[]>([]);
+
+  const targetScore = getTargetScore(missionId);
+  const levelTheme = getLevelConfig(missionId);
+  const themeColor = levelTheme.gridColor;
+
+  // Touch screen detection
   useEffect(() => {
-    if (isStarted && controlsRef.current) {
-      controlsRef.current.lock();
-    }
-  }, [isStarted]);
+    const checkTouch = () => {
+      setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    };
+    checkTouch();
+  }, []);
 
-  const handleHit = () => {
-    setScore(s => s + 100);
-    setShowHitMarker(true);
-    setTimeout(() => setShowHitMarker(false), 150);
-    if (mission && score + 100 >= 500) {
-      setMissionComplete(true);
+  // Sync background music loops
+  useEffect(() => {
+    if (isStarted && !isDead && !missionComplete) {
+      audio.startBackgroundMusic();
+    } else {
+      audio.stopBackgroundMusic();
+    }
+    return () => {
+      audio.stopBackgroundMusic();
+    };
+  }, [isStarted, isDead, missionComplete]);
+
+  // Restart / Deploy setup
+  const handleStart = () => {
+    setIsStarted(true);
+    setEnemies(getInitialEnemies(missionId));
+    setHealth(100);
+    setIsDead(false);
+    setScore(0);
+    setAmmo(30);
+    setIsAlarmActive(false);
+    setMissionComplete(false);
+    playerPosRef.current.set(0, 0, 5);
+    
+    if (controlsRef.current && !isTouch) {
+      controlsRef.current.lock();
     }
   };
 
+  // Check mission status
+  useEffect(() => {
+    if (isStarted && enemies.length > 0 && enemies.every(e => e.health <= 0) && !missionComplete) {
+      setMissionComplete(true);
+      audio.stopBackgroundMusic();
+      if (!isTouch && controlsRef.current) {
+        controlsRef.current.unlock();
+      }
+    }
+  }, [enemies, isStarted, missionComplete, isTouch]);
+
+  // Process player weapon firing
   const handleShoot = () => {
-    if (ammo > 0) {
+    if (ammo > 0 && !isDead && isStarted && !missionComplete) {
       setAmmo(a => a - 1);
       setIsFiring(true);
-      setTimeout(() => setIsFiring(false), 50);
+      setTimeout(() => setIsFiring(false), 60);
+      audio.playShootSound();
+      shakeRef.current = 0.09; // Screen recoil
+
+      // Spawn bullet tracer from weapon into world
+      let camera;
+      if (controlsRef.current && controlsRef.current.getObject) {
+        camera = controlsRef.current.getObject();
+      }
+      
+      const start = camera ? camera.position.clone() : playerPosRef.current.clone().add(new THREE.Vector3(0, 1.5, 0));
+      const direction = camera 
+        ? new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion)
+        : new THREE.Vector3(0, 0, -1);
+      
+      const end = start.clone().addScaledVector(direction, 40);
+
+      // Add temporary tracer line
+      const tracerId = Math.random();
+      setTracers(t => [...t, { id: tracerId, start, end }]);
+      setTimeout(() => {
+        setTracers(t => t.filter(x => x.id !== tracerId));
+      }, 70);
     }
+  };
+
+  // Process hit marks on targets
+  const handleHitEnemy = (id: string, type: 'enemy' | 'boss') => {
+    if (ammo <= 0 || isDead || !isStarted) return;
+    
+    setEnemies(prev => prev.map(enemy => {
+      if (enemy.id === id) {
+        const nextH = Math.max(0, enemy.health - 50);
+        if (nextH <= 0) {
+          audio.playExplosionSound();
+          setScore(s => s + (type === 'boss' ? 500 : 100));
+        } else {
+          audio.playHitSound();
+        }
+        return { ...enemy, health: nextH };
+      }
+      return enemy;
+    }));
+
+    setShowHitMarker(true);
+    setTimeout(() => setShowHitMarker(false), 140);
+  };
+
+  // Neural Forge target hit
+  const handleHitDummy = () => {
+    if (ammo <= 0 || isDead) return;
+    setScore(s => s + 100);
+    audio.playHitSound();
+    setShowHitMarker(true);
+    setTimeout(() => setShowHitMarker(false), 140);
+  };
+
+  // Process guard returning fire to player
+  const handleShootPlayer = (start: THREE.Vector3, end: THREE.Vector3) => {
+    if (isDead || !isStarted || missionComplete) return;
+
+    // Bullet tracer
+    const tracerId = Math.random();
+    setTracers(t => [...t, { id: tracerId, start, end }]);
+    setTimeout(() => {
+      setTracers(t => t.filter(x => x.id !== tracerId));
+    }, 70);
+
+    // Inflict damage
+    setHealth(h => {
+      const nextH = Math.max(0, h - 12);
+      if (nextH <= 0) {
+        setIsDead(true);
+        audio.playExplosionSound();
+        if (controlsRef.current) controlsRef.current.unlock();
+      } else {
+        audio.playHitSound();
+      }
+      return nextH;
+    });
+
+    // Screen flash & camera shake
+    setHitFlash(true);
+    setTimeout(() => setHitFlash(false), 120);
+    shakeRef.current = 0.35;
+  };
+
+  // Keyboard controls key toggle binding
+  const [sub] = useKeyboardControls();
+  useEffect(() => {
+    return sub(
+      (state) => (state as any).toggleCamera,
+      (pressed) => {
+        if (pressed && isStarted && !isDead && !missionComplete) {
+          setCameraMode(m => m === 'first-person' ? 'third-person' : 'first-person');
+          audio.playClickSound();
+        }
+      }
+    );
+  }, [sub, isStarted, isDead, missionComplete]);
+
+  // Touch look input listeners
+  const TouchLookController: React.FC = () => {
+    useFrame((state) => {
+      if (touchLookRef.current.yaw !== 0 || touchLookRef.current.pitch !== 0) {
+        state.camera.rotation.y += touchLookRef.current.yaw;
+        state.camera.rotation.x += touchLookRef.current.pitch;
+        state.camera.rotation.x = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, state.camera.rotation.x));
+        
+        touchLookRef.current.yaw = 0;
+        touchLookRef.current.pitch = 0;
+      }
+    });
+    return null;
   };
 
   return (
@@ -293,167 +774,354 @@ const Simulation: React.FC = () => {
         { name: 'backward', keys: ['ArrowDown', 's', 'S'] },
         { name: 'left', keys: ['ArrowLeft', 'a', 'A'] },
         { name: 'right', keys: ['ArrowRight', 'd', 'D'] },
-        { name: 'jump', keys: ['Space'] },
+        { name: 'toggleCamera', keys: ['v', 'V'] },
       ]}
     >
-      <div className="fixed inset-0 bg-black cursor-crosshair" onMouseDown={() => {
-        if (isStarted && !missionComplete) handleShoot();
-      }}>
+      <div 
+        className="fixed inset-0 bg-black overflow-hidden select-none" 
+        onMouseDown={() => {
+          if (isStarted && !isDead && !missionComplete && !isTouch) handleShoot();
+        }}
+      >
+        {/* Render Canvas */}
         <Canvas shadows>
-          <PerspectiveCamera makeDefault position={[0, 2, 10]} fov={75} />
-          <fog attach="fog" args={["#000", 10, 50]} />
-          <Sky sunPosition={[100, 20, 100]} />
-          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+          <PerspectiveCamera makeDefault position={[0, 2, 5]} fov={75} />
+          <fog attach="fog" args={[levelTheme.fogColor, 15, 60]} />
           
+          <Sky sunPosition={[80, 25, 80]} />
+          <Stars radius={90} depth={45} count={4000} factor={3} saturation={0} fade speed={1.2} />
+
           <Suspense fallback={null}>
-            <ambientLight intensity={0.2} />
-            <pointLight position={[10, 10, 10]} intensity={1} castShadow />
-            
-            {/* Ground */}
-            <Plane args={[100, 100]} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-              <meshStandardMaterial color="#171717" roughness={0.8} metalness={0.2} />
+            <ambientLight intensity={levelTheme.ambientIntensity} />
+            <pointLight position={[12, 12, 12]} intensity={1.2} castShadow />
+
+            {/* Ground Plane */}
+            <Plane args={[100, 100]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+              <meshStandardMaterial color={levelTheme.floorColor} roughness={0.7} metalness={0.2} />
             </Plane>
 
-            {/* Grid Helper for Tactical Look */}
-            <gridHelper args={[100, 50, "#3b82f6", "#1f2937"]} position={[0, 0.01, 0]} />
+            {/* Tactical Grid */}
+            <gridHelper args={[100, 50, themeColor, "#1e293b"]} position={[0, 0.015, 0]} />
 
-            {/* Simulation Guards */}
-            {isStarted && mission?.id === 'm0' && (
-              <>
-                <Guard 
-                  position={[-10, 0, -20]} 
-                  waypoints={[[-10, 0, -20], [10, 0, -20]]} 
-                  onHit={handleHit}
-                  onDetect={() => setIsAlarmActive(true)}
-                />
-                <Guard 
-                  position={[15, 0, -30]} 
-                  waypoints={[[15, 0, -30], [15, 0, -10]]} 
-                  onHit={handleHit}
-                  onDetect={() => setIsAlarmActive(true)}
-                />
-              </>
-            )}
-
-            {isStarted && !mission && Array.from({ length: 5 }).map((_, i) => (
-              <Target 
-                key={i} 
-                position={[(i - 2) * 5, 2, -10]} 
-                onHit={handleHit} 
+            {/* Spawns Active Guard list */}
+            {isStarted && enemies.map((guard) => (
+              <Guard 
+                key={guard.id}
+                id={guard.id}
+                name={guard.name}
+                type={guard.type}
+                position={guard.position}
+                waypoints={guard.waypoints}
+                health={guard.health}
+                playerPosRef={playerPosRef}
+                isAlarmActive={isAlarmActive}
+                onDetect={() => {
+                  if (!isAlarmActive) {
+                    setIsAlarmActive(true);
+                    audio.playAlertSound();
+                  }
+                }}
+                onHit={() => handleHitEnemy(guard.id, guard.type)}
+                onShootPlayer={handleShootPlayer}
               />
             ))}
 
-            <Player />
-            <Weapon isFiring={isFiring} />
-            <PointerLockControls ref={controlsRef} />
-            <Environment preset="night" />
+            {/* Spawns Target Dummies for Neural Forge */}
+            {isStarted && !mission && Array.from({ length: 4 }).map((_, i) => (
+              <Target 
+                key={i}
+                position={[(i - 1.5) * 8, 0, -15]}
+                onHit={handleHitDummy}
+              />
+            ))}
+
+            {/* Bullet Tracer lines */}
+            {tracers.map((t) => (
+              <TracerMesh key={t.id} start={t.start} end={t.end} />
+            ))}
+
+            {/* Unified Player Controller & Character */}
+            <Player 
+              cameraMode={cameraMode} 
+              playerPosRef={playerPosRef} 
+              isMovingRef={isMovingRef} 
+              shakeRef={shakeRef}
+              touchMovementRef={touchMovementRef}
+            />
+
+            <PlayerCharacterModelMesh 
+              cameraMode={cameraMode} 
+              playerPosRef={playerPosRef} 
+              isMovingRef={isMovingRef}
+              isFiring={isFiring} 
+              color="#3b82f6" 
+            />
+
+            {/* First-person Weapon HUD element */}
+            {cameraMode === 'first-person' && isStarted && !isDead && !missionComplete && (
+              <Weapon isFiring={isFiring} />
+            )}
+
+            {/* Environmental Setup */}
+            <Environment preset={levelTheme.ambientPreset} />
             <Warehouse />
-            
-            {/* Cinematic Spotlights */}
-            <spotLight position={[0, 15, 0]} angle={0.3} penumbra={1} intensity={2} castShadow color="#3b82f6" />
-            <spotLight position={[-30, 15, -30]} angle={0.5} penumbra={1} intensity={1} color="#ef4444" />
+
+            {/* Pointer lock controls */}
+            {!isTouch && <PointerLockControls ref={controlsRef} />}
+
+            {/* Touch Aim Look */}
+            {isTouch && <TouchLookController />}
+
+            {/* Cyber Lights */}
+            <spotLight position={[0, 18, 0]} angle={0.35} penumbra={1} intensity={2.5} castShadow color={levelTheme.spotlightColor} />
+            <spotLight position={[-25, 18, -25]} angle={0.4} penumbra={1} intensity={1.5} color={isAlarmActive ? '#ef4444' : '#3b82f6'} />
           </Suspense>
         </Canvas>
 
-        {/* HUD Elements */}
-
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-          {/* Crosshair */}
-          <div className="relative">
-            <div className="w-8 h-[2px] bg-blue-400 absolute left-1/2 -translate-x-1/2" />
-            <div className="h-8 w-[2px] bg-blue-400 absolute top-1/2 -translate-y-1/2" />
-            <div className="w-1 h-1 bg-red-500 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-            
-            {/* Hit Marker */}
-            {showHitMarker && (
-              <motion.div 
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1.5, opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              >
-                <div className="w-8 h-8 relative">
-                  <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-red-500" />
-                  <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-red-500" />
-                  <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-red-500" />
-                  <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-red-500" />
-                </div>
-              </motion.div>
-            )}
-          </div>
+        {/* --- RETREAT/NAV HEADER (Responsive positioning) --- */}
+        <div className="absolute top-6 left-6 z-50 pointer-events-auto flex items-center gap-4">
+          <button 
+            onClick={() => {
+              audio.playClickSound();
+              navigate(mission ? '/campaign' : '/');
+            }}
+            className="px-4 py-2 bg-black/60 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl text-[10px] font-mono tracking-widest text-gray-400 hover:text-white uppercase transition-all backdrop-blur-md"
+          >
+            ← RETREAT TO NEXUS
+          </button>
+          
+          <button 
+            onClick={() => {
+              setCameraMode(m => m === 'first-person' ? 'third-person' : 'first-person');
+              audio.playClickSound();
+            }}
+            className="hidden sm:inline-block px-4 py-2 bg-black/60 hover:bg-blue-950/20 border border-blue-500/20 text-[10px] font-mono tracking-widest text-blue-400 uppercase rounded-xl transition-all backdrop-blur-md"
+          >
+            Camera: {cameraMode === 'first-person' ? '1ST PERS' : '3RD PERS'} (V)
+          </button>
         </div>
 
-        {/* STEALTH HUD */}
-        <div className="absolute top-10 right-10 flex flex-col items-end gap-2">
-          <div className="flex gap-1 items-center">
-            <span className="text-xs font-mono text-gray-500 uppercase">Detection Level</span>
-            <div className="w-32 h-1 bg-white/10 rounded-full overflow-hidden">
+        {/* --- DYNAMIC STATS HUD --- */}
+        <div className="absolute top-20 sm:top-6 right-6 flex flex-col items-end gap-2 z-30 pointer-events-none font-mono">
+          <div className="flex gap-2 items-center">
+            <span className="text-[10px] text-gray-400 uppercase tracking-wider">Detection</span>
+            <div className="w-24 sm:w-32 h-1.5 bg-white/10 rounded-full overflow-hidden">
               <motion.div 
                 animate={{ width: isAlarmActive ? '100%' : '0%' }}
-                className={`h-full ${isAlarmActive ? 'bg-red-500' : 'bg-blue-400'}`}
+                className={`h-full ${isAlarmActive ? 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'bg-blue-400'}`}
               />
             </div>
           </div>
           {isAlarmActive && (
             <motion.span 
-              animate={{ opacity: [1, 0, 1] }} 
-              transition={{ repeat: Infinity, duration: 0.5 }}
-              className="text-xs font-black italic text-red-500 uppercase tracking-widest"
+              animate={{ opacity: [1, 0.4, 1] }} 
+              transition={{ repeat: Infinity, duration: 0.6 }}
+              className="text-[10px] font-bold text-red-500 uppercase tracking-widest"
             >
-              ALARM STATUS: COMPROMISED
+              ALARM ACTIVE
             </motion.span>
           )}
         </div>
 
-        {/* Simulation UI */}
-        <div className="absolute top-24 left-10 space-y-4">
-          <div className="flex flex-col">
-            <span className="text-xs font-mono text-blue-400 uppercase tracking-widest">Score</span>
-            <span className="text-4xl font-black italic text-white leading-none">{score}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xs font-mono text-blue-400 uppercase tracking-widest">Ammo</span>
-            <div className="flex items-end gap-1">
-              <span className="text-2xl font-black italic text-white leading-none">{ammo}</span>
-              <span className="text-xs text-gray-500 font-mono mb-1">/ 30</span>
+        {/* Gun Crosshair HUD */}
+        {cameraMode === 'first-person' && isStarted && !isDead && !missionComplete && (
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+            <div className="relative">
+              <div className="w-5 h-[1.5px] bg-blue-400 absolute left-1/2 -translate-x-1/2" />
+              <div className="h-5 w-[1.5px] bg-blue-400 absolute top-1/2 -translate-y-1/2" />
+              <div className="w-1 h-1 bg-red-500 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+              
+              {/* Recoil damage tick indicator */}
+              {showHitMarker && (
+                <motion.div 
+                  initial={{ scale: 0.6, opacity: 0 }}
+                  animate={{ scale: 1.4, opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                >
+                  <div className="w-6 h-6 relative">
+                    <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-red-500" />
+                    <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-red-500" />
+                    <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-red-500" />
+                    <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-red-500" />
+                  </div>
+                </motion.div>
+              )}
             </div>
           </div>
-        </div>
+        )}
 
-        {!isStarted && (
-          <div className="absolute inset-0 bg-black/80 flex items-center justify-center backdrop-blur-md z-[60]">
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="glass-card p-12 text-center max-w-md"
+        {/* --- DYNAMIC DIGITAL VITALITY HUD --- */}
+        {isStarted && !isDead && !missionComplete && (
+          <div className="absolute bottom-6 left-6 flex flex-col gap-3 z-30 font-hud max-w-[280px]">
+            {/* Health Monitor */}
+            <div className="flex flex-col gap-1">
+              <div className="flex justify-between text-[10px] text-blue-400 font-bold uppercase tracking-widest">
+                <span>Vitality Shield</span>
+                <span className={health < 35 ? 'text-red-500 animate-pulse' : 'text-blue-300'}>{health}%</span>
+              </div>
+              <div className="w-48 h-3.5 bg-black/60 border border-blue-500/30 rounded-md p-[2px] overflow-hidden backdrop-blur-sm">
+                <div 
+                  className={`h-full rounded-sm transition-all duration-300 ${health < 35 ? 'bg-red-500 shadow-[0_0_10px_#ef4444]' : 'bg-gradient-to-r from-blue-500 to-cyan-400 shadow-[0_0_10px_#3b82f6]'}`}
+                  style={{ width: `${health}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Score & Ammo Panel */}
+            <div className="flex gap-6 pt-1 bg-black/40 border border-white/5 rounded-xl px-4 py-2.5 backdrop-blur-sm">
+              <div className="flex flex-col">
+                <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest">TGT_XP</span>
+                <span className="text-xl font-bold italic text-white leading-none text-blue-300">
+                  {score}
+                  {mission && <span className="text-xs text-gray-500 font-mono">/{targetScore}</span>}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest">AMMO</span>
+                <div className="flex items-end gap-0.5 leading-none">
+                  <span className="text-xl font-bold italic text-white">{ammo}</span>
+                  <span className="text-[10px] text-gray-500 font-mono">/30</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* --- TOUCH SCREEN INTERACTIVE BUTTONS --- */}
+        {isTouch && isStarted && !isDead && !missionComplete && (
+          <div className="absolute inset-0 z-40 pointer-events-none select-none">
+            {/* Touch joystick movement pad */}
+            <div 
+              className="absolute bottom-6 left-1/2 -translate-x-[110%] w-32 h-32 rounded-full border border-blue-500/20 bg-black/40 pointer-events-auto flex items-center justify-center backdrop-blur-sm touch-none"
+              onTouchStart={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                joystickStartRef.current = { x: cx, y: cy };
+                setJoystickActive(true);
+              }}
+              onTouchMove={(e) => {
+                if (!joystickStartRef.current) return;
+                const touch = e.touches[0];
+                const dx = touch.clientX - joystickStartRef.current.x;
+                const dy = touch.clientY - joystickStartRef.current.y;
+                
+                const dist = Math.min(45, Math.sqrt(dx*dx + dy*dy));
+                const angle = Math.atan2(dy, dx);
+                
+                setJoystickPos({
+                  x: Math.cos(angle) * dist,
+                  y: Math.sin(angle) * dist
+                });
+                
+                touchMovementRef.current.forward = dy < -10;
+                touchMovementRef.current.backward = dy > 10;
+                touchMovementRef.current.left = dx < -10;
+                touchMovementRef.current.right = dx > 10;
+              }}
+              onTouchEnd={() => {
+                joystickStartRef.current = null;
+                setJoystickPos({ x: 0, y: 0 });
+                setJoystickActive(false);
+                touchMovementRef.current = { forward: false, backward: false, left: false, right: false };
+              }}
             >
-              <h2 className="text-4xl font-black italic uppercase mb-4 tracking-tighter">
+              <div 
+                className={`w-12 h-12 rounded-full border transition-all ${joystickActive ? 'bg-cyan-400/60 border-cyan-300 shadow-[0_0_15px_#22d3ee]' : 'bg-blue-500/40 border-blue-400 shadow-neon-blue'}`}
+                style={{ transform: `translate(${joystickPos.x}px, ${joystickPos.y}px)` }}
+              />
+            </div>
+
+            {/* Drag Zone (Right Half) for camera rotation */}
+            <div 
+              className="absolute inset-y-0 right-0 w-[55%] pointer-events-auto touch-none"
+              onTouchStart={(e) => {
+                const touch = e.touches[0];
+                lastLookTouchRef.current = { x: touch.clientX, y: touch.clientY };
+              }}
+              onTouchMove={(e) => {
+                if (!lastLookTouchRef.current) return;
+                const touch = e.touches[0];
+                const dx = touch.clientX - lastLookTouchRef.current.x;
+                const dy = touch.clientY - lastLookTouchRef.current.y;
+                
+                touchLookRef.current.yaw -= dx * 0.005;
+                touchLookRef.current.pitch -= dy * 0.005;
+                
+                lastLookTouchRef.current = { x: touch.clientX, y: touch.clientY };
+              }}
+              onTouchEnd={() => {
+                lastLookTouchRef.current = null;
+              }}
+            />
+
+            {/* Trigger Fire / Toggle HUD on mobile */}
+            <div className="absolute bottom-6 right-6 flex items-center gap-4 pointer-events-auto z-50">
+              <button 
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                  setCameraMode(m => m === 'first-person' ? 'third-person' : 'first-person');
+                  audio.playClickSound();
+                }}
+                className="w-12 h-12 rounded-full bg-blue-600/30 border border-blue-400 text-white font-black text-[9px] flex items-center justify-center shadow-lg active:scale-95"
+              >
+                CAM
+              </button>
+              <button 
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                  handleShoot();
+                }}
+                className="w-20 h-20 rounded-full bg-red-600/40 border-2 border-red-500 text-white font-black italic flex items-center justify-center text-xs shadow-lg shadow-red-500/20 active:scale-90"
+              >
+                FIRE
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* --- FULLSCREEN DAMAGE RED FLASH --- */}
+        {hitFlash && (
+          <div className="absolute inset-0 bg-red-600/25 pointer-events-none z-50 animate-pulse" />
+        )}
+
+        {/* --- RETREAT/START SCREEN --- */}
+        {!isStarted && (
+          <div className="absolute inset-0 bg-black/85 flex items-center justify-center backdrop-blur-md z-[60] p-4">
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="glass-card p-8 md:p-12 text-center max-w-lg border border-blue-500/30 shadow-neon-blue"
+            >
+              <h2 className="text-4xl md:text-5xl font-black italic uppercase mb-4 tracking-tighter text-white">
                 {mission ? mission.title : "Neural Forge"}
               </h2>
-              <p className="text-gray-400 text-sm mb-8 font-medium">
-                {mission ? mission.briefing.text : "Welcome to Balwant's training module. Objective: Neutralize all ISF thermal signatures with maximum precision. Punishment is for pain; training is for results. Movement: WASD. Aim: Mouse. Shoot: Click."}
-              </p>
+              <div className="text-left bg-black/40 border border-white/5 p-4 rounded-xl font-serif text-sm italic text-gray-300 mb-8 leading-relaxed">
+                "{mission ? mission.briefing.text : "Welcome to Balwant's training module. Objective: Neutralize all ISF thermal signatures with maximum precision. Punishment is for pain; training is for results."}"
+                <div className="mt-4 font-mono not-italic text-[10px] text-blue-400 tracking-[0.3em] font-black uppercase">
+                  OPERATOR CLEARANCE: ARYAN SHARMA
+                </div>
+              </div>
               <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsStarted(true);
-                }}
-                className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black italic uppercase tracking-widest hover:bg-blue-500 transition-all active:scale-95 shadow-xl shadow-blue-600/20"
+                onClick={handleStart}
+                className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black italic uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-blue-600/20"
               >
-                {mission ? "INITIALIZE MISSION" : "START SIMULATION"}
+                {mission ? "INITIALIZE UPLINK" : "ENGAGE SIMULATOR"}
               </button>
             </motion.div>
           </div>
         )}
 
+        {/* --- MISSION SUCCESS SCREEN --- */}
         {missionComplete && (
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center z-[70] p-10 text-center"
+            className="absolute inset-0 bg-neutral-950/95 flex flex-col items-center justify-center z-[70] p-10 text-center"
           >
-            <h3 className="text-6xl font-black italic text-emerald-500 uppercase mb-4">Mission Success</h3>
-            <p className="text-gray-400 mb-8 max-w-sm">Objective achieved. Intelligence recovered. Tactical state synchronized with HQ.</p>
+            <h3 className="text-6xl font-black italic text-emerald-500 uppercase mb-4 tracking-tighter shadow-sm animate-pulse">Mission Complete</h3>
+            <p className="text-gray-400 mb-8 max-w-sm text-sm">Objective achieved. Target signatures neutralized. Syncing tactical data with Sector Command.</p>
             <div className="flex gap-4">
               <button 
                 onClick={async () => {
@@ -464,21 +1132,19 @@ const Simulation: React.FC = () => {
                       body: JSON.stringify({
                         userId: 'guest_user',
                         currentScene: 's8_shadow_ascendant',
-                        rage: 50,
-                        resolve: 50,
+                        rage: 60,
+                        resolve: 60,
                         skills: ['combat'],
                         itemIds: ['map']
                       })
                     });
-                    
                     if (!response.ok) throw new Error('Save failed');
                     navigate('/campaign');
                   } catch (e) {
-                    console.error('Save failed, navigating anyway:', e);
                     navigate('/campaign');
                   }
                 }}
-                className="px-12 py-4 bg-emerald-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-600/20"
+                className="px-12 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-600/20"
               >
                 SAVE & EXIT
               </button>
@@ -487,6 +1153,36 @@ const Simulation: React.FC = () => {
                 className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition-all"
               >
                 DISCARD
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* --- CRITICAL FAILURE / DEATH SCREEN --- */}
+        {isDead && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="absolute inset-0 bg-black/95 flex flex-col items-center justify-center z-[70] p-10 text-center"
+          >
+            <h3 className="text-5xl md:text-7xl font-black italic text-red-600 uppercase mb-2 tracking-tighter animate-pulse">
+              CONNECTION TERMINATED
+            </h3>
+            <p className="text-[11px] font-mono text-red-500/60 uppercase tracking-[0.4em] mb-12">
+              CRITICAL SHIELD BREACH // OPERATIVE DECEASED
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button 
+                onClick={handleStart}
+                className="px-12 py-4 bg-red-700 hover:bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest transition-all shadow-lg shadow-red-700/20"
+              >
+                REDEPLOY UPLINK
+              </button>
+              <button 
+                onClick={() => navigate(mission ? '/campaign' : '/')}
+                className="px-8 py-4 bg-white/5 border border-white/10 text-gray-400 hover:text-white rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition-all"
+              >
+                RETREAT TO NEXUS
               </button>
             </div>
           </motion.div>
