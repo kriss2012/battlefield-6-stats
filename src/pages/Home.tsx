@@ -47,11 +47,12 @@ export default function Home() {
               <span className="h-[1px] w-8 bg-blue-500" />
               <span className="text-xs font-mono text-blue-400 tracking-[0.4em] uppercase">Tactical Intelligence Hub</span>
             </div>
-            <h1 className="text-7xl md:text-8xl font-black mb-6 italic tracking-tighter chromatic-aberration animate-glitch-v2 leading-none">
-              BF6 <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">STATS HUB</span>
+            <h1 className="text-7xl md:text-8xl font-black mb-2 italic tracking-tighter chromatic-aberration animate-glitch-v2 leading-none uppercase">
+              SPECTRE <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">DIVISION</span>
             </h1>
-            <p className="text-xl text-gray-500 font-medium max-w-xl dof-blur mb-8 leading-relaxed">
-              Advanced performance tracking, real-time server telemetry, and global competitive analytics.
+            <p className="text-xs font-mono text-blue-400/80 tracking-[0.45em] mb-6 uppercase">SHADOW RECKONING</p>
+            <p className="text-xl text-gray-400 font-medium max-w-xl dof-blur mb-8 leading-relaxed">
+              Advanced tactical performance tracking, real-time command center telemetry, and cyber-espionage analytics for Spectre operatives.
             </p>
             <div className="flex gap-4">
               <button className="px-8 py-3 bg-blue-600 rounded-xl font-black italic text-xs uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20">Launch Theater</button>
@@ -69,8 +70,9 @@ export default function Home() {
             { to: "/analytics", icon: "📈", title: "Telemetry", desc: "Visualize historical trends with skill signatures and performance stability charts.", color: "purple" },
             { to: "/leaderboard", icon: "🏆", title: "Rankings", desc: "Global ranking system tracking the most lethal operators in the combat theater.", color: "amber" },
             { to: "/servers", icon: "🎮", title: "Network", desc: "Scan active combat zones for server availability and real-time player density.", color: "emerald" },
-            { to: "/forge", icon: "🧬", title: "Neural Forge", desc: "AI-driven development of tactical textures, characters, and combat narratives.", color: "blue" },
-            { to: "/friends", icon: "👥", title: "Friends", desc: "Manage your tactical network and coordinate with fellow operators.", color: "purple" },
+            { to: "/operatives", icon: "👤", title: "Operatives Dossiers", desc: "Access tactical bios, clearance status levels, and agent lore files.", color: "blue" },
+            { to: "/forge", icon: "🧬", title: "Neural Forge", desc: "AI-driven development of tactical textures, characters, and combat narratives.", color: "purple" },
+            { to: "/friends", icon: "👥", title: "Friends Network", desc: "Coordinate and manage links with fellow Spectre operatives.", color: "emerald" },
             { to: "/story", icon: "🎬", title: "Shadow Rising", desc: "Experience the interactive revenge saga of Aryan Sharma.", color: "red" },
           ].map((item, i) => (
             <motion.div
