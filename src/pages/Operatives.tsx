@@ -1,9 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { characterLore, CharacterPortraits } from '../utils/characterAssets';
 import type { CharacterLore } from '../utils/characterAssets';
 import TacticalHUD from '../components/TacticalHUD';
 import { audio } from '../utils/audio';
+import ThreeScene from '../components/ThreeScene';
+import CharacterModel from '../components/CharacterModel';
+import { Cylinder } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+
+const getOperativeColor = (id: string) => {
+  switch (id) {
+    case 'aryan_shadow': return '#ef4444';
+    case 'savita': return '#9ca3af';
+    case 'balwant': return '#fbbf24';
+    case 'kabir': return '#f97316';
+    case 'director': return '#c084fc';
+    default: return '#3b82f6';
+  }
+};
+
+const getOperativeType = (id: string) => {
+  if (id === 'kabir' || id === 'director') return 'enemy';
+  return 'player';
+};
+
+const HologramOperative: React.FC<{ id: string }> = ({ id }) => {
+  const groupRef = useRef<THREE.Group>(null!);
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    groupRef.current.rotation.y = time * 0.4;
+    groupRef.current.position.y = Math.sin(time * 1.5) * 0.04 - 0.4;
+  });
+
+  const color = getOperativeColor(id);
+  const type = getOperativeType(id);
+
+  return (
+    <group ref={groupRef}>
+      <Cylinder args={[0.9, 1.0, 0.1, 32]} position={[0, -1.2, 0]}>
+        <meshStandardMaterial color="#0c111d" metalness={0.9} roughness={0.1} />
+      </Cylinder>
+      <Cylinder args={[0.85, 0.85, 0.02, 32]} position={[0, -1.14, 0]}>
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={3} />
+      </Cylinder>
+
+      <group position={[0, -0.05, 0]}>
+        <CharacterModel color={color} type={type} isMoving={false} scale={0.9} />
+      </group>
+    </group>
+  );
+};
 
 const Operatives: React.FC = () => {
   const [selectedId, setSelectedId] = useState<string>('aryan_shadow');
@@ -46,7 +95,7 @@ const Operatives: React.FC = () => {
             <span className="h-[1px] w-8 bg-blue-500" />
             <span className="text-xs font-mono text-blue-400 tracking-[0.4em] uppercase">Tactical Database</span>
           </div>
-          <h1 className="text-6xl font-black italic tracking-tighter mb-2 uppercase leading-none chromatic-aberration">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black italic tracking-tighter mb-2 uppercase leading-none chromatic-aberration">
             ACTIVE <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">OPERATIVES</span>
           </h1>
           <p className="text-gray-500 font-medium max-w-xl">
@@ -120,12 +169,16 @@ const Operatives: React.FC = () => {
                 {/* Dossier Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                   
-                  {/* Portrait Panel */}
+                  {/* 3D Hologram Portrait Panel */}
                   <div className="md:col-span-4 flex flex-col items-center justify-center gap-4">
-                    <div className="w-48 h-48 rounded-full border-2 border-blue-500/20 bg-black/60 p-4 relative group shadow-2xl overflow-hidden">
-                      <div className="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors pointer-events-none" />
-                      {CharacterPortraits[activeChar.id]}
-                      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+                    <div className="w-full aspect-square bg-black/40 border border-blue-500/20 rounded-2xl p-2 relative group shadow-2xl overflow-hidden h-[300px]">
+                      <div className="absolute inset-0 bg-tactical-grid bg-grid-sm opacity-10 pointer-events-none" />
+                      <div className="w-full h-full">
+                        <ThreeScene autoRotate={false} enableZoom={false} environment="studio">
+                          <HologramOperative id={activeChar.id} />
+                        </ThreeScene>
+                      </div>
+                      <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-neutral-950 to-transparent pointer-events-none" />
                     </div>
                     <div className="text-center font-mono">
                       <span className="text-[10px] text-gray-500 tracking-widest uppercase block mb-1">Clearance Protocol</span>
