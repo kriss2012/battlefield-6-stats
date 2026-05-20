@@ -76,7 +76,7 @@ const Armory: React.FC = () => {
               <span className="h-[2px] w-12 bg-tactical-primary tactical-glow" />
               <span className="text-xs font-hud text-tactical-primary tracking-[0.4em] uppercase">Tactical Arsenal</span>
             </div>
-            <h1 className="text-6xl font-display font-black tracking-tighter mb-2 uppercase leading-none chromatic-aberration animate-glitch-v2 text-glow">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black tracking-tighter mb-2 uppercase leading-none chromatic-aberration animate-glitch-v2 text-glow">
               The <span className="text-white">Armory</span>
             </h1>
             <p className="text-gray-500 font-medium max-w-xl">
@@ -102,8 +102,8 @@ const Armory: React.FC = () => {
 
         <div className="grid lg:grid-cols-12 gap-12 items-start">
           {/* 3D Preview */}
-          <div className="lg:col-span-7 relative group">
-            <div className="aspect-square glass-panel">
+          <div className="lg:col-span-7 relative group w-full">
+            <div className="h-[300px] md:h-[420px] lg:h-auto lg:aspect-square glass-panel">
               <ArmoryView 
                 type={activeTab === 'operators' ? 'operator' : 'weapon'} 
                 color={customColor === '#3b82f6' ? selectedItem.color : customColor} 
