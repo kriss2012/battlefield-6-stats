@@ -22,6 +22,22 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
   }
 
+  // Open Developer Tools automatically to assist with runtime debugging
+  mainWindow.webContents.openDevTools();
+
+  // Register developer tools shortcuts
+  globalShortcut.register('F12', () => {
+    if (mainWindow) {
+      mainWindow.webContents.toggleDevTools();
+    }
+  });
+
+  globalShortcut.register('CommandOrControl+Shift+I', () => {
+    if (mainWindow) {
+      mainWindow.webContents.toggleDevTools();
+    }
+  });
+
   // Handle escape to exit fullscreen
   mainWindow.on('enter-full-screen', () => {
     globalShortcut.register('Escape', () => {
@@ -35,7 +51,7 @@ function createWindow() {
 
   // Fallback global shortcut just in case
   globalShortcut.register('Escape', () => {
-    if (mainWindow.isFullScreen()) {
+    if (mainWindow && mainWindow.isFullScreen()) {
       mainWindow.setFullScreen(false);
     }
   });
