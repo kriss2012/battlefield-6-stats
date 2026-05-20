@@ -29,15 +29,15 @@ const Footer = () => {
         <div className="col-span-1 md:col-span-2 flex flex-col gap-6">
           <div className="flex items-center gap-4">
             <div className="text-3xl font-black italic tracking-tighter text-blue-500 bg-black p-2 border border-white/10 rounded-lg">
-              BF6 <span className="text-white">SH</span>
+              SD <span className="text-white">HQ</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-black italic tracking-tight uppercase">Stats Hub</span>
+              <span className="text-xl font-black italic tracking-tight uppercase">SPECTRE DIVISION</span>
               <span className="text-xs text-gray-600 font-bold uppercase tracking-[0.4em]">Operational Tactical Command</span>
             </div>
           </div>
           <p className="text-sm text-gray-500 max-w-md leading-relaxed">
-            The ultimate tactical visualization platform for the next generation of combat assets. 
+            The ultimate tactical visualization platform for Spectre operatives. 
             Real-time telemetry, neural synthesis, and global network monitoring.
           </p>
         </div>
@@ -51,11 +51,11 @@ const Footer = () => {
             <Link to="/player" className="text-xs text-gray-400 hover:text-white transition-all uppercase tracking-widest flex items-center gap-2">
               <span className="opacity-20">01</span> Player_Tracking
             </Link>
-            <Link to="/analytics" className="text-xs text-gray-400 hover:text-white transition-all uppercase tracking-widest flex items-center gap-2">
-              <span className="opacity-20">02</span> Telemetry_Feed
+            <Link to="/operatives" className="text-xs text-gray-400 hover:text-white transition-all uppercase tracking-widest flex items-center gap-2">
+              <span className="opacity-20">02</span> Operatives_Dossiers
             </Link>
-            <Link to="/servers" className="text-xs text-gray-400 hover:text-white transition-all uppercase tracking-widest flex items-center gap-2">
-              <span className="opacity-20">03</span> Network_Nodes
+            <Link to="/analytics" className="text-xs text-gray-400 hover:text-white transition-all uppercase tracking-widest flex items-center gap-2">
+              <span className="opacity-20">03</span> Telemetry_Feed
             </Link>
             <Link to="/forge" className="text-xs text-gray-400 hover:text-white transition-all uppercase tracking-widest flex items-center gap-2">
               <span className="opacity-20">04</span> Neural_Forge
@@ -71,7 +71,7 @@ const Footer = () => {
             </span>
           </div>
           <div className="text-[11px] text-gray-700 font-bold tracking-[0.3em] uppercase space-y-1">
-            <p>© 2024 BF6 HUB // ALL RIGHTS RESERVED</p>
+            <p>© 2026 SPECTRE DIVISION // ALL RIGHTS RESERVED</p>
             <p className="text-red-900/40">UNAUTHORIZED_ACCESS_IS_FELONY</p>
           </div>
         </div>
