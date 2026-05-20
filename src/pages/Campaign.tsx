@@ -42,7 +42,7 @@ const Campaign: React.FC = () => {
                     <span className="h-[1px] w-8 bg-blue-500" />
                     <span className="text-xs font-mono text-blue-400 tracking-[0.4em] uppercase">Global Operations</span>
                   </div>
-                  <h1 className="text-6xl font-black italic tracking-tighter mb-2 uppercase leading-none chromatic-aberration">
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-black italic tracking-tighter mb-2 uppercase leading-none chromatic-aberration">
                     Campaign <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">Nexus</span>
                   </h1>
                   <p className="text-gray-500 font-medium max-w-xl">
