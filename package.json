@@ -55,6 +55,10 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^42.2.0",
+    "electron-builder": "^26.8.1",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
@@ -63,6 +67,7 @@
     "tailwindcss": "^3.4.18",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.45.0",
-    "vite": "^6.4.1"
+    "vite": "^6.4.1",
+    "wait-on": "^9.0.10"
   }
 }
