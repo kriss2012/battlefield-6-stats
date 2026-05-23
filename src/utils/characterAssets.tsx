@@ -8,6 +8,8 @@ export interface CharacterLore {
   traits: string[];
   specialization: string;
   status: 'ACTIVE' | 'MIA' | 'REDACTED' | 'DECEASED';
+  gender: 'male' | 'female';
+  costume: string;
 }
 
 export const characterLore: Record<string, CharacterLore> = {
@@ -18,7 +20,9 @@ export const characterLore: Record<string, CharacterLore> = {
     bio: 'Once a quiet student in Nagpur, Aryan was forged into a ghost by the Iron Shadow Front. After his mother was taken, he dismantled the organization from within. Now, he operates as a freelance asset, tracking ISF remnants across the globe.',
     traits: ['Invisible', 'Analytic', 'Relentless'],
     specialization: 'Infiltration & Strategic Disruption',
-    status: 'ACTIVE'
+    status: 'ACTIVE',
+    gender: 'male',
+    costume: 'Stealth Tactical Suit with Adaptive Camo Mesh'
   },
   savita: {
     id: 'savita',
@@ -27,7 +31,9 @@ export const characterLore: Record<string, CharacterLore> = {
     bio: 'A teacher whose quiet strength defined Aryan\'s moral compass. Her abduction by the ISF was the catalyst for the Shadow Rising. Her final words remain the only thing keeping Aryan from fully disappearing into the darkness.',
     traits: ['Resilient', 'Observant', 'Principled'],
     specialization: 'Cultural Intelligence & Ethics',
-    status: 'DECEASED'
+    status: 'DECEASED',
+    gender: 'female',
+    costume: 'Civilian Attire with Hidden Kevlar Weave'
   },
   balwant: {
     id: 'balwant',
@@ -36,7 +42,9 @@ export const characterLore: Record<string, CharacterLore> = {
     bio: 'Former RAW operative with thirty years of off-book experience. He saw the potential in Aryan\'s rage and shaped it into a weapon. He provides the tactical oversight and global network required for Shadow operations.',
     traits: ['Strategic', 'Cynical', 'Loyal'],
     specialization: 'Tactical Training & Logistics',
-    status: 'ACTIVE'
+    status: 'ACTIVE',
+    gender: 'male',
+    costume: 'Heavy Combat Vest and Utility Fatigues'
   },
   kabir: {
     id: 'kabir',
@@ -45,7 +53,9 @@ export const characterLore: Record<string, CharacterLore> = {
     bio: 'The son of a powerful MLA, Kabir was the catalyst for Aryan\'s initial fall. His entitled cruelty led to the confrontation that first revealed Aryan\'s latent combat potential.',
     traits: ['Aggressive', 'Entitled', 'Unpredictable'],
     specialization: 'Political Enforcement',
-    status: 'MIA'
+    status: 'MIA',
+    gender: 'male',
+    costume: 'High-Tech Urban Riot Gear'
   },
   director: {
     id: 'director',
@@ -54,7 +64,9 @@ export const characterLore: Record<string, CharacterLore> = {
     bio: 'The enigmatic leader of the Iron Shadow Front. He viewed human conflict as a series of mathematical equations to be solved through pressure and leverage.',
     traits: ['Calculating', 'Enigmatic', 'Ruthless'],
     specialization: 'Global Network Architecture',
-    status: 'REDACTED'
+    status: 'REDACTED',
+    gender: 'male',
+    costume: 'Immaculate Tailored Suit over Ballistic Armor'
   },
   vihaan: {
     id: 'vihaan',
@@ -63,7 +75,9 @@ export const characterLore: Record<string, CharacterLore> = {
     bio: 'A former NSG commando discharged for excessive force. Vihaan was recruited by Balwant to serve as the heavy muscle for Spectre Division. He prefers kinetic solutions to complex problems.',
     traits: ['Explosive', 'Fearless', 'Blunt'],
     specialization: 'Heavy Assault & Demolitions',
-    status: 'ACTIVE'
+    status: 'ACTIVE',
+    gender: 'male',
+    costume: 'EOD Blast Suit with Reinforced Plating'
   },
   neha: {
     id: 'neha',
@@ -72,7 +86,9 @@ export const characterLore: Record<string, CharacterLore> = {
     bio: 'An infamous black-hat hacker who breached ISF servers on a dare. After being hunted, she sought refuge with Spectre Division. She now controls their digital overwatch.',
     traits: ['Brilliant', 'Sarcastic', 'Elusive'],
     specialization: 'Cyber Warfare & Signals',
-    status: 'ACTIVE'
+    status: 'ACTIVE',
+    gender: 'female',
+    costume: 'Sleek Runner Jacket and Augmented VR Visor'
   },
   zaheer: {
     id: 'zaheer',
@@ -81,7 +97,9 @@ export const characterLore: Record<string, CharacterLore> = {
     bio: 'An ex-mercenary who worked for the ISF before discovering their true agenda. Zaheer defected, bringing invaluable intel and combat experience to the Spectre team.',
     traits: ['Veteran', 'Tactical', 'Guilt-Ridden'],
     specialization: 'Reconnaissance & Sniper',
-    status: 'ACTIVE'
+    status: 'ACTIVE',
+    gender: 'male',
+    costume: 'Desert Ghillie Suit with Thermal Negation'
   },
   claire: {
     id: 'claire',
@@ -90,7 +108,9 @@ export const characterLore: Record<string, CharacterLore> = {
     bio: 'An international arms dealer and former MI6 operative. Claire supplies the ISF with state-of-the-art weaponry and handles their European logistics and wetwork.',
     traits: ['Charming', 'Lethal', 'Opportunistic'],
     specialization: 'CQC & Supply Lines',
-    status: 'MIA'
+    status: 'MIA',
+    gender: 'female',
+    costume: 'Tactical Catsuit with Concealed Holsters'
   },
   omar: {
     id: 'omar',
@@ -99,7 +119,9 @@ export const characterLore: Record<string, CharacterLore> = {
     bio: 'The Director\'s personal bodyguard and chief interrogator. Omar is a mountain of a man who takes genuine pleasure in breaking both codes and people.',
     traits: ['Brutal', 'Loyal', 'Intimidating'],
     specialization: 'Interrogation & Heavy Weapons',
-    status: 'ACTIVE'
+    status: 'ACTIVE',
+    gender: 'male',
+    costume: 'Juggernaut Powered Exoskeleton'
   }
 };
 
