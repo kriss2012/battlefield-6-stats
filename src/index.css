@@ -86,13 +86,17 @@
   }
   
   .btn-tactical {
-    @apply relative inline-flex items-center justify-center px-8 py-3 bg-blue-600/10 border border-blue-500/30 text-blue-400 font-hud text-xs tracking-widest hover:bg-blue-600/20 hover:border-blue-400 hover:text-white transition-all overflow-hidden group;
+    @apply relative inline-flex items-center justify-center px-8 py-3 bg-blue-600/10 border border-blue-500/30 text-blue-400 font-hud text-xs tracking-widest hover:bg-blue-600/20 hover:border-blue-400 hover:text-white transition-all overflow-hidden;
     clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   }
   
   .btn-tactical::before {
     content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700;
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/20 to-transparent -translate-x-full transition-transform duration-700;
+  }
+
+  .btn-tactical:hover::before {
+    transform: translateX(100%);
   }
 }
 
