@@ -1,58 +1,80 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { aiService } from '../services/aiService';
-import type { AIAsset } from '../services/aiService';
+import { useNavigate } from 'react-router-dom';
+import ThreeScene from '../components/ThreeScene';
+import CharacterModel from '../components/CharacterModel';
+import { useFrame } from '@react-three/fiber';
+import { Cylinder } from '@react-three/drei';
+import * as THREE from 'three';
+import { addCustomCharacter, CharacterLore } from '../utils/characterAssets';
+import { audio } from '../utils/audio';
+
+// Small inner component for the rotating hologram
+const ForgeHologram: React.FC<{ gender: 'male' | 'female'; costume: string }> = ({ gender, costume }) => {
+  const groupRef = useRef<THREE.Group>(null!);
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    groupRef.current.rotation.y = time * 0.3;
+    groupRef.current.position.y = Math.sin(time * 2) * 0.05 - 0.4;
+  });
+
+  return (
+    <group ref={groupRef}>
+      <Cylinder args={[1.2, 1.4, 0.1, 32]} position={[0, -1.2, 0]}>
+        <meshStandardMaterial color="#0c111d" metalness={0.9} roughness={0.1} />
+      </Cylinder>
+      <Cylinder args={[1.1, 1.1, 0.02, 32]} position={[0, -1.14, 0]}>
+        <meshStandardMaterial color="#3b82f6" emissive="#3b82f6" emissiveIntensity={3} />
+      </Cylinder>
+      <group position={[0, -0.05, 0]}>
+        <CharacterModel color="#3b82f6" type="player" isMoving={false} scale={1.1} gender={gender} costume={costume} />
+      </group>
+    </group>
+  );
+};
 
 const NeuralForge: React.FC = () => {
-  const [assets, setAssets] = useState<AIAsset[]>([]);
-  const [isGenerating, setIsGenerating] = useState<string | null>(null);
-  const [isStabilizing, setIsStabilizing] = useState<boolean>(false);
-  const [logs, setLogs] = useState<string[]>(['[SYSTEM] NEURAL LINK ESTABLISHED', '[INFO] SECTOR SCANNING COMPLETE']);
-  const [neuralLoad, setNeuralLoad] = useState(12);
-  const [selectedAsset, setSelectedAsset] = useState<AIAsset | null>(null);
+  const navigate = useNavigate();
+  const [name, setName] = useState('');
+  const [role, setRole] = useState('CUSTOM OPERATIVE');
+  const [gender, setGender] = useState<'male' | 'female'>('male');
+  const [costume, setCostume] = useState('Standard Issue Armor');
+  const [isDeploying, setIsDeploying] = useState(false);
 
-  // Neural Load Management
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    if (isGenerating) {
-      interval = setInterval(() => {
-        setNeuralLoad(prev => Math.min(prev + Math.random() * 5, 95));
-      }, 200);
-    } else {
-      const timeout = setTimeout(() => {
-        setNeuralLoad(12 + Math.random() * 5);
-      }, 1000);
-      return () => clearTimeout(timeout);
-    }
-    return () => clearInterval(interval);
-  }, [isGenerating]);
+  const costumes = [
+    'Standard Issue Armor',
+    'Stealth Tactical Suit with Adaptive Camo Mesh',
+    'Desert Ghillie Suit with Thermal Negation',
+    'Juggernaut Powered Exoskeleton',
+    'Sleek Runner Jacket and Augmented VR Visor',
+    'Civilian Attire with Hidden Kevlar Weave',
+    'Tactical Catsuit with Concealed Holsters',
+    'High-Tech Urban Riot Gear',
+    'EOD Blast Suit with Reinforced Plating'
+  ];
 
-  const addLog = (msg: string) => {
-    setLogs(prev => [`[${new Date().toLocaleTimeString()}] ${msg}`, ...prev].slice(0, 10));
-  };
-
-  const generate = async (type: 'texture' | 'character' | 'storyline') => {
-    setIsGenerating(type);
-    addLog(`INITIATING ${type.toUpperCase()} SYNTHESIS...`);
+  const handleDeploy = () => {
+    if (!name.trim()) return;
+    audio.playClickSound();
+    setIsDeploying(true);
+    audio.playVoiceAnnouncement(`New operative ${name} authorized. Deploying to roster.`);
     
-    try {
-      let newAsset: AIAsset;
-      if (type === 'texture') newAsset = await aiService.generateTexture();
-      else if (type === 'character') newAsset = await aiService.generateCharacter();
-      else newAsset = await aiService.generateStoryline();
+    setTimeout(() => {
+      const newChar: CharacterLore = {
+        id: `custom_${Date.now()}`,
+        name: name.toUpperCase(),
+        role: role.toUpperCase(),
+        bio: 'Classified Operative forged in the Neural Network. Origin unknown. Combat effectiveness rated highly anomalous.',
+        traits: ['Adaptable', 'Unpredictable', 'Forged'],
+        specialization: 'Custom Combat Parameters',
+        status: 'ACTIVE',
+        gender: gender,
+        costume: costume
+      };
       
-      addLog(`DATA BLOCK RETRIEVED: ${newAsset.id}`);
-      setIsStabilizing(true);
-      addLog(`RECONSTRUCTION PHASE ACTIVE...`);
-      
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulating stabilization
-      
-      setAssets((prev: AIAsset[]) => [newAsset, ...prev]);
-      addLog(`STABILIZATION COMPLETE. COMMIT SUCCESS.`);
-    } finally {
-      setIsGenerating(null);
-      setIsStabilizing(false);
-    }
+      addCustomCharacter(newChar);
+      navigate('/operatives');
+    }, 2500);
   };
 
   return (
@@ -60,269 +82,151 @@ const NeuralForge: React.FC = () => {
       {/* Background Ambience */}
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none -z-10" />
       
-      <div className="container mx-auto max-w-6xl relative">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-4">
+      <div className="max-w-7xl mx-auto relative h-full flex flex-col">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-8">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
               <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              <span className="font-mono text-xs text-blue-400 tracking-[0.4em] uppercase">Neural Network Online</span>
+              <span className="font-mono text-xs text-blue-400 tracking-[0.4em] uppercase">Tactical Synthesis Forge</span>
             </div>
-            <h1 className="text-6xl font-black italic tracking-tighter mb-4 uppercase leading-none chromatic-aberration animate-glitch-v2">
-              Neural <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">Forge</span>
+            <h1 className="text-5xl md:text-6xl font-black italic tracking-tighter uppercase leading-none chromatic-aberration">
+              Operative <span className="text-blue-500">Creator</span>
             </h1>
-            <p className="text-gray-500 font-mono text-xs tracking-widest uppercase">
-              Tactical Synthesis & Asset Maturation Cycle v4.2
-            </p>
-          </div>
-
-          {/* Neural Load Meter */}
-          <div className="flex flex-col w-full md:w-64 bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-xs font-black italic tracking-widest text-gray-400 uppercase">Neural Load</span>
-              <span className="text-xs font-mono text-blue-400">{neuralLoad.toFixed(1)}%</span>
-            </div>
-            <div className="h-2 bg-black/40 rounded-full overflow-hidden border border-white/5">
-              <motion.div 
-                className={`h-full bg-gradient-to-r ${neuralLoad > 80 ? 'from-orange-500 to-red-500' : 'from-blue-500 to-emerald-400'}`}
-                animate={{ width: `${neuralLoad}%` }}
-                transition={{ type: "spring", stiffness: 50 }}
-              />
-            </div>
           </div>
         </div>
 
-        {/* Forge Controls & Live Feed */}
-        <div className="flex flex-col lg:flex-row gap-8 mb-16">
-          <div className="flex flex-wrap gap-4 bg-white/5 p-2 rounded-2xl border border-white/10 w-fit h-fit">
-            <button 
-              onClick={() => generate('texture')}
-              disabled={!!isGenerating}
-              className="px-8 py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-900/40 disabled:text-blue-300 rounded-xl transition-all font-black italic text-xs uppercase tracking-widest flex items-center gap-3"
-            >
-              {isGenerating === 'texture' ? 'Synthesizing...' : 'Dev Texture'}
-              <span className="opacity-50 text-xs">01</span>
-            </button>
-            <button 
-              onClick={() => generate('character')}
-              disabled={!!isGenerating}
-              className="px-8 py-3 bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-900/40 disabled:text-emerald-300 rounded-xl transition-all font-black italic text-xs uppercase tracking-widest flex items-center gap-3"
-            >
-              {isGenerating === 'character' ? 'Forging...' : 'Dev Character'}
-              <span className="opacity-50 text-xs">02</span>
-            </button>
-            <button 
-              onClick={() => generate('storyline')}
-              disabled={!!isGenerating}
-              className="px-8 py-3 bg-purple-600 hover:bg-purple-500 disabled:bg-purple-900/40 disabled:text-purple-300 rounded-xl transition-all font-black italic text-xs uppercase tracking-widest flex items-center gap-3"
-            >
-              {isGenerating === 'storyline' ? 'Analyzing...' : 'Dev Narrative'}
-              <span className="opacity-50 text-xs">03</span>
-            </button>
-          </div>
-
-          {/* Live Feed */}
-          <div className="flex-1 bg-black/40 border border-white/5 rounded-2xl p-4 font-mono text-xs h-[100px] overflow-hidden relative">
-            <div className="absolute top-2 left-4 text-blue-500/40 font-black italic uppercase tracking-widest">Neural_Operations_Log</div>
-            <div className="mt-4 flex flex-col gap-1">
-              <AnimatePresence mode="popLayout">
-                {logs.map((log, i) => (
-                  <motion.div 
-                    key={i}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1 - i * 0.1, x: 0 }}
-                    className="text-gray-500"
-                  >
-                    {log}
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 min-h-[600px]">
+          {/* Left Panel: 3D Hologram Preview */}
+          <div className="lg:col-span-7 glass-panel rounded-2xl relative overflow-hidden flex flex-col border border-blue-500/20 shadow-[0_0_50px_rgba(59,130,246,0.1)]">
+            <div className="absolute top-4 left-4 z-10 flex flex-col gap-1">
+              <span className="text-[10px] font-mono text-blue-400 tracking-widest uppercase">Live Telemetry</span>
+              <span className="text-xs font-black uppercase tracking-widest text-white/50 border border-white/10 px-2 py-1 rounded bg-black/50 backdrop-blur w-fit">
+                {name || 'UNIDENTIFIED_ASSET'}
+              </span>
             </div>
-            <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+            
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.15)_0%,transparent_70%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-tactical-grid bg-grid-sm opacity-10 pointer-events-none" />
+            
+            <div className="w-full h-full min-h-[500px]">
+              <ThreeScene autoRotate={false} enableZoom={false} environment="studio">
+                <ForgeHologram gender={gender} costume={costume} />
+              </ThreeScene>
+            </div>
+            
+            <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-neutral-950/90 to-transparent pointer-events-none" />
           </div>
-        </div>
 
-        {/* Stabilization Overlay */}
-        <AnimatePresence>
-          {isStabilizing && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[150] bg-blue-500/5 backdrop-blur-md flex items-center justify-center pointer-events-none"
-            >
-              <div className="flex flex-col items-center gap-6">
-                <div className="w-64 h-1 bg-white/10 rounded-full overflow-hidden border border-white/10">
-                  <motion.div 
-                    initial={{ x: '-100%' }}
-                    animate={{ x: '100%' }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                    className="w-1/2 h-full bg-blue-500 shadow-[0_0_20px_#3b82f6]"
-                  />
-                </div>
-                <span className="text-xl font-black italic tracking-[0.5em] text-blue-400 animate-pulse uppercase">Recalibrating Neural Mesh</span>
+          {/* Right Panel: Customization Options */}
+          <div className="lg:col-span-5 flex flex-col gap-6">
+            {/* Identity Settings */}
+            <div className="glass-card p-6 border-t-2 border-t-blue-500/50 flex flex-col gap-4">
+              <h3 className="text-sm font-mono text-blue-400 tracking-[0.3em] uppercase mb-2">Identity Matrix</h3>
+              
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] text-gray-500 font-mono tracking-widest uppercase">Operative Callsign</label>
+                <input 
+                  type="text" 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="ENTER CALLSIGN..."
+                  className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm font-black italic tracking-widest uppercase focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all text-white placeholder:text-white/20"
+                />
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <AnimatePresence mode="popLayout">
-            {assets.map((asset: AIAsset) => (
-              <motion.div
-                key={asset.id}
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                whileHover={{ y: -5 }}
-                className="glass-card p-6 border-t-2 border-t-white/10 flex flex-col h-full group relative overflow-hidden"
-              >
-                {/* Tactical Scanning Background (Hover Only) */}
-                <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 pointer-events-none" />
-
-                <div className="flex justify-between items-start mb-6 relative z-10">
-                  <span className={`text-xs font-black px-4 py-1.5 rounded-lg border uppercase tracking-[0.2em] ${
-                    asset.type === 'texture' ? 'bg-blue-500/10 text-blue-400 border-blue-500/30' :
-                    asset.type === 'character' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' :
-                    'bg-purple-500/10 text-purple-400 border-purple-500/30'
-                  }`}>
-                    {asset.type}
-                  </span>
-                  <div className="flex flex-col items-end">
-                    <span className="text-xs font-mono text-gray-600 uppercase tracking-tighter">{asset.timestamp}</span>
-                    <span className="text-[10px] font-mono text-blue-500/40">CORE_SYNC_OK</span>
-                  </div>
-                </div>
-
-                {asset.type !== 'storyline' ? (
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-black group-hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all">
-                    <img 
-                      src={asset.content} 
-                      alt={asset.title} 
-                      className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
-                    
-                    {/* Measurement Overlay */}
-                    <div className="absolute bottom-4 left-4 font-mono text-[10px] text-white/40 tracking-widest flex gap-4 uppercase">
-                      <span>X: 1024</span>
-                      <span>Y: 1024</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-8 bg-neutral-900 rounded-2xl border border-white/5 mb-6 flex-1 italic text-gray-400 font-mono text-sm leading-relaxed relative group-hover:bg-neutral-800 transition-colors">
-                    <span className="absolute top-4 left-4 text-4xl text-white/5 pointer-events-none">"</span>
-                    {asset.content}
-                    <div className="absolute bottom-4 right-4 h-1 w-8 bg-purple-500/20" />
-                  </div>
-                )}
-
-                <div className="relative z-10">
-                  <h3 className="text-2xl font-black italic uppercase mb-2 group-hover:text-blue-400 transition-colors tracking-tight leading-none">
-                    {asset.title}
-                  </h3>
-                  <p className="text-gray-500 text-sm font-medium leading-relaxed mb-8">
-                    {asset.description}
-                  </p>
-
-                  <div className="flex justify-between items-end">
-                    <button 
-                      onClick={() => setSelectedAsset(asset)}
-                      className="px-6 py-2 border border-white/10 rounded-xl hover:bg-white/5 transition-all font-black italic text-xs tracking-widest uppercase text-gray-400 hover:text-white"
-                    >
-                      Analyze Source
-                    </button>
-                    <div className="text-[10px] font-mono text-white/20 uppercase tracking-[0.3em] flex flex-col items-end">
-                      <span>COM_VER_8.1</span>
-                      <span className="text-emerald-500/40">VERIFIED</span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-          
-          {assets.length === 0 && !isGenerating && (
-            <div className="col-span-full py-48 text-center border-2 border-dashed border-white/5 rounded-[40px] bg-white/[0.01]">
-              <div className="text-7xl mb-8 grayscale opacity-20">🧬</div>
-              <p className="text-gray-500 font-mono uppercase tracking-[0.8em] text-xs">
-                Uplink established. Accessing Neural Layers...
-              </p>
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] text-gray-500 font-mono tracking-widest uppercase">Combat Role</label>
+                <input 
+                  type="text" 
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm font-black italic tracking-widest uppercase focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all text-gray-300"
+                />
+              </div>
             </div>
-          )}
+
+            {/* Biological / Structural Settings */}
+            <div className="glass-card p-6 border-t-2 border-t-emerald-500/50 flex flex-col gap-4">
+              <h3 className="text-sm font-mono text-emerald-400 tracking-[0.3em] uppercase mb-2">Structural Base</h3>
+              
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] text-gray-500 font-mono tracking-widest uppercase">Anatomical Profile (Gender)</label>
+                <div className="flex gap-4 mt-1">
+                  <button
+                    onClick={() => { audio.playHoverSound(); setGender('male'); }}
+                    className={`flex-1 py-3 px-4 rounded-xl border text-xs font-black tracking-widest uppercase transition-all ${
+                      gender === 'male' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-black/50 border-white/10 text-gray-500 hover:border-white/30'
+                    }`}
+                  >
+                    MALE
+                  </button>
+                  <button
+                    onClick={() => { audio.playHoverSound(); setGender('female'); }}
+                    className={`flex-1 py-3 px-4 rounded-xl border text-xs font-black tracking-widest uppercase transition-all ${
+                      gender === 'female' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-black/50 border-white/10 text-gray-500 hover:border-white/30'
+                    }`}
+                  >
+                    FEMALE
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Tactical Gear Settings */}
+            <div className="glass-card p-6 border-t-2 border-t-purple-500/50 flex flex-col gap-4 flex-1">
+              <h3 className="text-sm font-mono text-purple-400 tracking-[0.3em] uppercase mb-2">Deployment Gear</h3>
+              
+              <div className="flex flex-col gap-2 overflow-y-auto max-h-[220px] pr-2 custom-scrollbar">
+                {costumes.map(c => (
+                  <button
+                    key={c}
+                    onClick={() => { audio.playHoverSound(); setCostume(c); }}
+                    className={`w-full text-left p-3 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${
+                      costume === c ? 'bg-purple-500/20 border-purple-500/50 text-purple-300' : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10 hover:border-white/20'
+                    }`}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Deploy Action */}
+            <button
+              onClick={handleDeploy}
+              disabled={isDeploying || !name.trim()}
+              className="btn-tactical py-5 mt-2 disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-blue-600/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
+              <span className="relative z-10 text-lg font-black tracking-[0.2em]">{isDeploying ? 'AUTHORIZING DEPLOYMENT...' : 'DEPLOY TO ROSTER'}</span>
+            </button>
+
+          </div>
         </div>
       </div>
 
-      {/* Analysis Modal Overlay */}
+      {/* Deployment Overlay Effect */}
       <AnimatePresence>
-        {selectedAsset && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedAsset(null)}
-              className="absolute inset-0 bg-neutral-950/90 backdrop-blur-xl"
-            />
-            
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl bg-neutral-900 border border-white/10 rounded-[32px] overflow-hidden shadow-2xl flex flex-col md:flex-row h-full max-h-[600px]"
-            >
-              <div className="w-full md:w-1/2 bg-black flex items-center justify-center p-12 overflow-hidden group">
-                {selectedAsset.type !== 'storyline' ? (
-                  <img src={selectedAsset.content} alt={selectedAsset.title} className="w-full h-full object-contain scale-110 group-hover:scale-100 transition-transform duration-[3000ms]" />
-                ) : (
-                  <div className="text-6xl text-purple-500 opacity-20 group-hover:opacity-40 transition-opacity">"</div>
-                )}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] opacity-40 pointer-events-none" />
-              </div>
-
-              <div className="flex-1 p-12 flex flex-col">
-                <div className="flex justify-between items-start mb-12">
-                  <div className="uppercase">
-                    <span className="text-xs text-blue-400 font-mono tracking-widest">{selectedAsset.type} // DATA_BLOCK</span>
-                    <h2 className="text-4xl font-black italic tracking-tighter leading-none mt-2">{selectedAsset.title}</h2>
-                  </div>
-                  <button 
-                    onClick={() => setSelectedAsset(null)}
-                    className="p-3 hover:bg-white/5 rounded-full transition-colors group"
-                  >
-                    <span className="group-hover:rotate-90 transition-transform block text-2xl">✕</span>
-                  </button>
-                </div>
-
-                <div className="space-y-8 flex-1">
-                  <div>
-                    <span className="text-xs font-black italic uppercase text-gray-500 tracking-[0.2em] block mb-2">Tactical Breakdown</span>
-                    <p className="text-gray-400 text-sm leading-relaxed">{selectedAsset.description}</p>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
-                      <span className="text-[10px] text-gray-600 block mb-1 uppercase">Synthesis Confidence</span>
-                      <span className="text-lg font-black text-blue-400 italic">98.4%</span>
-                    </div>
-                    <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
-                      <span className="text-[10px] text-gray-600 block mb-1 uppercase">Neural Load</span>
-                      <span className="text-lg font-black text-blue-400 italic">{neuralLoad.toFixed(1)}%</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto">
-                    <button 
-                      onClick={() => setSelectedAsset(null)}
-                      className="w-full py-4 bg-white text-black rounded-2xl font-black italic uppercase tracking-widest hover:bg-blue-400 transition-colors"
-                    >
-                      Finalize Command
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+        {isDeploying && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[300] bg-blue-500/10 backdrop-blur-md flex flex-col items-center justify-center pointer-events-none"
+          >
+            <div className="w-32 h-1 bg-white/20 rounded-full overflow-hidden mb-8">
+              <motion.div 
+                initial={{ x: '-100%' }}
+                animate={{ x: '100%' }}
+                transition={{ duration: 1, repeat: Infinity }}
+                className="w-1/2 h-full bg-blue-500 shadow-[0_0_20px_#3b82f6]"
+              />
+            </div>
+            <h2 className="text-4xl font-black italic uppercase tracking-[0.5em] text-white animate-pulse text-glow">
+              SYNTHESIZING
+            </h2>
+            <p className="mt-4 font-mono text-blue-400 tracking-widest text-sm uppercase">Integrating identity into core roster...</p>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
