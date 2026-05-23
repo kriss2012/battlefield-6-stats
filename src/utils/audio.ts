@@ -252,6 +252,35 @@ class AudioEngine {
       this.musicGain = null;
     }
   }
+
+  // === REAL HUMAN VOICE ANNOUNCEMENTS ===
+  playVoiceAnnouncement(text: string) {
+    if (!('speechSynthesis' in window)) return;
+    
+    // Stop any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Find a good authoritative/tactical voice
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoice = voices.find(v => 
+      v.name.includes('Google UK English Male') || 
+      v.name.includes('Microsoft Mark') || 
+      v.name.includes('Daniel') ||
+      v.name.includes('Samantha')
+    ) || voices.find(v => v.lang.startsWith('en-'));
+    
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
+    }
+    
+    utterance.pitch = 0.85; // Slightly deeper for tactical feel
+    utterance.rate = 1.05; // Slightly faster/urgent
+    utterance.volume = 1.0;
+    
+    window.speechSynthesis.speak(utterance);
+  }
 }
 
 export const audio = new AudioEngine();
