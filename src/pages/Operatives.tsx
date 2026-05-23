@@ -26,7 +26,7 @@ const getOperativeType = (id: string) => {
   return 'player';
 };
 
-const HologramOperative: React.FC<{ id: string; gender?: 'male' | 'female' }> = ({ id, gender = 'male' }) => {
+const HologramOperative: React.FC<{ id: string; gender?: 'male' | 'female'; costume?: string }> = ({ id, gender = 'male', costume = '' }) => {
   const groupRef = useRef<THREE.Group>(null!);
 
   useFrame((state) => {
@@ -48,7 +48,7 @@ const HologramOperative: React.FC<{ id: string; gender?: 'male' | 'female' }> = 
       </Cylinder>
 
       <group position={[0, -0.05, 0]}>
-        <CharacterModel color={color} type={type} isMoving={false} scale={0.9} gender={gender} />
+        <CharacterModel color={color} type={type} isMoving={false} scale={0.9} gender={gender} costume={costume} />
       </group>
     </group>
   );
@@ -175,7 +175,7 @@ const Operatives: React.FC = () => {
                       <div className="absolute inset-0 bg-tactical-grid bg-grid-sm opacity-10 pointer-events-none" />
                       <div className="w-full h-full">
                         <ThreeScene autoRotate={false} enableZoom={false} environment="studio">
-                          <HologramOperative id={activeChar.id} gender={activeChar.gender} />
+                          <HologramOperative id={activeChar.id} gender={activeChar.gender} costume={activeChar.costume} />
                         </ThreeScene>
                       </div>
                       <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-neutral-950 to-transparent pointer-events-none" />
