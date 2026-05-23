@@ -209,7 +209,7 @@ export default function Navigation() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[#0a0d14] z-[200] lg:hidden flex flex-col justify-between p-8 pt-32 overflow-y-auto border border-blue-500/20 shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]"
+            className="fixed inset-0 bg-[#0a0d14] z-[200] lg:hidden flex flex-col p-8 pt-32 pb-24 overflow-y-auto border border-blue-500/20 shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]"
           >
             {/* Visual background details */}
             <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_95%,rgba(59,130,246,0.05)_95%)] bg-[size:100%_40px] pointer-events-none opacity-30" />
@@ -240,7 +240,7 @@ export default function Navigation() {
             </div>
 
             {/* Mobile Auth links */}
-            <div className="border-t border-white/10 pt-6 flex flex-col gap-3 relative z-10">
+            <div className="border-t border-white/10 pt-6 flex flex-col gap-3 relative z-10 mt-auto mt-12">
               {isAuthenticated ? (
                 <div className="flex flex-col gap-3">
                   <div className="flex justify-between items-center bg-white/5 border border-white/5 p-4 rounded-xl">
