@@ -55,6 +55,51 @@ export const characterLore: Record<string, CharacterLore> = {
     traits: ['Calculating', 'Enigmatic', 'Ruthless'],
     specialization: 'Global Network Architecture',
     status: 'REDACTED'
+  },
+  vihaan: {
+    id: 'vihaan',
+    name: 'VIHAAN DAS',
+    role: 'THE BREACHER',
+    bio: 'A former NSG commando discharged for excessive force. Vihaan was recruited by Balwant to serve as the heavy muscle for Spectre Division. He prefers kinetic solutions to complex problems.',
+    traits: ['Explosive', 'Fearless', 'Blunt'],
+    specialization: 'Heavy Assault & Demolitions',
+    status: 'ACTIVE'
+  },
+  neha: {
+    id: 'neha',
+    name: 'NEHA PATIL',
+    role: 'THE GHOST',
+    bio: 'An infamous black-hat hacker who breached ISF servers on a dare. After being hunted, she sought refuge with Spectre Division. She now controls their digital overwatch.',
+    traits: ['Brilliant', 'Sarcastic', 'Elusive'],
+    specialization: 'Cyber Warfare & Signals',
+    status: 'ACTIVE'
+  },
+  zaheer: {
+    id: 'zaheer',
+    name: 'ZAHEER KHAN',
+    role: 'THE VANGUARD',
+    bio: 'An ex-mercenary who worked for the ISF before discovering their true agenda. Zaheer defected, bringing invaluable intel and combat experience to the Spectre team.',
+    traits: ['Veteran', 'Tactical', 'Guilt-Ridden'],
+    specialization: 'Reconnaissance & Sniper',
+    status: 'ACTIVE'
+  },
+  claire: {
+    id: 'claire',
+    name: 'CLAIRE VANCE',
+    role: 'THE FIXER',
+    bio: 'An international arms dealer and former MI6 operative. Claire supplies the ISF with state-of-the-art weaponry and handles their European logistics and wetwork.',
+    traits: ['Charming', 'Lethal', 'Opportunistic'],
+    specialization: 'CQC & Supply Lines',
+    status: 'MIA'
+  },
+  omar: {
+    id: 'omar',
+    name: 'OMAR SYED',
+    role: 'THE ENFORCER',
+    bio: 'The Director\'s personal bodyguard and chief interrogator. Omar is a mountain of a man who takes genuine pleasure in breaking both codes and people.',
+    traits: ['Brutal', 'Loyal', 'Intimidating'],
+    specialization: 'Interrogation & Heavy Weapons',
+    status: 'ACTIVE'
   }
 };
 
