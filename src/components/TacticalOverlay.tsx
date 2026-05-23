@@ -50,21 +50,7 @@ const TacticalOverlay: React.FC = () => {
   const smoothGlitchOpacity = useSpring(glitchOpacity, { stiffness: 100, damping: 20 });
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[100] overflow-hidden">
-      {/* Noise Texture Layer */}
-      <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-
-      {/* Jitter Layer on High Speed */}
-      <motion.div 
-        style={{ opacity: smoothGlitchOpacity }}
-        className="absolute inset-0 bg-blue-500/5 mix-blend-color-dodge z-[150]"
-        animate={{
-          x: [0, -2, 2, -1, 1, 0],
-          y: [0, 1, -1, 2, -2, 0],
-        }}
-        transition={{ duration: 0.1, repeat: Infinity, repeatType: "mirror" }}
-      />
-
+    <div className="fixed inset-0 pointer-events-none z-[80] overflow-hidden">
       {/* Dynamic Tactical Grid */}
       <motion.div 
         style={{ x: smoothMouseX, y: smoothGridY }}
