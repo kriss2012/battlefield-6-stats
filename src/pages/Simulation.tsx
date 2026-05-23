@@ -551,7 +551,7 @@ const PlayerCharacterModelMesh: React.FC<PlayerModelMeshProps> = ({ cameraMode, 
 };
 
 // === MAIN SIMULATION MODULE ===
-const Simulation: React.FC = () => {
+const SimulationContent: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
@@ -768,15 +768,6 @@ const Simulation: React.FC = () => {
   };
 
   return (
-    <KeyboardControls
-      map={[
-        { name: 'forward', keys: ['ArrowUp', 'w', 'W'] },
-        { name: 'backward', keys: ['ArrowDown', 's', 'S'] },
-        { name: 'left', keys: ['ArrowLeft', 'a', 'A'] },
-        { name: 'right', keys: ['ArrowRight', 'd', 'D'] },
-        { name: 'toggleCamera', keys: ['v', 'V'] },
-      ]}
-    >
       <div 
         className="fixed inset-0 bg-black overflow-hidden select-none" 
         onMouseDown={() => {
@@ -1188,8 +1179,21 @@ const Simulation: React.FC = () => {
           </motion.div>
         )}
       </div>
-    </KeyboardControls>
   );
 };
+
+const Simulation: React.FC = () => (
+  <KeyboardControls
+    map={[
+      { name: 'forward', keys: ['ArrowUp', 'w', 'W'] },
+      { name: 'backward', keys: ['ArrowDown', 's', 'S'] },
+      { name: 'left', keys: ['ArrowLeft', 'a', 'A'] },
+      { name: 'right', keys: ['ArrowRight', 'd', 'D'] },
+      { name: 'toggleCamera', keys: ['v', 'V'] },
+    ]}
+  >
+    <SimulationContent />
+  </KeyboardControls>
+);
 
 export default Simulation;
