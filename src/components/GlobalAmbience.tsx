@@ -8,7 +8,7 @@ const GlobalAmbience: React.FC = () => {
   
   // Generate random positions for the star-field/grid (Memoized to prevent flickering)
   const positions = React.useMemo(() => {
-    const particlesCount = 2000;
+    const particlesCount = 500;
     const pos = new Float32Array(particlesCount * 3);
     for (let i = 0; i < particlesCount; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 50;
