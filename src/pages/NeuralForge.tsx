@@ -6,7 +6,7 @@ import CharacterModel from '../components/CharacterModel';
 import { useFrame } from '@react-three/fiber';
 import { Cylinder } from '@react-three/drei';
 import * as THREE from 'three';
-import { addCustomCharacter, CharacterLore } from '../utils/characterAssets';
+import { addCustomCharacter, type CharacterLore } from '../utils/characterAssets';
 import { audio } from '../utils/audio';
 
 // Small inner component for the rotating hologram
