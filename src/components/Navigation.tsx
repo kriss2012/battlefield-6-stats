@@ -51,7 +51,7 @@ export default function Navigation() {
       links: [
         { to: "/player", label: "PLAYER SEARCH" },
         { to: "/analytics", label: "ANALYTICS" },
-        { to: "/head-to-head", label: "H2H COMPARE" },
+        { to: "/head-to-head", label: "5V5 SIMULATOR" },
         { to: "/leaderboard", label: "RANKINGS" },
         { to: "/servers", label: "NETWORKS" },
         { to: "/friends", label: "FRIENDS" },
