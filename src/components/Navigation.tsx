@@ -66,7 +66,7 @@ export default function Navigation() {
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
-        className="fixed top-8 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-2 w-[95%] max-w-[1280px]"
+        className="fixed top-8 left-1/2 -translate-x-1/2 z-[201] flex items-center gap-2 w-[95%] max-w-[1280px]"
       >
         {/* Sector Identity */}
         <div className="hidden xl:flex flex-col items-end mr-4 font-mono text-[9px] text-gray-500 tracking-[0.3em] shrink-0">
@@ -209,10 +209,10 @@ export default function Navigation() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/95 z-[95] lg:hidden backdrop-blur-xl flex flex-col justify-between p-8 pt-32 overflow-y-auto"
+            className="fixed inset-0 bg-[#0a0d14] z-[200] lg:hidden flex flex-col justify-between p-8 pt-32 overflow-y-auto border border-blue-500/20 shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]"
           >
             {/* Visual background details */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_95%,rgba(59,130,246,0.05)_95%)] bg-[size:100%_40px] pointer-events-none opacity-50" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_95%,rgba(59,130,246,0.05)_95%)] bg-[size:100%_40px] pointer-events-none opacity-30" />
             
             <div className="flex flex-col gap-8 relative z-10">
               {categories.map((cat) => (
