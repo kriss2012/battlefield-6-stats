@@ -45,10 +45,6 @@ const TacticalOverlay: React.FC = () => {
   const heading = useTransform(scrollYProgress, [0, 1], [0, 360]);
   const smoothHeading = useSpring(heading, { stiffness: 50, damping: 30 });
 
-  // Scroll Glitch Intensity
-  const glitchOpacity = useTransform(scrollVelocity, [-2000, 0, 2000], [0.3, 0, 0.3]);
-  const smoothGlitchOpacity = useSpring(glitchOpacity, { stiffness: 100, damping: 20 });
-
   return (
     <div className="fixed inset-0 pointer-events-none z-[80] overflow-hidden">
       {/* Dynamic Tactical Grid */}
