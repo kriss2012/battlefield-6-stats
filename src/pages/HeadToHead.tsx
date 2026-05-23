@@ -12,6 +12,7 @@ interface PlayerMatchStats {
   ping: number;
   team: 'SPECTRE' | 'ISF';
   isAlive: boolean;
+  costume: string;
 }
 
 export default function HeadToHead() {
@@ -41,7 +42,8 @@ export default function HeadToHead() {
         score: Math.floor(Math.random() * 5000) + 1000,
         ping: Math.floor(Math.random() * 40) + 10,
         team,
-        isAlive: Math.random() > 0.3
+        isAlive: Math.random() > 0.3,
+        costume: char.costume || 'Standard Issue Armor'
       })).sort((a, b) => b.score - a.score);
     };
 
@@ -103,8 +105,13 @@ export default function HeadToHead() {
               <td className="p-4 text-center">
                 <div className={`w-2 h-2 rounded-full mx-auto ${player.isAlive ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-red-500/30'}`} />
               </td>
-              <td className="p-4 text-sm font-black uppercase tracking-widest text-white group-hover:text-blue-400 transition-colors">
-                {player.name}
+              <td className="p-4">
+                <div className="text-sm font-black uppercase tracking-widest text-white group-hover:text-blue-400 transition-colors">
+                  {player.name}
+                </div>
+                <div className="text-[9px] text-gray-500 tracking-[0.2em] font-mono mt-1">
+                  GEAR: {player.costume}
+                </div>
               </td>
               <td className="p-4 text-center text-sm font-black italic text-gray-300">
                 {player.score.toLocaleString()}
