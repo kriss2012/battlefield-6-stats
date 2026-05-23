@@ -2,13 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    cursor: crosshair;
+  }
+  
+  /* Adding custom cursor for interactive elements */
+  a, button, [role="button"], input, select, textarea {
+    cursor: pointer;
+  }
+  
+  /* Custom Scrollbar for game feel */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(10, 13, 20, 0.8);
+    border-left: 1px solid rgba(59, 130, 246, 0.1);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.4);
+    border-radius: 0;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.8);
+  }
+}
+
 @layer components {
   .glass-card {
-    @apply bg-tactical-panel backdrop-blur-md border border-tactical-primary/20 rounded-xl shadow-lg hover:shadow-neon-blue transition-all duration-300;
+    @apply bg-tactical-panel backdrop-blur-md border border-tactical-primary/20 shadow-lg hover:shadow-neon-blue transition-all duration-300 relative overflow-hidden;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
   }
 
   .glass-panel {
-    @apply bg-tactical-dark/90 backdrop-blur-xl border border-tactical-primary/30 rounded-2xl shadow-neon-blue relative overflow-hidden;
+    @apply bg-tactical-dark/90 backdrop-blur-xl border border-tactical-primary/30 shadow-neon-blue relative overflow-hidden;
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
   }
   
   .glass-panel::before {
@@ -17,7 +47,7 @@
   }
 
   .premium-gradient {
-    @apply bg-gradient-to-br from-tactical-primary/20 via-tactical-secondary/20 to-tactical-accent/20;
+    @apply bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-tactical-dark via-black to-black;
   }
 
   .text-glow {
@@ -54,6 +84,16 @@
   .hud-nav-item {
     @apply px-6 py-2 rounded-full font-black text-[10px] tracking-[0.2em] transition-all duration-300 flex items-center gap-2;
   }
+  
+  .btn-tactical {
+    @apply relative inline-flex items-center justify-center px-8 py-3 bg-blue-600/10 border border-blue-500/30 text-blue-400 font-hud text-xs tracking-widest hover:bg-blue-600/20 hover:border-blue-400 hover:text-white transition-all overflow-hidden group;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  }
+  
+  .btn-tactical::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700;
+  }
 }
 
 .scanline {
@@ -65,12 +105,18 @@
   background: linear-gradient(
     to bottom,
     rgba(18, 16, 16, 0) 50%,
-    rgba(0, 0, 0, 0.05) 50%
+    rgba(0, 0, 0, 0.2) 50%
   );
   background-size: 100% 4px;
   z-index: 110;
   pointer-events: none;
-  opacity: 0.15;
+  opacity: 0.25;
+  animation: scanline-scroll 10s linear infinite;
+}
+
+@keyframes scanline-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100vh; }
 }
 
 @keyframes glitch {
@@ -95,44 +141,44 @@
   animation: fadeIn 0.5s ease-out forwards;
 }
 
-  .chromatic-aberration {
-    text-shadow: 1px 0 rgba(59, 130, 246, 0.5), -1px 0 rgba(139, 92, 246, 0.5);
-    position: relative;
-  }
+.chromatic-aberration {
+  text-shadow: 2px 0 rgba(255, 0, 0, 0.5), -2px 0 rgba(0, 255, 255, 0.5);
+  position: relative;
+}
 
-  .dof-blur {
-    filter: blur(1.5px) saturate(0.9);
-    transition: filter 0.5s ease;
-  }
+.dof-blur {
+  filter: blur(1.5px) saturate(0.9);
+  transition: filter 0.5s ease;
+}
 
-  .dof-blur:hover {
-    filter: blur(0) saturate(1);
-  }
+.dof-blur:hover {
+  filter: blur(0) saturate(1);
+}
 
-  .tactical-glow {
-    box-shadow: 0 0 10px var(--glow-color, rgba(59, 130, 246, 0.3));
-  }
+.tactical-glow {
+  box-shadow: 0 0 10px var(--glow-color, rgba(59, 130, 246, 0.3));
+}
 
 .noise-overlay {
   position: fixed;
   inset: 0;
   z-index: 105;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.05;
   mix-blend-mode: overlay;
 }
 
 @keyframes glitch-v2 {
   0% { clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%); transform: translate(0); }
-  2% { clip-path: polygon(0 78%, 100% 78%, 100% 100%, 0 100%); transform: translate(-2px); }
-  4% { clip-path: polygon(0 78%, 100% 78%, 100% 100%, 0 100%); transform: translate(2px); }
+  2% { clip-path: polygon(0 78%, 100% 78%, 100% 100%, 0 100%); transform: translate(-4px); }
+  4% { clip-path: polygon(0 78%, 100% 78%, 100% 100%, 0 100%); transform: translate(4px); }
   6% { clip-path: polygon(0 50%, 100% 50%, 100% 52%, 0 52%); transform: translate(0); }
   100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translate(0); }
 }
 
 .animate-glitch-v2:hover {
-  animation: glitch-v2 0.4s cubic-bezier(.25,.46,.45,.94) both;
+  animation: glitch-v2 0.3s cubic-bezier(.25,.46,.45,.94) both;
 }
 
 .vector-pulse {
@@ -166,11 +212,12 @@
 
 /* Clear 3D Image Effects */
 .clear-3d-image {
-  @apply relative overflow-hidden rounded-2xl transition-all duration-500;
+  @apply relative overflow-hidden transition-all duration-500;
   transform: translateZ(20px);
   box-shadow: 
     0 10px 30px -10px rgba(0, 0, 0, 0.5),
     0 0 20px rgba(59, 130, 246, 0.2);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
 }
 
 .clear-3d-image::after {
@@ -181,8 +228,8 @@
 .clear-3d-image:hover {
   transform: translateZ(40px) scale(1.02);
   box-shadow: 
-    0 20px 50px -15px rgba(0, 0, 0, 0.6),
-    0 0 40px rgba(59, 130, 246, 0.4);
+    0 20px 50px -15px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(59, 130, 246, 0.6);
 }
 
 .clear-3d-image:hover::after {
@@ -198,3 +245,4 @@
   33% { transform: translateY(-10px) rotateX(2deg) rotateY(-2deg); }
   66% { transform: translateY(5px) rotateX(-1deg) rotateY(3deg); }
 }
+
