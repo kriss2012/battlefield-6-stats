@@ -12,64 +12,64 @@ export default function Home() {
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 blur-[120px] rounded-full -z-10" />
         
         {/* User Navigation */}
-        <div className="flex justify-end mb-16">
+        <div className="flex justify-end mb-8 md:mb-16 mt-8 md:mt-0 z-10 relative">
           {isAuthenticated ? (
-            <div className="flex items-center gap-4 px-4 py-2 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm">
-              <span className="text-gray-400 font-bold text-sm">Welcome, {user?.username}!</span>
+            <div className="flex flex-col md:flex-row items-end md:items-center gap-4 px-4 py-2 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm">
+              <span className="text-gray-400 font-hud text-[10px] tracking-widest uppercase">Operator: {user?.username}</span>
               <Link
                 to="/profile"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl transition-all font-black text-xs uppercase"
+                className="btn-tactical py-2 px-6"
               >
-                ACCOUNT
+                <span className="relative z-10">DASHBOARD</span>
               </Link>
             </div>
           ) : (
-            <div className="flex gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               <Link
                 to="/login"
-                className="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all font-bold text-sm"
+                className="btn-tactical px-6 py-2 bg-transparent"
               >
-                LOGIN
+                <span className="relative z-10">AUTHENTICATE</span>
               </Link>
               <Link
                 to="/register"
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl transition-all font-black text-sm"
+                className="btn-tactical px-6 py-2"
               >
-                REGISTER
+                <span className="relative z-10">DEPLOY</span>
               </Link>
             </div>
           )}
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center gap-16 mb-32 perspective-1000">
-          <div className="flex-1 text-left animate-fade-in relative preserve-3d">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 mb-24 lg:mb-32 perspective-1000">
+          <div className="flex-1 text-left animate-fade-in relative preserve-3d w-full mt-12 md:mt-0 z-10">
             <div className="flex items-center gap-2 mb-4">
               <span className="h-[1px] w-8 bg-blue-500" />
-              <span className="text-xs font-mono text-blue-400 tracking-[0.4em] uppercase">Tactical Intelligence Hub</span>
+              <span className="text-[10px] md:text-xs font-hud text-blue-400 tracking-[0.4em] uppercase">Tactical Intelligence Hub</span>
             </div>
-            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black mb-2 italic tracking-tighter chromatic-aberration animate-glitch-v2 leading-none uppercase">
-              SPECTRE <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">DIVISION</span>
+            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black mb-2 italic tracking-tighter chromatic-aberration animate-glitch-v2 leading-none uppercase">
+              SPECTRE <br className="lg:hidden" /><span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">DIVISION</span>
             </h1>
-            <p className="text-xs font-mono text-blue-400/80 tracking-[0.45em] mb-6 uppercase">SHADOW RECKONING</p>
-            <p className="text-xl text-gray-400 font-medium max-w-xl dof-blur mb-8 leading-relaxed">
+            <p className="text-[10px] md:text-xs font-hud text-blue-400/80 tracking-[0.3em] md:tracking-[0.45em] mb-6 md:mb-8 uppercase">SHADOW RECKONING</p>
+            <p className="text-sm md:text-lg text-gray-400 font-medium max-w-xl dof-blur mb-8 leading-relaxed">
               Advanced tactical performance tracking, real-time command center telemetry, and cyber-espionage analytics for Spectre operatives.
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link 
                 to="/campaign" 
-                className="px-8 py-3 bg-blue-600 rounded-xl font-black italic text-xs uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 inline-block text-center"
+                className="btn-tactical py-4 px-10 text-center"
               >
-                Launch Theater
+                <span className="relative z-10">LAUNCH THEATER</span>
               </Link>
               <Link 
                 to="/codex" 
-                className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl font-black italic text-xs uppercase tracking-widest hover:bg-white/10 transition-all inline-block text-center"
+                className="btn-tactical py-4 px-10 text-center bg-transparent"
               >
-                Manuals
+                <span className="relative z-10">ACCESS DATABASE</span>
               </Link>
             </div>
           </div>
-          <div className="flex-1 w-full lg:max-w-2xl floating-3d">
+          <div className="flex-1 w-full lg:max-w-2xl floating-3d relative z-0">
             <Hero3D />
           </div>
         </div>
