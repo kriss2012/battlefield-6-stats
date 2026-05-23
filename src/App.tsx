@@ -57,16 +57,20 @@ function App() {
 
   if (!started) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-black">
+      <div className="flex h-screen w-screen items-center justify-center bg-black relative overflow-hidden">
+        {/* Ambient Grid for start screen */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.1)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
+        
         <button
-          className="px-8 py-4 text-xl font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-500 transition-colors shadow-[0_0_20px_rgba(37,99,235,0.5)]"
+          className="btn-tactical text-2xl px-12 py-6 animate-pulse hover:animate-none z-10"
           onClick={() => {
             audio.init();
             audio.playStartupSound();
             setStarted(true);
           }}
         >
-          START GAME
+          <span className="relative z-10">INITIALIZE UPLINK</span>
         </button>
       </div>
     );
