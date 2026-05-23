@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValue, useVelocity } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 
 const TacticalOverlay: React.FC = () => {
   const { scrollYProgress, scrollY } = useScroll();
-  const scrollVelocity = useVelocity(scrollY);
   
   // Mouse parallax
   const mouseX = useMotionValue(0);
