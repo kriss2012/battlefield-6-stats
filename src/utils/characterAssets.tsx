@@ -125,6 +125,10 @@ export const characterLore: Record<string, CharacterLore> = {
   }
 };
 
+export const addCustomCharacter = (char: CharacterLore) => {
+  characterLore[char.id] = char;
+};
+
 const TacticalOverlay = () => (
   <>
     <rect x="0" y="0" width="100" height="100" fill="none" stroke="rgba(59, 130, 246, 0.1)" strokeWidth="0.5" />
