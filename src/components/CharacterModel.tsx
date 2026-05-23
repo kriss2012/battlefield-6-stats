@@ -191,7 +191,7 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
         </Box>
 
         {/* === LEFT ARM === */}
-        <group ref={leftArmPivot} position={[-0.45, 0.65, 0]}>
+        <group ref={leftArmPivot} position={[gender === 'male' ? -0.45 : -0.38, 0.65, 0]}>
           {/* Left Upper Arm Mesh */}
           <Box args={[0.18, 0.45, 0.18]} position={[0, -0.2, 0]} castShadow>
             <meshStandardMaterial color="#111827" metalness={0.8} />
@@ -207,7 +207,7 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
         </group>
 
         {/* === RIGHT ARM (HOLDING GUN) === */}
-        <group ref={rightArmPivot} position={[0.45, 0.65, 0]}>
+        <group ref={rightArmPivot} position={[gender === 'male' ? 0.45 : 0.38, 0.65, 0]}>
           {/* Right Upper Arm Mesh */}
           <Box args={[0.18, 0.45, 0.18]} position={[0, -0.2, 0]} castShadow>
             <meshStandardMaterial color="#111827" metalness={0.8} />
