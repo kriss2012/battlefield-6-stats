@@ -9,6 +9,7 @@ interface CharacterModelProps {
   isMoving?: boolean;
   isFiring?: boolean;
   scale?: number;
+  gender?: 'male' | 'female';
 }
 
 const CharacterModel: React.FC<CharacterModelProps> = ({
@@ -17,6 +18,7 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
   isMoving = false,
   isFiring = false,
   scale = 1.0,
+  gender = 'male',
 }) => {
   const modelRef = useRef<THREE.Group>(null!);
   const chestRef = useRef<THREE.Mesh>(null!);
@@ -151,11 +153,11 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
 
         {/* === TORSO === */}
         {/* Upper Chest Armor */}
-        <Box args={[0.7, 0.7, 0.45]} position={[0, 0.45, 0]} castShadow>
+        <Box args={[gender === 'male' ? 0.7 : 0.55, 0.7, gender === 'male' ? 0.45 : 0.4]} position={[0, 0.45, 0]} castShadow>
           <meshStandardMaterial color={armorColor} metalness={0.85} roughness={0.15} />
         </Box>
         {/* Lower Stomach Section */}
-        <Box args={[0.55, 0.4, 0.35]} position={[0, 0.05, 0]} castShadow>
+        <Box args={[gender === 'male' ? 0.55 : 0.45, 0.4, 0.35]} position={[0, 0.05, 0]} castShadow>
           <meshStandardMaterial color="#111827" metalness={0.7} roughness={0.4} />
         </Box>
         {/* Spine/Exo-frame Element */}
@@ -173,10 +175,10 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
         </Sphere>
         
         {/* Shoulder Guards (Pauldrons) */}
-        <Box args={[0.25, 0.22, 0.35]} position={[0.42, 0.7, 0]} castShadow>
+        <Box args={[0.25, 0.22, 0.35]} position={[gender === 'male' ? 0.42 : 0.35, 0.7, 0]} castShadow>
           <meshStandardMaterial color={armorColor} metalness={0.9} />
         </Box>
-        <Box args={[0.25, 0.22, 0.35]} position={[-0.42, 0.7, 0]} castShadow>
+        <Box args={[0.25, 0.22, 0.35]} position={[gender === 'male' ? -0.42 : -0.35, 0.7, 0]} castShadow>
           <meshStandardMaterial color={armorColor} metalness={0.9} />
         </Box>
 
