@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { characterLore } from '../utils/characterAssets';
 import { audio } from '../utils/audio';
 
