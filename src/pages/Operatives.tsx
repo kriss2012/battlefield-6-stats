@@ -26,7 +26,7 @@ const getOperativeType = (id: string) => {
   return 'player';
 };
 
-const HologramOperative: React.FC<{ id: string }> = ({ id }) => {
+const HologramOperative: React.FC<{ id: string; gender?: 'male' | 'female' }> = ({ id, gender = 'male' }) => {
   const groupRef = useRef<THREE.Group>(null!);
 
   useFrame((state) => {
@@ -48,7 +48,7 @@ const HologramOperative: React.FC<{ id: string }> = ({ id }) => {
       </Cylinder>
 
       <group position={[0, -0.05, 0]}>
-        <CharacterModel color={color} type={type} isMoving={false} scale={0.9} />
+        <CharacterModel color={color} type={type} isMoving={false} scale={0.9} gender={gender} />
       </group>
     </group>
   );
@@ -175,7 +175,7 @@ const Operatives: React.FC = () => {
                       <div className="absolute inset-0 bg-tactical-grid bg-grid-sm opacity-10 pointer-events-none" />
                       <div className="w-full h-full">
                         <ThreeScene autoRotate={false} enableZoom={false} environment="studio">
-                          <HologramOperative id={activeChar.id} />
+                          <HologramOperative id={activeChar.id} gender={activeChar.gender} />
                         </ThreeScene>
                       </div>
                       <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-neutral-950 to-transparent pointer-events-none" />
@@ -195,6 +195,9 @@ const Operatives: React.FC = () => {
                         </span>
                         <span className="text-xs font-mono text-gray-500 uppercase tracking-widest">
                           {activeChar.role}
+                        </span>
+                        <span className="text-xs font-mono text-gray-600 uppercase tracking-widest border border-gray-600/30 px-2 py-0.5 rounded bg-gray-900/50">
+                          {activeChar.gender === 'male' ? 'MALE' : 'FEMALE'}
                         </span>
                       </div>
                       <h2 className="text-4xl font-black italic uppercase text-white tracking-tight">
@@ -216,8 +219,15 @@ const Operatives: React.FC = () => {
                         <h4 className="text-[10px] font-mono text-blue-500/60 uppercase tracking-[0.3em] mb-2 font-black">
                           SPECIALIZATION
                         </h4>
-                        <span className="text-xs text-white font-bold tracking-wide block bg-white/5 border border-white/10 px-3 py-2 rounded-lg">
+                        <span className="text-xs text-white font-bold tracking-wide block bg-white/5 border border-white/10 px-3 py-2 rounded-lg mb-4">
                           {activeChar.specialization}
+                        </span>
+                        
+                        <h4 className="text-[10px] font-mono text-blue-500/60 uppercase tracking-[0.3em] mb-2 font-black">
+                          DEPLOYMENT_GEAR
+                        </h4>
+                        <span className="text-xs text-blue-300 font-bold tracking-wide block bg-blue-900/10 border border-blue-500/20 px-3 py-2 rounded-lg">
+                          {activeChar.costume}
                         </span>
                       </div>
                       <div>
