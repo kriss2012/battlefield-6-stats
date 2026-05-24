@@ -47,23 +47,25 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
 
   // Custom premium color palettes matching the video
   // Male character is bronze/gold metallic armor. Female character is dark blue polished armor.
-  let primaryColor = '#1e3a8a'; // Default polished blue
+  let primaryColor = color;
   let secondaryColor = '#0f172a'; // Navy steel slate
   let metalnessValue = 0.85;
   let roughnessValue = 0.15;
 
-  if (gender === 'male') {
-    // Gold/Bronze theme
-    primaryColor = '#b8860b'; // Gold bronze
-    secondaryColor = '#4a3b1a'; // Dark brass metal
-    metalnessValue = 0.9;
-    roughnessValue = 0.12;
-  } else {
-    // Sleek Navy Blue theme
-    primaryColor = '#1e3e62'; // Polished dark blue
-    secondaryColor = '#0b132b'; // Dark midnight steel
-    metalnessValue = 0.88;
-    roughnessValue = 0.15;
+  if (color === '#3b82f6') {
+    if (gender === 'male') {
+      // Gold/Bronze theme
+      primaryColor = '#b8860b'; // Gold bronze
+      secondaryColor = '#4a3b1a'; // Dark brass metal
+      metalnessValue = 0.9;
+      roughnessValue = 0.12;
+    } else {
+      // Sleek Navy Blue theme
+      primaryColor = '#1e3e62'; // Polished dark blue
+      secondaryColor = '#0b132b'; // Dark midnight steel
+      metalnessValue = 0.88;
+      roughnessValue = 0.15;
+    }
   }
 
   // Override colors for special costumes
