@@ -834,8 +834,27 @@ const SimulationContent: React.FC = () => {
 
   // Input states (touch screens)
   const [isTouch, setIsTouch] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
+  const [sensitivity, setSensitivity] = useState(() => parseFloat(localStorage.getItem('mouse_sensitivity') || '1.0'));
   const [joystickActive, setJoystickActive] = useState(false);
   const [joystickPos, setJoystickPos] = useState({ x: 0, y: 0 });
+
+  // Persist mouse sensitivity
+  useEffect(() => {
+    localStorage.setItem('mouse_sensitivity', sensitivity.toString());
+  }, [sensitivity]);
+
+  // Touch screen detection via actual touch events
+  useEffect(() => {
+    const handleTouchStart = () => {
+      setIsTouch(true);
+      window.removeEventListener('touchstart', handleTouchStart);
+    };
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+    };
+  }, []);
 
   // Refs for canvas-loop communications
   const playerPosRef = useRef(new THREE.Vector3(0, 0, 5));
@@ -859,12 +878,15 @@ const SimulationContent: React.FC = () => {
   const levelTheme = getLevelConfig(missionId);
   const themeColor = levelTheme.gridColor;
 
-  // Touch screen detection
+  // Pointer lock status detection
   useEffect(() => {
-    const checkTouch = () => {
-      setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    const handleLockChange = () => {
+      setIsLocked(document.pointerLockElement !== null);
     };
-    checkTouch();
+    document.addEventListener('pointerlockchange', handleLockChange);
+    return () => {
+      document.removeEventListener('pointerlockchange', handleLockChange);
+    };
   }, []);
 
   // Sync background music loops
@@ -1078,7 +1100,7 @@ const SimulationContent: React.FC = () => {
       <div 
         className="fixed inset-0 bg-black overflow-hidden select-none" 
         onMouseDown={() => {
-          if (isStarted && !isDead && !missionComplete && !isTouch) handleShoot();
+          if (isStarted && !isDead && !missionComplete && !isTouch && isLocked) handleShoot();
         }}
       >
         {/* Render Canvas */}
@@ -1175,7 +1197,7 @@ const SimulationContent: React.FC = () => {
             <Warehouse />
 
             {/* Pointer lock controls */}
-            {!isTouch && <PointerLockControls ref={controlsRef} />}
+            {!isTouch && <PointerLockControls ref={controlsRef} pointerSpeed={sensitivity} />}
 
             {/* Touch Aim Look */}
             {isTouch && <TouchLookController />}
@@ -1187,7 +1209,7 @@ const SimulationContent: React.FC = () => {
         </Canvas>
 
         {/* --- RETREAT/NAV HEADER (Responsive positioning) --- */}
-        <div className="absolute top-6 left-6 z-50 pointer-events-auto flex items-center gap-4">
+        <div className="absolute top-6 left-6 z-[75] pointer-events-auto flex items-center gap-4">
           <button 
             onClick={() => {
               audio.playClickSound();
@@ -1207,6 +1229,23 @@ const SimulationContent: React.FC = () => {
           >
             Camera: {cameraMode === 'first-person' ? '1ST PERS' : '3RD PERS'} (V)
           </button>
+
+          {!isTouch && (
+            <div className="flex items-center gap-3 px-3 py-1.5 bg-black/60 border border-white/10 hover:border-blue-500/30 rounded-xl backdrop-blur-md transition-all text-white">
+              <span className="text-[9px] font-mono tracking-widest text-blue-400 uppercase select-none">SENSITIVITY: {sensitivity.toFixed(1)}</span>
+              <input 
+                type="range" 
+                min="0.1" 
+                max="4.0" 
+                step="0.1" 
+                value={sensitivity} 
+                onChange={(e) => {
+                  setSensitivity(parseFloat(e.target.value));
+                }}
+                className="w-16 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:bg-white/30 transition-all outline-none"
+              />
+            </div>
+          )}
         </div>
 
         {/* --- DYNAMIC STATS HUD --- */}
@@ -1354,8 +1393,8 @@ const SimulationContent: React.FC = () => {
                 const dx = touch.clientX - lastLookTouchRef.current.x;
                 const dy = touch.clientY - lastLookTouchRef.current.y;
                 
-                touchLookRef.current.yaw -= dx * 0.005;
-                touchLookRef.current.pitch -= dy * 0.005;
+                touchLookRef.current.yaw -= dx * 0.005 * sensitivity;
+                touchLookRef.current.pitch -= dy * 0.005 * sensitivity;
                 
                 lastLookTouchRef.current = { x: touch.clientX, y: touch.clientY };
               }}
@@ -1372,7 +1411,17 @@ const SimulationContent: React.FC = () => {
                   setCameraMode(m => m === 'first-person' ? 'third-person' : 'first-person');
                   audio.playClickSound();
                 }}
-                className="w-12 h-12 rounded-full bg-blue-600/30 border border-blue-400 text-white font-black text-[9px] flex items-center justify-center shadow-lg active:scale-95"
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                  setCameraMode(m => m === 'first-person' ? 'third-person' : 'first-person');
+                  audio.playClickSound();
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCameraMode(m => m === 'first-person' ? 'third-person' : 'first-person');
+                  audio.playClickSound();
+                }}
+                className="w-12 h-12 rounded-full bg-blue-600/30 border border-blue-400 text-white font-black text-[9px] flex items-center justify-center shadow-lg active:scale-95 pointer-events-auto"
               >
                 CAM
               </button>
@@ -1381,7 +1430,15 @@ const SimulationContent: React.FC = () => {
                   e.stopPropagation();
                   handleShoot();
                 }}
-                className="w-20 h-20 rounded-full bg-red-600/40 border-2 border-red-500 text-white font-black italic flex items-center justify-center text-xs shadow-lg shadow-red-500/20 active:scale-90"
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                  handleShoot();
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleShoot();
+                }}
+                className="w-20 h-20 rounded-full bg-red-600/40 border-2 border-red-500 text-white font-black italic flex items-center justify-center text-xs shadow-lg shadow-red-500/20 active:scale-90 pointer-events-auto"
               >
                 FIRE
               </button>
