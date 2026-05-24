@@ -78,14 +78,14 @@ const getLevelConfig = (missionId: string | null): LevelConfig => {
       };
     default: // Training / Neural Forge
       return {
-        gridColor: '#10b981',
-        skyColor: '#020617',
-        ambientIntensity: 0.25,
-        spotlightColor: '#10b981',
-        wallColor: '#1f2937',
-        floorColor: '#111827',
-        fogColor: '#020617',
-        ambientPreset: 'studio',
+        gridColor: '#00f3ff',
+        skyColor: '#050a1f',
+        ambientIntensity: 0.3,
+        spotlightColor: '#00f3ff',
+        wallColor: '#1e293b',
+        floorColor: '#0a0f1c',
+        fogColor: '#050a1f',
+        ambientPreset: 'night',
       };
   }
 };
@@ -371,6 +371,12 @@ const Warehouse: React.FC = () => {
             <boxGeometry args={[2.5, 20, 2.5]} />
             <meshStandardMaterial color="#0f172a" metalness={0.7} roughness={0.3} />
           </mesh>
+          {/* Glowing Screen on Pillar */}
+          <mesh position={[x, 12, -23.7]} castShadow={false}>
+            <planeGeometry args={[1.2, 1.8]} />
+            <meshBasicMaterial color="#00f3ff" transparent opacity={0.6} />
+          </mesh>
+
           <mesh position={[x, 10, 25]} castShadow receiveShadow>
             <boxGeometry args={[2.5, 20, 2.5]} />
             <meshStandardMaterial color="#0f172a" metalness={0.7} roughness={0.3} />
@@ -378,15 +384,42 @@ const Warehouse: React.FC = () => {
         </React.Fragment>
       ))}
 
-      {/* Cargo Crates */}
-      <mesh position={[-15, 2, -15]} rotation={[0, 0.2, 0]} castShadow receiveShadow>
-        <boxGeometry args={[4, 4, 8]} />
-        <meshStandardMaterial color="#1d4ed8" metalness={0.4} roughness={0.5} />
-      </mesh>
-      <mesh position={[15, 2, -20]} rotation={[0, -0.15, 0]} castShadow receiveShadow>
-        <boxGeometry args={[4, 4, 8]} />
-        <meshStandardMaterial color="#991b1b" metalness={0.4} roughness={0.5} />
-      </mesh>
+      {/* Cargo Crates with Radar Dishes */}
+      <group position={[-15, 2, -15]} rotation={[0, 0.2, 0]}>
+        <mesh castShadow receiveShadow>
+          <boxGeometry args={[4, 4, 8]} />
+          <meshStandardMaterial color="#1d4ed8" metalness={0.6} roughness={0.4} />
+        </mesh>
+        {/* Radar Dish */}
+        <group position={[0, 3, 0]} rotation={[0, 0.5, 0]}>
+          <mesh castShadow receiveShadow rotation={[Math.PI / 3, 0, 0]}>
+            <cylinderGeometry args={[1.5, 0.1, 0.3, 16]} />
+            <meshStandardMaterial color="#64748b" metalness={0.8} />
+          </mesh>
+          <mesh castShadow receiveShadow position={[0, -0.5, 0]}>
+            <cylinderGeometry args={[0.2, 0.2, 1.5, 8]} />
+            <meshStandardMaterial color="#475569" metalness={0.8} />
+          </mesh>
+        </group>
+      </group>
+
+      <group position={[15, 2, -20]} rotation={[0, -0.15, 0]}>
+        <mesh castShadow receiveShadow>
+          <boxGeometry args={[4, 4, 8]} />
+          <meshStandardMaterial color="#991b1b" metalness={0.6} roughness={0.4} />
+        </mesh>
+        {/* Radar Dish */}
+        <group position={[0, 3, 0]} rotation={[0, -0.4, 0]}>
+          <mesh castShadow receiveShadow rotation={[Math.PI / 3.5, 0, 0]}>
+            <cylinderGeometry args={[1.5, 0.1, 0.3, 16]} />
+            <meshStandardMaterial color="#64748b" metalness={0.8} />
+          </mesh>
+          <mesh castShadow receiveShadow position={[0, -0.5, 0]}>
+            <cylinderGeometry args={[0.2, 0.2, 1.5, 8]} />
+            <meshStandardMaterial color="#475569" metalness={0.8} />
+          </mesh>
+        </group>
+      </group>
       <mesh position={[0, 1, -5]} castShadow receiveShadow>
         <boxGeometry args={[2, 2, 2]} />
         <meshStandardMaterial color="#334155" roughness={0.9} />
