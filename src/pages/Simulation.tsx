@@ -1451,6 +1451,54 @@ const SimulationContent: React.FC = () => {
           <div className="absolute inset-0 bg-red-600/25 pointer-events-none z-50 animate-pulse" />
         )}
 
+        {/* --- CLICK TO RESUME / PAUSE OVERLAY --- */}
+        {isStarted && !isDead && !missionComplete && !isTouch && !isLocked && (
+          <div 
+            onClick={() => {
+              if (controlsRef.current) controlsRef.current.lock();
+            }}
+            className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-[55] cursor-pointer backdrop-blur-sm pointer-events-auto"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              onClick={(e) => e.stopPropagation()}
+              className="glass-card p-8 text-center max-w-sm border border-blue-500/30 shadow-neon-blue animate-fade-in"
+            >
+              <h3 className="text-2xl font-black italic uppercase text-blue-400 mb-2 tracking-wide">SIMULATION PAUSED</h3>
+              <p className="text-gray-400 text-xs mb-6 font-mono leading-relaxed">
+                NEURAL SYNC SUSPENDED. AIM CALIBRATION OPTIONS ARE BELOW.
+              </p>
+              
+              {/* Calibration Slider inside Pause Screen */}
+              <div className="bg-black/30 border border-blue-500/20 p-4 rounded-xl mb-6 text-left">
+                <div className="flex justify-between text-[10px] font-mono tracking-widest text-blue-400 uppercase mb-2 font-black">
+                  <span>⚙️ SENSITIVITY CALIBRATION</span>
+                  <span>{sensitivity.toFixed(1)}x</span>
+                </div>
+                <input 
+                  type="range" 
+                  min="0.1" 
+                  max="4.0" 
+                  step="0.1" 
+                  value={sensitivity} 
+                  onChange={(e) => setSensitivity(parseFloat(e.target.value))}
+                  className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                />
+              </div>
+
+              <button 
+                onClick={() => {
+                  if (controlsRef.current) controlsRef.current.lock();
+                }}
+                className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold tracking-widest uppercase transition-all shadow-lg active:scale-95"
+              >
+                CLICK TO RESUME
+              </button>
+            </motion.div>
+          </div>
+        )}
+
         {/* --- RETREAT/START SCREEN --- */}
         {!isStarted && (
           <div className="absolute inset-0 bg-black/85 flex items-center justify-center backdrop-blur-md z-[60] p-4">
@@ -1462,12 +1510,32 @@ const SimulationContent: React.FC = () => {
               <h2 className="text-4xl md:text-5xl font-black italic uppercase mb-4 tracking-tighter text-white">
                 {mission ? mission.title : "Neural Forge"}
               </h2>
-              <div className="text-left bg-black/40 border border-white/5 p-4 rounded-xl font-serif text-sm italic text-gray-300 mb-8 leading-relaxed">
+              <div className="text-left bg-black/40 border border-white/5 p-4 rounded-xl font-serif text-sm italic text-gray-300 mb-6 leading-relaxed">
                 "{mission ? mission.briefing.text : "Welcome to Balwant's training module. Objective: Neutralize all ISF thermal signatures with maximum precision. Punishment is for pain; training is for results."}"
                 <div className="mt-4 font-mono not-italic text-[10px] text-blue-400 tracking-[0.3em] font-black uppercase">
                   OPERATOR CLEARANCE: ARYAN SHARMA
                 </div>
               </div>
+
+              {/* Calibration Slider inside Start Screen */}
+              {!isTouch && (
+                <div className="bg-black/30 border border-blue-500/20 p-4 rounded-xl mb-6 text-left">
+                  <div className="flex justify-between text-[10px] font-mono tracking-widest text-blue-400 uppercase mb-2 font-black">
+                    <span>⚙️ MOUSE SENSITIVITY CALIBRATION</span>
+                    <span>{sensitivity.toFixed(1)}x</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="0.1" 
+                    max="4.0" 
+                    step="0.1" 
+                    value={sensitivity} 
+                    onChange={(e) => setSensitivity(parseFloat(e.target.value))}
+                    className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  />
+                </div>
+              )}
+
               <button 
                 onClick={handleStart}
                 className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black italic uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-blue-600/20"
