@@ -29,3 +29,6 @@ yarn-error.log*
 
 # Claude related
 .claude
+*.exe
+*.zip
+*.asar
