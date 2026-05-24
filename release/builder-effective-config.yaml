@@ -1,11 +1,13 @@
 directories:
   output: release
   buildResources: build
-appId: com.kiri.bf6game
-productName: Battlefield 6
+appId: com.kiri.spectredivision
+productName: Spectre Division Shadow Reckoning
 win:
   target:
     - nsis
+    - portable
+    - zip
 files:
   - filter:
       - dist/**/*
