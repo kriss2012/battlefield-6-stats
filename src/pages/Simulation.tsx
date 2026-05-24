@@ -595,6 +595,7 @@ const Warehouse: React.FC = () => {
         <group key={`trooper-r-${idx}`} position={[38, 0, z]} rotation={[0, -Math.PI / 2.3, 0]}>
           <CharacterModel color="#1e3e62" type="player" isMoving={false} isFiring={false} scale={0.92} costume="Heavy Combat Suit" />
         </group>
+      ))}
     </group>
   );
 };
