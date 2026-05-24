@@ -506,7 +506,7 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
                 {/* Large Scope */}
                 <Cylinder args={[0.03, 0.02, 0.35, 12]} position={[0.05, 0.1, 0]} rotation={[0, 0, Math.PI / 2]}><meshStandardMaterial color="#090d16" metalness={0.9} /></Cylinder>
                 <Box args={[0.01, 0.08, 0.04]} position={[0.05, 0.04, 0]}><meshStandardMaterial color="#111827" /></Box>
-              </g>
+              </>
             ) : isCivilian ? (
               // Suppressed Pistol
               <>
