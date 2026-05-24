@@ -8,8 +8,7 @@ import {
   PerspectiveCamera,
   useKeyboardControls,
   KeyboardControls,
-  Plane,
-  Sparkles
+  Plane
 } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -820,13 +819,10 @@ const SimulationContent: React.FC = () => {
             <ambientLight intensity={levelTheme.ambientIntensity} />
             <pointLight position={[12, 12, 12]} intensity={1.2} castShadow />
 
-            {/* Ground Plane (Polished, metallic hangar floor that reflects the sky/beams) */}
+            {/* Ground Plane */}
             <Plane args={[100, 100]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-              <meshStandardMaterial color={levelTheme.floorColor} roughness={0.16} metalness={0.88} />
+              <meshStandardMaterial color={levelTheme.floorColor} roughness={0.7} metalness={0.2} />
             </Plane>
-
-            {/* Tactical Floating Sparkles (Ember effect) */}
-            <Sparkles count={120} scale={[80, 14, 80]} size={2.5} speed={0.4} color={themeColor} />
 
             {/* Tactical Grid */}
             <gridHelper args={[100, 50, themeColor, "#1e293b"]} position={[0, 0.015, 0]} />
@@ -891,7 +887,7 @@ const SimulationContent: React.FC = () => {
             )}
 
             {/* Environmental Setup */}
-            <Environment preset={levelTheme.ambientPreset} />
+            {/* <Environment preset={levelTheme.ambientPreset} /> */}
             <Warehouse />
 
             {/* Pointer lock controls */}
