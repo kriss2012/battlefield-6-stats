@@ -60,25 +60,27 @@ const TacticalOverlay: React.FC = () => {
       
       {/* Left Telemetry Panel */}
       <div className="absolute bottom-12 left-12 flex flex-col gap-4 font-mono">
-        <div className="flex flex-col">
-          <span className="text-xs text-gray-500 tracking-widest uppercase">Telemetry Status</span>
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-black italic text-blue-400">{fps}</span>
-            <span className="text-xs text-blue-400/50">FPS</span>
+        <div className="flex flex-col w-48">
+          <span className="text-xs text-blue-400 tracking-widest uppercase mb-1 font-bold">SHIELD STATUS</span>
+          <div className="h-2 bg-white/5 rounded-sm overflow-hidden border border-blue-500/20 mb-1">
+            <motion.div 
+              className="h-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]"
+              animate={{ width: `100%` }}
+            />
+          </div>
+          <div className="flex justify-between text-[10px] text-cyan-400/60 uppercase">
+            <span>PR%</span>
+            <span>4 GRPS</span>
           </div>
         </div>
 
-        <div className="flex flex-col w-32">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-xs text-gray-500 tracking-widest uppercase">Neural Load</span>
-            <span className="text-xs text-white/60">{neuralLoad}%</span>
-          </div>
-          <div className="h-1 bg-white/5 rounded-full overflow-hidden border border-white/5">
-            <motion.div 
-              className="h-full bg-gradient-to-r from-blue-500 to-emerald-400"
-              animate={{ width: `${neuralLoad}%` }}
-              transition={{ type: "spring", stiffness: 50 }}
-            />
+        <div className="flex flex-col">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-black italic text-white">{fps}</span>
+            <div className="flex flex-col">
+              <span className="text-[8px] text-white/50 tracking-widest">FPS</span>
+              <span className="text-[8px] text-white/50 tracking-widest">NEURAL LOAD {neuralLoad}%</span>
+            </div>
           </div>
         </div>
       </div>
@@ -118,26 +120,36 @@ const TacticalOverlay: React.FC = () => {
       </motion.div>
 
       {/* Top Bar Signal (Already handled by Nav mostly, but adding small detail) */}
-      <div className="absolute top-2 w-full flex justify-between px-12 font-mono text-[10px] text-white/20 tracking-[0.5em] uppercase pointer-events-none">
-        <div className="flex gap-4">
+      <div className="absolute top-2 w-full flex justify-between px-12 font-mono text-[10px] text-white/40 tracking-[0.3em] uppercase pointer-events-none">
+        <div className="flex gap-8">
           <span>Uplink: Synchronized</span>
-          <span>Encryption: AES-256</span>
+          <span>Encryption: AES 256</span>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-8">
           <span>Combat Zone: US_EAST_01</span>
           <span>Cycle: 08:24:55</span>
         </div>
       </div>
 
-      {/* Bottom Right Integrity Log */}
-      <div className="absolute bottom-12 right-12 w-48 font-mono text-[10px] text-white/20 uppercase tracking-widest flex flex-col gap-1 items-end text-right">
-        <span className="text-blue-500/40 font-black mb-1">System_Integrity_Log</span>
-        <motion.div animate={{ opacity: [0.2, 0.5, 0.2] }} transition={{ duration: 2, repeat: Infinity }}>
-          - MEMORY_SYNC: OK<br/>
-          - KERNEL_LOAD: NOMINAL<br/>
-          - ENCRYPTION: ACTIVE<br/>
-          - UPLINK_LATENCY: 24MS
-        </motion.div>
+      {/* Bottom Right Integrity Log & Controls */}
+      <div className="absolute bottom-12 right-12 flex items-end gap-6 pointer-events-auto">
+        <div className="w-56 font-mono text-[9px] text-white/30 uppercase tracking-widest flex flex-col gap-1 items-end text-right mb-2">
+          <span className="text-blue-500/50 font-black mb-1">SYSTEM_SMIRORTTY_LOG</span>
+          <motion.div animate={{ opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 2, repeat: Infinity }} className="flex flex-col items-end">
+            <span>MEMORY SYNERGITY</span>
+            <span>KERNEL LOAD: NOMINAL</span>
+            <span>BROCKATIO LAMBLE LOGOAD</span>
+            <span>UP THE LIATERET ZONE</span>
+          </motion.div>
+        </div>
+        
+        <div className="flex items-center gap-4">
+          <div className="font-bold text-xs text-white/50 tracking-widest">CAM</div>
+          <button className="w-16 h-16 rounded-full bg-red-600/20 border-2 border-red-500/50 flex items-center justify-center relative overflow-hidden backdrop-blur-sm group hover:bg-red-600/40 transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] cursor-crosshair">
+            <span className="text-red-500 font-bold text-sm tracking-widest group-hover:scale-110 transition-transform">FIRE</span>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.4)_0%,transparent_70%)]" />
+          </button>
+        </div>
       </div>
 
       <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.05)_50%)] bg-[size:100%_4px]" />
