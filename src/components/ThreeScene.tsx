@@ -42,7 +42,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
             far={4.5} 
           />
           
-          {/* <Environment preset={environment} /> */}
+          <Environment preset={environment} />
           
           <EffectComposer multisampling={4}>
             <Bloom 
