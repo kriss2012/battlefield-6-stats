@@ -217,22 +217,124 @@ const Weapon: React.FC<{ isFiring: boolean }> = ({ isFiring }) => {
   );
 };
 
-// --- Glowing Tracer Mesh ---
-const TracerMesh: React.FC<{ start: THREE.Vector3; end: THREE.Vector3 }> = ({ start, end }) => {
-  const distance = start.distanceTo(end);
-  const position = start.clone().add(end).multiplyScalar(0.5);
-  const direction = end.clone().sub(start).normalize();
-  
-  const quaternion = new THREE.Quaternion();
-  quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
-  
+// --- Glowing Tracer Mesh (Advanced Ballistic Simulation) ---
+const BulletTracer: React.FC<{ start: THREE.Vector3; direction: THREE.Vector3; color?: string }> = ({ start, direction, color = '#ef4444' }) => {
+  const meshRef = useRef<THREE.Mesh>(null!);
+  const pos = useRef(start.clone());
+  const vel = useRef(direction.clone().multiplyScalar(95.0)); // 95 m/s speed
+  const gravity = -3.5; // bullet drops over distance
+  const life = useRef(0.6); // destroy after 0.6 seconds
+
+  useFrame((state, delta) => {
+    if (life.current <= 0) return;
+    life.current -= delta;
+    
+    const mesh = meshRef.current;
+    if (mesh) {
+      // Apply gravity to bullet path (parabolic calculation)
+      vel.current.y += gravity * delta;
+      pos.current.addScaledVector(vel.current, delta);
+      mesh.position.copy(pos.current);
+      
+      // Align cylinder with travel direction
+      const dir = vel.current.clone().normalize();
+      const quaternion = new THREE.Quaternion();
+      quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+      mesh.quaternion.copy(quaternion);
+    }
+  });
+
   return (
-    <mesh position={position} quaternion={quaternion}>
-      <cylinderGeometry args={[0.018, 0.018, distance, 4]} />
-      <meshBasicMaterial color="#ef4444" toneMapped={false} />
+    <mesh ref={meshRef} position={start.clone()}>
+      <cylinderGeometry args={[0.012, 0.012, 0.8, 4]} />
+      <meshBasicMaterial color={color} toneMapped={false} />
     </mesh>
   );
 };
+
+// --- Newtonian Shell Casing Ejection Simulator ---
+const ShellCasing: React.FC<{ startPos: THREE.Vector3; startVel: THREE.Vector3 }> = ({ startPos, startVel }) => {
+  const meshRef = useRef<THREE.Mesh>(null!);
+  const vel = useRef(startVel.clone());
+  const rot = useRef(new THREE.Vector3(Math.random() * 5 + 2, Math.random() * 5 + 2, Math.random() * 5 + 2));
+  const gravity = -9.81;
+  const bounceCoefficient = 0.55;
+  const life = useRef(2.0); // 2 seconds lifetime
+
+  useFrame((state, delta) => {
+    if (life.current <= 0) return;
+    life.current -= delta;
+    
+    const mesh = meshRef.current;
+    if (mesh) {
+      // Apply gravity
+      vel.current.y += gravity * delta;
+      
+      // Update position
+      mesh.position.addScaledVector(vel.current, delta);
+      
+      // Rotate casing
+      mesh.rotation.x += rot.current.x * delta;
+      mesh.rotation.y += rot.current.y * delta;
+      mesh.rotation.z += rot.current.z * delta;
+      
+      // Floor bounce collision
+      if (mesh.position.y < 0.02) {
+        mesh.position.y = 0.02;
+        vel.current.y = -vel.current.y * bounceCoefficient; // bounce up
+        vel.current.x *= 0.6; // friction
+        vel.current.z *= 0.6; // friction
+        rot.current.multiplyScalar(0.5); // slow down rotation
+      }
+    }
+  });
+
+  return (
+    <mesh ref={meshRef} position={startPos.clone()} castShadow>
+      <cylinderGeometry args={[0.008, 0.008, 0.04, 6]} />
+      <meshStandardMaterial color="#b8860b" metalness={0.9} roughness={0.15} />
+    </mesh>
+  );
+};
+
+// --- Spark / Blood Particle Kinematics ---
+const ImpactParticle: React.FC<{ startPos: THREE.Vector3; color: string }> = ({ startPos, color }) => {
+  const meshRef = useRef<THREE.Mesh>(null!);
+  // Random velocity in a dome pointing upwards/outwards
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.random() * (Math.PI / 3.0); // 60 degree dome
+  const speed = 2.0 + Math.random() * 4.0;
+  const vel = useRef(new THREE.Vector3(
+    Math.cos(theta) * Math.sin(phi) * speed,
+    Math.cos(phi) * speed + 1.0, // extra vertical push
+    Math.sin(theta) * Math.sin(phi) * speed
+  ));
+  
+  const gravity = -9.81;
+  const life = useRef(0.6 + Math.random() * 0.4); // ~0.8s life
+
+  useFrame((state, delta) => {
+    if (life.current <= 0) return;
+    life.current -= delta;
+    
+    const mesh = meshRef.current;
+    if (mesh) {
+      vel.current.y += gravity * delta;
+      mesh.position.addScaledVector(vel.current, delta);
+      // Fade out scale
+      const scale = Math.max(0, life.current);
+      mesh.scale.set(scale, scale, scale);
+    }
+  });
+
+  return (
+    <mesh ref={meshRef} position={startPos.clone()}>
+      <boxGeometry args={[0.04, 0.04, 0.04]} />
+      <meshBasicMaterial color={color} toneMapped={false} />
+    </mesh>
+  );
+};
+
 
 // --- Guard AI Component ---
 const Guard: React.FC<{ 
@@ -346,20 +448,66 @@ const Guard: React.FC<{
   );
 };
 
+const RadarDish: React.FC = () => {
+  const dishRef = useRef<THREE.Group>(null!);
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    if (dishRef.current) {
+      dishRef.current.rotation.y = t * 1.5;
+    }
+  });
+
+  return (
+    <group ref={dishRef}>
+      {/* Dish */}
+      <mesh rotation={[Math.PI / 3.5, 0, 0]} castShadow>
+        <cylinderGeometry args={[1.5, 0.2, 0.35, 16, 1, true]} />
+        <meshStandardMaterial color="#475569" metalness={0.85} roughness={0.15} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Center Subreflector Feed */}
+      <mesh position={[0, 0.6, 0.2]} rotation={[Math.PI / 3.5, 0, 0]}>
+        <cylinderGeometry args={[0.02, 0.02, 0.7]} />
+        <meshBasicMaterial color="#ef4444" />
+      </mesh>
+    </group>
+  );
+};
+
+const ScanlineWave: React.FC = () => {
+  const meshRef = useRef<THREE.Mesh>(null!);
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    if (meshRef.current) {
+      // Moves vertical sweep between y = 0.05 and y = 7.5
+      meshRef.current.position.y = 3.8 + Math.sin(t * 1.3) * 3.7;
+    }
+  });
+
+  return (
+    <mesh ref={meshRef} rotation={[-Math.PI / 2, 0, 0]}>
+      <planeGeometry args={[100, 100]} />
+      <meshBasicMaterial color="#00f3ff" transparent opacity={0.045} side={THREE.DoubleSide} />
+    </mesh>
+  );
+};
+
 // --- Industrial Warehouse Layout ---
 const Warehouse: React.FC = () => {
   return (
     <group>
+      {/* Fullscreen Holographic Grid Scanner Wave */}
+      <ScanlineWave />
+
       {/* Structural boundary walls */}
-      <mesh position={[0, 10, -50]}>
+      <mesh position={[0, 10, -50]} castShadow receiveShadow>
         <boxGeometry args={[100, 20, 1.5]} />
         <meshStandardMaterial color="#1e293b" roughness={0.8} />
       </mesh>
-      <mesh position={[50, 10, 0]} rotation={[0, -Math.PI / 2, 0]}>
+      <mesh position={[50, 10, 0]} rotation={[0, -Math.PI / 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[100, 20, 1.5]} />
         <meshStandardMaterial color="#1e293b" roughness={0.8} />
       </mesh>
-      <mesh position={[-50, 10, 0]} rotation={[0, Math.PI / 2, 0]}>
+      <mesh position={[-50, 10, 0]} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[100, 20, 1.5]} />
         <meshStandardMaterial color="#1e293b" roughness={0.8} />
       </mesh>
@@ -371,10 +519,10 @@ const Warehouse: React.FC = () => {
             <boxGeometry args={[2.5, 20, 2.5]} />
             <meshStandardMaterial color="#0f172a" metalness={0.7} roughness={0.3} />
           </mesh>
-          {/* Glowing Screen on Pillar */}
-          <mesh position={[x, 12, -23.7]} castShadow={false}>
-            <planeGeometry args={[1.2, 1.8]} />
-            <meshBasicMaterial color="#00f3ff" transparent opacity={0.6} />
+          {/* Glowing Telemetry Screen on Pillars */}
+          <mesh position={[x, 12, -23.7]}>
+            <planeGeometry args={[1.3, 1.9]} />
+            <meshBasicMaterial color="#00f3ff" transparent opacity={0.65} toneMapped={false} />
           </mesh>
 
           <mesh position={[x, 10, 25]} castShadow receiveShadow>
@@ -384,52 +532,75 @@ const Warehouse: React.FC = () => {
         </React.Fragment>
       ))}
 
-      {/* Cargo Crates with Radar Dishes */}
-      <group position={[-15, 2, -15]} rotation={[0, 0.2, 0]}>
+      {/* Blue Solar Power Generator (Left) */}
+      <group position={[-16, 1.5, -16]} rotation={[0, 0.25, 0]}>
         <mesh castShadow receiveShadow>
-          <boxGeometry args={[4, 4, 8]} />
-          <meshStandardMaterial color="#1d4ed8" metalness={0.6} roughness={0.4} />
+          <boxGeometry args={[4.5, 3, 7.5]} />
+          <meshStandardMaterial color="#1e40af" metalness={0.8} roughness={0.2} />
         </mesh>
-        {/* Radar Dish */}
-        <group position={[0, 3, 0]} rotation={[0, 0.5, 0]}>
-          <mesh castShadow receiveShadow rotation={[Math.PI / 3, 0, 0]}>
-            <cylinderGeometry args={[1.5, 0.1, 0.3, 16]} />
-            <meshStandardMaterial color="#64748b" metalness={0.8} />
+        {/* Glowing Indicator Strip */}
+        <mesh position={[0, 0.5, 3.8]}>
+          <boxGeometry args={[3.2, 0.15, 0.1]} />
+          <meshBasicMaterial color="#00f3ff" toneMapped={false} />
+        </mesh>
+        {/* Tilted Solar Grid Panel Array on top */}
+        <group position={[0, 1.6, 0]} rotation={[-Math.PI / 6, 0, 0]}>
+          <mesh castShadow receiveShadow>
+            <boxGeometry args={[4.0, 0.12, 6.5]} />
+            <meshStandardMaterial color="#0f172a" metalness={0.9} roughness={0.1} />
           </mesh>
-          <mesh castShadow receiveShadow position={[0, -0.5, 0]}>
-            <cylinderGeometry args={[0.2, 0.2, 1.5, 8]} />
-            <meshStandardMaterial color="#475569" metalness={0.8} />
-          </mesh>
+          {/* Subdivided Solar Cells Grid */}
+          <gridHelper args={[6, 6, "#60a5fa", "#3b82f6"]} position={[0, 0.08, 0]} />
         </group>
       </group>
 
-      <group position={[15, 2, -20]} rotation={[0, -0.15, 0]}>
+      {/* Red Radar Power Generator (Right) */}
+      <group position={[16, 1.5, -21]} rotation={[0, -0.2, 0]}>
         <mesh castShadow receiveShadow>
-          <boxGeometry args={[4, 4, 8]} />
-          <meshStandardMaterial color="#991b1b" metalness={0.6} roughness={0.4} />
+          <boxGeometry args={[4.5, 3, 7.5]} />
+          <meshStandardMaterial color="#991b1b" metalness={0.8} roughness={0.2} />
         </mesh>
-        {/* Radar Dish */}
-        <group position={[0, 3, 0]} rotation={[0, -0.4, 0]}>
-          <mesh castShadow receiveShadow rotation={[Math.PI / 3.5, 0, 0]}>
-            <cylinderGeometry args={[1.5, 0.1, 0.3, 16]} />
-            <meshStandardMaterial color="#64748b" metalness={0.8} />
+        {/* Glowing Alert Strip */}
+        <mesh position={[0, 0.5, 3.8]}>
+          <boxGeometry args={[3.2, 0.15, 0.1]} />
+          <meshBasicMaterial color="#ef4444" toneMapped={false} />
+        </mesh>
+        {/* Spinning Radar Dish Mount */}
+        <group position={[0, 1.5, 0]}>
+          <mesh position={[0, 0.5, 0]} castShadow>
+            <cylinderGeometry args={[0.22, 0.22, 1.2, 8]} />
+            <meshStandardMaterial color="#334155" metalness={0.9} />
           </mesh>
-          <mesh castShadow receiveShadow position={[0, -0.5, 0]}>
-            <cylinderGeometry args={[0.2, 0.2, 1.5, 8]} />
-            <meshStandardMaterial color="#475569" metalness={0.8} />
-          </mesh>
+          <group position={[0, 1.2, 0]}>
+            <RadarDish />
+          </group>
         </group>
       </group>
+
+      {/* Center Tactical Obstacle Box */}
       <mesh position={[0, 1, -5]} castShadow receiveShadow>
         <boxGeometry args={[2, 2, 2]} />
-        <meshStandardMaterial color="#334155" roughness={0.9} />
+        <meshStandardMaterial color="#1e293b" roughness={0.8} metalness={0.4} />
       </mesh>
+
+      {/* Background Troopers Standing at Attention (Squads) */}
+      {/* Left Row */}
+      {[-32, -37, -42].map((z, idx) => (
+        <group key={`trooper-l-${idx}`} position={[-38, 0, z]} rotation={[0, Math.PI / 2.3, 0]}>
+          <CharacterModel color="#1e3e62" type="player" isMoving={false} isFiring={false} scale={0.92} costume="Heavy Combat Suit" />
+        </group>
+      ))}
+      {/* Right Row */}
+      {[-32, -37, -42].map((z, idx) => (
+        <group key={`trooper-r-${idx}`} position={[38, 0, z]} rotation={[0, -Math.PI / 2.3, 0]}>
+          <CharacterModel color="#1e3e62" type="player" isMoving={false} isFiring={false} scale={0.92} costume="Heavy Combat Suit" />
+        </group>
     </group>
   );
 };
 
 // --- Target Dummy (Training Mode) ---
-const Target: React.FC<{ position: [number, number, number]; onHit: () => void }> = ({ position, onHit }) => {
+const Target: React.FC<{ position: [number, number, number]; onHit: (pos: THREE.Vector3) => void }> = ({ position, onHit }) => {
   const [hit, setHit] = useState(false);
   const meshRef = useRef<THREE.Group>(null!);
 
@@ -438,7 +609,7 @@ const Target: React.FC<{ position: [number, number, number]; onHit: () => void }
       meshRef.current.scale.lerp(new THREE.Vector3(0, 0, 0), delta * 15);
       if (meshRef.current.scale.x < 0.05) {
         setHit(false);
-        onHit();
+        onHit(meshRef.current.position.clone().add(new THREE.Vector3(0, 1.1, 0)));
         meshRef.current.scale.set(1, 1, 1);
         meshRef.current.position.set(
           (Math.random() - 0.5) * 30,
@@ -490,9 +661,13 @@ const Player: React.FC<PlayerProps> = ({ cameraMode, playerPosRef, isMovingRef, 
   const [, getKeys] = useKeyboardControls();
   const velocity = useRef(new THREE.Vector3());
   const direction = useRef(new THREE.Vector3());
+  const yVelocity = useRef(0.0);
+  const gravity = -19.5;
+  const groundY = 0.0;
 
   useFrame((state, delta) => {
-    const { forward, backward, left, right } = getKeys();
+    // get jump key from mapping
+    const { forward, backward, left, right, jump } = getKeys() as any;
     
     // Camera forward projected horizontally
     const camForward = new THREE.Vector3(0, 0, -1).applyQuaternion(state.camera.quaternion);
@@ -518,18 +693,40 @@ const Player: React.FC<PlayerProps> = ({ cameraMode, playerPosRef, isMovingRef, 
       velocity.current.addScaledVector(direction.current, delta * 30);
     }
 
-    // Velocity decay friction
+    // Velocity decay friction (X & Z)
     velocity.current.multiplyScalar(0.8);
 
-    // Apply translation delta
+    // Apply horizontal velocity translation
     playerPosRef.current.addScaledVector(velocity.current, delta);
+
+    // --- Jump and Gravity Physics (Kinematics) ---
+    const onGround = playerPosRef.current.y <= groundY;
+    if (onGround) {
+      playerPosRef.current.y = groundY;
+      yVelocity.current = 0;
+      if (jump) {
+        yVelocity.current = 7.8; // Initial vertical velocity impulse
+        audio.playClickSound(); // Play feedback sound
+      }
+    } else {
+      // Euler integration of gravity acceleration
+      yVelocity.current += gravity * delta;
+    }
+    
+    playerPosRef.current.y += yVelocity.current * delta;
+
+    if (playerPosRef.current.y < groundY) {
+      playerPosRef.current.y = groundY;
+      yVelocity.current = 0;
+    }
     
     // Clamp to map boundaries
     checkCollision(playerPosRef.current);
 
-    // Set camera coordinates
+    // Set camera coordinates (with head height offset)
+    const headHeight = 1.6;
     if (cameraMode === 'first-person') {
-      state.camera.position.copy(playerPosRef.current).add(new THREE.Vector3(0, 1.6, 0));
+      state.camera.position.copy(playerPosRef.current).add(new THREE.Vector3(0, headHeight, 0));
     } else {
       // 3rd Person: Offset 3.5m back along look vector, 1.8m up
       state.camera.position.copy(playerPosRef.current)
@@ -561,9 +758,21 @@ interface PlayerModelMeshProps {
 
 const PlayerCharacterModelMesh: React.FC<PlayerModelMeshProps> = ({ cameraMode, playerPosRef, isMovingRef, isFiring, color }) => {
   const groupRef = useRef<THREE.Group>(null!);
+  const lastPos = useRef(new THREE.Vector3());
+  const tiltX = useRef(0);
+  const tiltZ = useRef(0);
 
-  useFrame((state) => {
-    groupRef.current.position.copy(playerPosRef.current);
+  useFrame((state, delta) => {
+    const currentPos = playerPosRef.current;
+    
+    // Calculate speed velocity vector
+    const velocityVec = currentPos.clone().sub(lastPos.current).divideScalar(delta || 0.016);
+    lastPos.current.copy(currentPos);
+    
+    // Prevent huge jumps
+    if (velocityVec.length() > 25) velocityVec.setLength(25);
+    
+    groupRef.current.position.copy(currentPos);
     
     // Rotate character mesh to align with camera forward look
     const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(state.camera.quaternion);
@@ -572,6 +781,23 @@ const PlayerCharacterModelMesh: React.FC<PlayerModelMeshProps> = ({ cameraMode, 
     
     const angle = Math.atan2(forward.x, forward.z);
     groupRef.current.rotation.y = angle;
+
+    // Transform velocity to character local space to calculate lean (Euler Math)
+    const charQuat = groupRef.current.quaternion.clone();
+    const localVel = velocityVec.clone().applyQuaternion(charQuat.invert());
+    
+    // Lean formulas: pitch (X) for forward/backward speed, roll (Z) for strafe side speed
+    const targetTiltX = -localVel.z * 0.055;
+    const targetTiltZ = -localVel.x * 0.055;
+    
+    tiltX.current = THREE.MathUtils.lerp(tiltX.current, targetTiltX, delta * 9);
+    tiltZ.current = THREE.MathUtils.lerp(tiltZ.current, targetTiltZ, delta * 9);
+    
+    // Apply tilt to first child group of CharacterModel
+    if (groupRef.current.children[0]) {
+      groupRef.current.children[0].rotation.x = tiltX.current;
+      groupRef.current.children[0].rotation.z = tiltZ.current;
+    }
   });
 
   if (cameraMode === 'first-person') return null;
@@ -625,7 +851,9 @@ const SimulationContent: React.FC = () => {
 
   // Custom targets configuration
   const [enemies, setEnemies] = useState<EnemyState[]>([]);
-  const [tracers, setTracers] = useState<{ id: number; start: THREE.Vector3; end: THREE.Vector3 }[]>([]);
+  const [tracers, setTracers] = useState<{ id: number; start: THREE.Vector3; direction: THREE.Vector3; color?: string }[]>([]);
+  const [spawnedCasings, setSpawnedCasings] = useState<{ id: number; pos: THREE.Vector3; vel: THREE.Vector3 }[]>([]);
+  const [particles, setParticles] = useState<{ id: number; pos: THREE.Vector3; color: string }[]>([]);
 
   const targetScore = getTargetScore(missionId);
   const levelTheme = getLevelConfig(missionId);
@@ -679,7 +907,7 @@ const SimulationContent: React.FC = () => {
     }
   }, [enemies, isStarted, missionComplete, isTouch]);
 
-  // Process player weapon firing
+  // Process player weapon firing (Newtonian Ballistics & Ejections)
   const handleShoot = () => {
     if (ammo > 0 && !isDead && isStarted && !missionComplete) {
       setAmmo(a => a - 1);
@@ -699,23 +927,33 @@ const SimulationContent: React.FC = () => {
         ? new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion)
         : new THREE.Vector3(0, 0, -1);
       
-      const end = start.clone().addScaledVector(direction, 40);
+      // Spawn golden shell casing ejecting right-upwards from gun ejector port
+      const casingId = Math.random();
+      const cameraQuat = camera ? camera.quaternion : new THREE.Quaternion();
+      const ejectPos = start.clone().add(new THREE.Vector3(0.22, -0.2, -0.3).applyQuaternion(cameraQuat));
+      const ejectVel = new THREE.Vector3(1.6 + Math.random() * 0.8, 1.8 + Math.random() * 1.0, -0.5 + Math.random() * 0.4).applyQuaternion(cameraQuat);
+      setSpawnedCasings(c => [...c, { id: casingId, pos: ejectPos, vel: ejectVel }]);
+      setTimeout(() => {
+        setSpawnedCasings(c => c.filter(x => x.id !== casingId));
+      }, 2100);
 
-      // Add temporary tracer line
+      // Add temporary dynamic bullet tracer line
       const tracerId = Math.random();
-      setTracers(t => [...t, { id: tracerId, start, end }]);
+      setTracers(t => [...t, { id: tracerId, start, direction, color: '#00f3ff' }]);
       setTimeout(() => {
         setTracers(t => t.filter(x => x.id !== tracerId));
-      }, 70);
+      }, 800);
     }
   };
 
-  // Process hit marks on targets
+  // Process hit marks on targets (Blood Particle Splashes)
   const handleHitEnemy = (id: string, type: 'enemy' | 'boss') => {
     if (ammo <= 0 || isDead || !isStarted) return;
     
+    let hitPosition = new THREE.Vector3();
     setEnemies(prev => prev.map(enemy => {
       if (enemy.id === id) {
+        hitPosition.set(...enemy.position).add(new THREE.Vector3(0, 1.1, 0));
         const nextH = Math.max(0, enemy.health - 50);
         if (nextH <= 0) {
           audio.playExplosionSound();
@@ -728,29 +966,53 @@ const SimulationContent: React.FC = () => {
       return enemy;
     }));
 
+    // Kinematic Blood Splashes (Hemispherical Velocity Dome)
+    const bloodParticles: any[] = [];
+    for (let i = 0; i < 12; i++) {
+      bloodParticles.push({ id: Math.random(), pos: hitPosition.clone(), color: '#ef4444' });
+    }
+    setParticles(p => [...p, ...bloodParticles]);
+    setTimeout(() => {
+      const ids = bloodParticles.map(bp => bp.id);
+      setParticles(p => p.filter(x => !ids.includes(x.id)));
+    }, 1100);
+
     setShowHitMarker(true);
     setTimeout(() => setShowHitMarker(false), 140);
   };
 
-  // Neural Forge target hit
-  const handleHitDummy = () => {
+  // Neural Forge target hit (Glowing Metal Spark Sparks)
+  const handleHitDummy = (pos: THREE.Vector3) => {
     if (ammo <= 0 || isDead) return;
     setScore(s => s + 100);
     audio.playHitSound();
+
+    // Kinematic Sparks (Hemispherical Gold Dome)
+    const sparkParticles: any[] = [];
+    for (let i = 0; i < 10; i++) {
+      sparkParticles.push({ id: Math.random(), pos: pos.clone(), color: '#eab308' });
+    }
+    setParticles(p => [...p, ...sparkParticles]);
+    setTimeout(() => {
+      const ids = sparkParticles.map(sp => sp.id);
+      setParticles(p => p.filter(x => !ids.includes(x.id)));
+    }, 1100);
+
     setShowHitMarker(true);
     setTimeout(() => setShowHitMarker(false), 140);
   };
 
-  // Process guard returning fire to player
+  // Process guard returning fire to player (Direct Tracer and Player Blood Splatter)
   const handleShootPlayer = (start: THREE.Vector3, end: THREE.Vector3) => {
     if (isDead || !isStarted || missionComplete) return;
 
     // Bullet tracer
+    const direction = end.clone().sub(start).normalize();
     const tracerId = Math.random();
-    setTracers(t => [...t, { id: tracerId, start, end }]);
+    setTracers(t => [...t, { id: tracerId, start, direction, color: '#ef4444' }]);
     setTimeout(() => {
       setTracers(t => t.filter(x => x.id !== tracerId));
-    }, 70);
+    }, 800);
 
     // Inflict damage
     setHealth(h => {
@@ -764,6 +1026,18 @@ const SimulationContent: React.FC = () => {
       }
       return nextH;
     });
+
+    // Spawn player blood splatter
+    const playerChest = playerPosRef.current.clone().add(new THREE.Vector3(0, 1.1, 0));
+    const playerBlood: any[] = [];
+    for (let i = 0; i < 10; i++) {
+      playerBlood.push({ id: Math.random(), pos: playerChest, color: '#ef4444' });
+    }
+    setParticles(p => [...p, ...playerBlood]);
+    setTimeout(() => {
+      const ids = playerBlood.map(pb => pb.id);
+      setParticles(p => p.filter(x => !ids.includes(x.id)));
+    }, 1100);
 
     // Screen flash & camera shake
     setHitFlash(true);
@@ -861,7 +1135,17 @@ const SimulationContent: React.FC = () => {
 
             {/* Bullet Tracer lines */}
             {tracers.map((t) => (
-              <TracerMesh key={t.id} start={t.start} end={t.end} />
+              <BulletTracer key={t.id} start={t.start} direction={t.direction} color={t.color} />
+            ))}
+
+            {/* Spawned Brass Casing Particles */}
+            {spawnedCasings.map((c) => (
+              <ShellCasing key={c.id} startPos={c.pos} startVel={c.vel} />
+            ))}
+
+            {/* Impact Spark & Blood Particles */}
+            {particles.map((p) => (
+              <ImpactParticle key={p.id} startPos={p.pos} color={p.color} />
             ))}
 
             {/* Unified Player Controller & Character */}
@@ -1223,6 +1507,7 @@ const Simulation: React.FC = () => (
       { name: 'left', keys: ['ArrowLeft', 'a', 'A'] },
       { name: 'right', keys: ['ArrowRight', 'd', 'D'] },
       { name: 'toggleCamera', keys: ['v', 'V'] },
+      { name: 'jump', keys: ['Space', ' '] },
     ]}
   >
     <SimulationContent />
