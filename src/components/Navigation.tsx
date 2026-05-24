@@ -69,9 +69,9 @@ export default function Navigation() {
         className="fixed top-8 left-1/2 -translate-x-1/2 z-[201] flex items-center gap-2 w-[95%] max-w-[1280px]"
       >
         {/* Sector Identity */}
-        <div className="hidden xl:flex flex-col items-end mr-4 font-mono text-[9px] text-gray-500 tracking-[0.3em] shrink-0">
-          <span>SECTOR // 06</span>
-          <span className="text-blue-500/50 font-bold">UPLINK_SECURE</span>
+        <div className="hidden xl:flex flex-col items-end mr-4 font-mono text-[9px] text-gray-500 tracking-[0.3em] shrink-0 uppercase">
+          <span>SYNC: SYNCHRONIZED</span>
+          <span className="text-blue-500/50 font-bold">ENCRYPTION: AES 256</span>
         </div>
 
         <div className="bg-neutral-900/60 backdrop-blur-2xl border border-white/10 p-1.5 rounded-2xl flex items-center justify-between shadow-2xl relative overflow-visible group flex-1">
@@ -79,8 +79,12 @@ export default function Navigation() {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[2000ms] pointer-events-none rounded-2xl" />
           
           <div className="flex items-center gap-2">
-            <Link to="/" onClick={() => audio.playClickSound()} className="px-3 py-1 hover:bg-white/5 rounded-xl transition-all">
+            <Link to="/" onClick={() => audio.playClickSound()} className="px-3 py-1 hover:bg-white/5 rounded-xl transition-all flex items-center gap-3">
               <Logo size={32} />
+              <div className="flex flex-col items-start justify-center hidden md:flex">
+                <span className="font-black text-blue-100 text-[13px] tracking-widest italic leading-none" style={{ textShadow: '0 0 10px rgba(59,130,246,0.5)' }}>SPECTRE DIVISION</span>
+                <span className="text-[9px] text-gray-400 tracking-[0.2em] mt-1 leading-none uppercase">Shadow Reckoning</span>
+              </div>
             </Link>
             
             <div className="h-4 w-[1px] bg-white/10 mx-1" />
