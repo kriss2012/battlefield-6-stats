@@ -887,7 +887,7 @@ const SimulationContent: React.FC = () => {
             )}
 
             {/* Environmental Setup */}
-            <Environment preset={levelTheme.ambientPreset} />
+            {/* <Environment preset={levelTheme.ambientPreset} /> */}
             <Warehouse />
 
             {/* Pointer lock controls */}
