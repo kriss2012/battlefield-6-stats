@@ -4,7 +4,6 @@ import {
   PointerLockControls, 
   Sky, 
   Stars, 
-  Environment, 
   PerspectiveCamera,
   useKeyboardControls,
   KeyboardControls,
@@ -225,7 +224,7 @@ const BulletTracer: React.FC<{ start: THREE.Vector3; direction: THREE.Vector3; c
   const gravity = -3.5; // bullet drops over distance
   const life = useRef(0.6); // destroy after 0.6 seconds
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (life.current <= 0) return;
     life.current -= delta;
     
@@ -261,7 +260,7 @@ const ShellCasing: React.FC<{ startPos: THREE.Vector3; startVel: THREE.Vector3 }
   const bounceCoefficient = 0.55;
   const life = useRef(2.0); // 2 seconds lifetime
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (life.current <= 0) return;
     life.current -= delta;
     
@@ -313,7 +312,7 @@ const ImpactParticle: React.FC<{ startPos: THREE.Vector3; color: string }> = ({ 
   const gravity = -9.81;
   const life = useRef(0.6 + Math.random() * 0.4); // ~0.8s life
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (life.current <= 0) return;
     life.current -= delta;
     
