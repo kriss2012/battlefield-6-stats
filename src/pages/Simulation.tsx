@@ -853,9 +853,9 @@ const SimulationContent: React.FC = () => {
   
   // Mobile touch references
   // const joystickStartRef = useRef<{ x: number; y: number } | null>(null);
-  const lastLookTouchRef = useRef<{ x: number; y: number } | null>(null);
+  // const lastLookTouchRef = useRef<{ x: number; y: number } | null>(null);
   const touchMovementRef = useRef({ forward: false, backward: false, left: false, right: false });
-  const touchLookRef = useRef({ yaw: 0, pitch: 0 });
+  // const touchLookRef = useRef({ yaw: 0, pitch: 0 });
 
   // Custom targets configuration
   const [enemies, setEnemies] = useState<EnemyState[]>([]);
