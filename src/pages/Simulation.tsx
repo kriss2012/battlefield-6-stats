@@ -913,10 +913,10 @@ const SimulationContent: React.FC = () => {
       setMissionComplete(true);
       audio.stopBackgroundMusic();
       if (controlsRef.current) {
-        controlsRef.current.lock();
+        controlsRef.current.unlock();
       }
     }
-  }, [enemies, isStarted, missionComplete, isTouch]);
+  }, [enemies, isStarted, missionComplete]);
 
   // Process player weapon firing (Newtonian Ballistics & Ejections)
   const handleShoot = () => {
@@ -1216,22 +1216,20 @@ const SimulationContent: React.FC = () => {
             Camera: {cameraMode === 'first-person' ? '1ST PERS' : '3RD PERS'} (V)
           </button>
 
-          {!isTouch && (
-            <div className="flex items-center gap-3 px-3 py-1.5 bg-black/60 border border-white/10 hover:border-blue-500/30 rounded-xl backdrop-blur-md transition-all text-white">
-              <span className="text-[9px] font-mono tracking-widest text-blue-400 uppercase select-none">SENSITIVITY: {sensitivity.toFixed(1)}</span>
-              <input 
-                type="range" 
-                min="0.1" 
-                max="4.0" 
-                step="0.1" 
-                value={sensitivity} 
-                onChange={(e) => {
-                  setSensitivity(parseFloat(e.target.value));
-                }}
-                className="w-16 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:bg-white/30 transition-all outline-none"
-              />
-            </div>
-          )}
+          <div className="flex items-center gap-3 px-3 py-1.5 bg-black/60 border border-white/10 hover:border-blue-500/30 rounded-xl backdrop-blur-md transition-all text-white">
+            <span className="text-[9px] font-mono tracking-widest text-blue-400 uppercase select-none">SENSITIVITY: {sensitivity.toFixed(1)}</span>
+            <input 
+              type="range" 
+              min="0.1" 
+              max="4.0" 
+              step="0.1" 
+              value={sensitivity} 
+              onChange={(e) => {
+                setSensitivity(parseFloat(e.target.value));
+              }}
+              className="w-16 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:bg-white/30 transition-all outline-none"
+            />
+          </div>
         </div>
 
         {/* --- DYNAMIC STATS HUD --- */}
