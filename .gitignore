@@ -34,3 +34,4 @@ yarn-error.log*
 *.asar
 release/spectre-division-game-0.0.0-x64.nsis.7z
 *.7z
+*.7z
