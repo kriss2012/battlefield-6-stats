@@ -835,8 +835,8 @@ const SimulationContent: React.FC = () => {
   // Input states (touch screens)
   const [isLocked, setIsLocked] = useState(false);
   const [sensitivity, setSensitivity] = useState(() => parseFloat(localStorage.getItem('mouse_sensitivity') || '1.0'));
-  const [joystickActive, setJoystickActive] = useState(false);
-  const [joystickPos, setJoystickPos] = useState({ x: 0, y: 0 });
+  // const [joystickActive, setJoystickActive] = useState(false);
+  // const [joystickPos, setJoystickPos] = useState({ x: 0, y: 0 });
 
   // Persist mouse sensitivity
   useEffect(() => {
@@ -852,7 +852,7 @@ const SimulationContent: React.FC = () => {
   const controlsRef = useRef<any>(null);
   
   // Mobile touch references
-  const joystickStartRef = useRef<{ x: number; y: number } | null>(null);
+  // const joystickStartRef = useRef<{ x: number; y: number } | null>(null);
   const lastLookTouchRef = useRef<{ x: number; y: number } | null>(null);
   const touchMovementRef = useRef({ forward: false, backward: false, left: false, right: false });
   const touchLookRef = useRef({ yaw: 0, pitch: 0 });
@@ -1071,19 +1071,19 @@ const SimulationContent: React.FC = () => {
   }, [sub, isStarted, isDead, missionComplete]);
 
   // Touch look input listeners
-  const TouchLookController: React.FC = () => {
-    useFrame((state) => {
-      if (touchLookRef.current.yaw !== 0 || touchLookRef.current.pitch !== 0) {
-        state.camera.rotation.y += touchLookRef.current.yaw;
-        state.camera.rotation.x += touchLookRef.current.pitch;
-        state.camera.rotation.x = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, state.camera.rotation.x));
-        
-        touchLookRef.current.yaw = 0;
-        touchLookRef.current.pitch = 0;
-      }
-    });
-    return null;
-  };
+  // const TouchLookController: React.FC = () => {
+  //   useFrame((state) => {
+  //     if (touchLookRef.current.yaw !== 0 || touchLookRef.current.pitch !== 0) {
+  //       state.camera.rotation.y += touchLookRef.current.yaw;
+  //       state.camera.rotation.x += touchLookRef.current.pitch;
+  //       state.camera.rotation.x = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, state.camera.rotation.x));
+  //       
+  //       touchLookRef.current.yaw = 0;
+  //       touchLookRef.current.pitch = 0;
+  //     }
+  //   });
+  //   return null;
+  // };
 
   return (
       <div 
@@ -1326,30 +1326,7 @@ const SimulationContent: React.FC = () => {
           </>
         )}
 
-        {/* Drag Zone (Right Half) for camera rotation - only active when touching */}
-        {isTouch && isStarted && !isDead && !missionComplete && (
-          <div 
-            className="absolute inset-y-0 right-0 w-[55%] pointer-events-auto touch-none z-30"
-            onTouchStart={(e) => {
-              const touch = e.touches[0];
-              lastLookTouchRef.current = { x: touch.clientX, y: touch.clientY };
-            }}
-            onTouchMove={(e) => {
-              if (!lastLookTouchRef.current) return;
-              const touch = e.touches[0];
-              const dx = touch.clientX - lastLookTouchRef.current.x;
-              const dy = touch.clientY - lastLookTouchRef.current.y;
-              
-              touchLookRef.current.yaw -= dx * 0.005 * sensitivity;
-              touchLookRef.current.pitch -= dy * 0.005 * sensitivity;
-              
-              lastLookTouchRef.current = { x: touch.clientX, y: touch.clientY };
-            }}
-            onTouchEnd={() => {
-              lastLookTouchRef.current = null;
-            }}
-          />
-        )}
+
 
         {/* --- FULLSCREEN DAMAGE RED FLASH --- */}
         {hitFlash && (
