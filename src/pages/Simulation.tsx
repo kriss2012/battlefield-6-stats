@@ -1300,150 +1300,156 @@ const SimulationContent: React.FC = () => {
 
         {/* --- DYNAMIC DIGITAL VITALITY HUD --- */}
         {isStarted && !isDead && !missionComplete && (
-          <div className="absolute bottom-6 left-6 flex flex-col gap-3 z-30 font-hud max-w-[280px]">
-            {/* Health Monitor */}
-            <div className="flex flex-col gap-1">
-              <div className="flex justify-between text-[10px] text-blue-400 font-bold uppercase tracking-widest">
-                <span>Vitality Shield</span>
-                <span className={health < 35 ? 'text-red-500 animate-pulse' : 'text-blue-300'}>{health}%</span>
-              </div>
-              <div className="w-48 h-3.5 bg-black/60 border border-blue-500/30 rounded-md p-[2px] overflow-hidden backdrop-blur-sm">
-                <div 
-                  className={`h-full rounded-sm transition-all duration-300 ${health < 35 ? 'bg-red-500 shadow-[0_0_10px_#ef4444]' : 'bg-gradient-to-r from-blue-500 to-cyan-400 shadow-[0_0_10px_#3b82f6]'}`}
-                  style={{ width: `${health}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Score & Ammo Panel */}
-            <div className="flex gap-6 pt-1 bg-black/40 border border-white/5 rounded-xl px-4 py-2.5 backdrop-blur-sm">
-              <div className="flex flex-col">
-                <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest">TGT_XP</span>
-                <span className="text-xl font-bold italic text-white leading-none text-blue-300">
-                  {score}
-                  {mission && <span className="text-xs text-gray-500 font-mono">/{targetScore}</span>}
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest">AMMO</span>
-                <div className="flex items-end gap-0.5 leading-none">
-                  <span className="text-xl font-bold italic text-white">{ammo}</span>
-                  <span className="text-[10px] text-gray-500 font-mono">/30</span>
+          <>
+            {/* Left HUD: Shield & Level Load */}
+            <div className="absolute bottom-10 left-10 flex flex-col gap-3 z-30 font-hud w-64 pointer-events-none">
+              <div className="flex flex-col gap-1">
+                <div className="text-[11px] text-cyan-400 font-bold uppercase tracking-widest flex items-center justify-between">
+                  <span>SHIELD STATUS</span>
+                  <span className="text-cyan-600/50">100%</span>
+                </div>
+                <div className="w-full h-2.5 bg-black/40 border border-cyan-500/20 overflow-hidden backdrop-blur-sm">
+                  <div 
+                    className="h-full bg-cyan-400 shadow-[0_0_10px_#22d3ee] transition-all duration-300"
+                    style={{ width: `${health}%` }}
+                  />
                 </div>
               </div>
+
+              <div className="mt-2 bg-black/60 border border-white/5 px-4 py-3 flex items-center justify-between w-56 backdrop-blur-md rounded-sm relative overflow-hidden">
+                <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.03)_50%,transparent_75%)] bg-[length:10px_10px]" />
+                <div className="flex items-center gap-3 relative z-10">
+                  <span className="text-[10px] text-gray-400 font-mono tracking-widest uppercase">LEVEL LOAD</span>
+                  <span className="text-sm font-bold text-white">24%</span>
+                </div>
+                <span className="text-xl font-black text-white relative z-10">{ammo}</span>
+              </div>
             </div>
-          </div>
+
+            {/* Center-Left: Joystick Base */}
+            <div className="absolute bottom-10 left-1/3 -translate-x-1/2 flex items-center gap-6 z-40 pointer-events-none">
+              <div 
+                className="w-32 h-32 rounded-full border border-blue-500/20 bg-black/40 pointer-events-auto flex items-center justify-center backdrop-blur-sm touch-none relative"
+                onTouchStart={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const cx = rect.left + rect.width / 2;
+                  const cy = rect.top + rect.height / 2;
+                  joystickStartRef.current = { x: cx, y: cy };
+                  setJoystickActive(true);
+                }}
+                onTouchMove={(e) => {
+                  if (!joystickStartRef.current) return;
+                  const touch = e.touches[0];
+                  const dx = touch.clientX - joystickStartRef.current.x;
+                  const dy = touch.clientY - joystickStartRef.current.y;
+                  
+                  const dist = Math.min(45, Math.sqrt(dx*dx + dy*dy));
+                  const angle = Math.atan2(dy, dx);
+                  
+                  setJoystickPos({
+                    x: Math.cos(angle) * dist,
+                    y: Math.sin(angle) * dist
+                  });
+                  
+                  touchMovementRef.current.forward = dy < -10;
+                  touchMovementRef.current.backward = dy > 10;
+                  touchMovementRef.current.left = dx < -10;
+                  touchMovementRef.current.right = dx > 10;
+                }}
+                onTouchEnd={() => {
+                  joystickStartRef.current = null;
+                  setJoystickPos({ x: 0, y: 0 });
+                  setJoystickActive(false);
+                  touchMovementRef.current = { forward: false, backward: false, left: false, right: false };
+                }}
+              >
+                {/* Visual directional markers on joystick base */}
+                <div className="absolute top-2 w-1 h-2 bg-white/20 rounded-full" />
+                <div className="absolute bottom-2 w-1 h-2 bg-white/20 rounded-full" />
+                <div className="absolute left-2 w-2 h-1 bg-white/20 rounded-full" />
+                <div className="absolute right-2 w-2 h-1 bg-white/20 rounded-full" />
+                
+                <div 
+                  className={`w-14 h-14 rounded-full border transition-all ${joystickActive ? 'bg-blue-400/60 border-blue-300 shadow-[0_0_15px_#60a5fa]' : 'bg-blue-500/20 border-blue-400/50 shadow-[0_0_10px_rgba(59,130,246,0.2)]'}`}
+                  style={{ transform: `translate(${joystickPos.x}px, ${joystickPos.y}px)` }}
+                />
+              </div>
+              <div className="flex items-center gap-3 text-xs font-mono font-bold text-white tracking-widest">
+                <span className="text-sm">N</span>
+                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]" />
+                <span className="text-gray-400">NOE / 3.3°</span>
+              </div>
+            </div>
+
+            {/* Right HUD: Abilities & Action Buttons */}
+            <div className="absolute bottom-10 right-10 flex flex-col items-end gap-3 z-40 pointer-events-none">
+              <div className="flex flex-col items-end gap-1 font-mono mb-2 bg-black/30 p-2 rounded-xl backdrop-blur-sm border border-white/5">
+                <div className="text-[10px] text-gray-400 tracking-widest uppercase flex justify-between w-40">
+                  <span>SPECIAL ABILITY</span>
+                  <span className="text-white font-bold">100%</span>
+                </div>
+                <div className="text-[10px] text-gray-400 tracking-widest uppercase flex justify-between w-40">
+                  <span>RENEW</span>
+                  <span className="text-cyan-400 font-bold">27%</span>
+                </div>
+              </div>
+              
+              <div className="flex items-end gap-6 pointer-events-auto">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCameraMode(m => m === 'first-person' ? 'third-person' : 'first-person');
+                    audio.playClickSound();
+                  }}
+                  className="w-16 h-16 rounded-full bg-[#0a1930]/80 border border-blue-500/50 flex items-center justify-center relative hover:bg-blue-900/60 transition-all backdrop-blur-sm shadow-[0_0_15px_rgba(59,130,246,0.3)] group active:scale-95"
+                >
+                  <span className="text-blue-400 font-bold text-[10px] tracking-widest">GAIN</span>
+                  <div className="absolute inset-0 rounded-full border border-blue-400/30 scale-110 group-hover:scale-100 transition-transform" />
+                </button>
+                
+                <button 
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    handleShoot();
+                  }}
+                  onTouchStart={(e) => {
+                    e.stopPropagation();
+                    handleShoot();
+                  }}
+                  className="w-24 h-24 rounded-full bg-[#3a0a0a]/80 border-2 border-red-500/80 flex flex-col items-center justify-center relative hover:bg-red-900/60 transition-all backdrop-blur-sm shadow-[0_0_20px_rgba(239,68,68,0.4)] group active:scale-90"
+                >
+                  <span className="text-red-500 font-black italic text-sm tracking-widest">FIRE</span>
+                  <div className="absolute top-3 right-3 text-red-500 text-lg opacity-80 group-hover:rotate-90 transition-transform duration-300">✦</div>
+                  <div className="absolute inset-0 rounded-full border border-red-500/30 scale-110 group-hover:scale-100 transition-transform" />
+                </button>
+              </div>
+            </div>
+          </>
         )}
 
-        {/* --- TOUCH SCREEN INTERACTIVE BUTTONS --- */}
+        {/* Drag Zone (Right Half) for camera rotation - only active when touching */}
         {isTouch && isStarted && !isDead && !missionComplete && (
-          <div className="absolute inset-0 z-40 pointer-events-none select-none">
-            {/* Touch joystick movement pad */}
-            <div 
-              className="absolute bottom-6 left-1/2 -translate-x-[110%] w-32 h-32 rounded-full border border-blue-500/20 bg-black/40 pointer-events-auto flex items-center justify-center backdrop-blur-sm touch-none"
-              onTouchStart={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const cx = rect.left + rect.width / 2;
-                const cy = rect.top + rect.height / 2;
-                joystickStartRef.current = { x: cx, y: cy };
-                setJoystickActive(true);
-              }}
-              onTouchMove={(e) => {
-                if (!joystickStartRef.current) return;
-                const touch = e.touches[0];
-                const dx = touch.clientX - joystickStartRef.current.x;
-                const dy = touch.clientY - joystickStartRef.current.y;
-                
-                const dist = Math.min(45, Math.sqrt(dx*dx + dy*dy));
-                const angle = Math.atan2(dy, dx);
-                
-                setJoystickPos({
-                  x: Math.cos(angle) * dist,
-                  y: Math.sin(angle) * dist
-                });
-                
-                touchMovementRef.current.forward = dy < -10;
-                touchMovementRef.current.backward = dy > 10;
-                touchMovementRef.current.left = dx < -10;
-                touchMovementRef.current.right = dx > 10;
-              }}
-              onTouchEnd={() => {
-                joystickStartRef.current = null;
-                setJoystickPos({ x: 0, y: 0 });
-                setJoystickActive(false);
-                touchMovementRef.current = { forward: false, backward: false, left: false, right: false };
-              }}
-            >
-              <div 
-                className={`w-12 h-12 rounded-full border transition-all ${joystickActive ? 'bg-cyan-400/60 border-cyan-300 shadow-[0_0_15px_#22d3ee]' : 'bg-blue-500/40 border-blue-400 shadow-neon-blue'}`}
-                style={{ transform: `translate(${joystickPos.x}px, ${joystickPos.y}px)` }}
-              />
-            </div>
-
-            {/* Drag Zone (Right Half) for camera rotation */}
-            <div 
-              className="absolute inset-y-0 right-0 w-[55%] pointer-events-auto touch-none"
-              onTouchStart={(e) => {
-                const touch = e.touches[0];
-                lastLookTouchRef.current = { x: touch.clientX, y: touch.clientY };
-              }}
-              onTouchMove={(e) => {
-                if (!lastLookTouchRef.current) return;
-                const touch = e.touches[0];
-                const dx = touch.clientX - lastLookTouchRef.current.x;
-                const dy = touch.clientY - lastLookTouchRef.current.y;
-                
-                touchLookRef.current.yaw -= dx * 0.005 * sensitivity;
-                touchLookRef.current.pitch -= dy * 0.005 * sensitivity;
-                
-                lastLookTouchRef.current = { x: touch.clientX, y: touch.clientY };
-              }}
-              onTouchEnd={() => {
-                lastLookTouchRef.current = null;
-              }}
-            />
-
-            {/* Trigger Fire / Toggle HUD on mobile */}
-            <div className="absolute bottom-6 right-6 flex items-center gap-4 pointer-events-auto z-50">
-              <button 
-                onTouchStart={(e) => {
-                  e.stopPropagation();
-                  setCameraMode(m => m === 'first-person' ? 'third-person' : 'first-person');
-                  audio.playClickSound();
-                }}
-                onMouseDown={(e) => {
-                  e.stopPropagation();
-                  setCameraMode(m => m === 'first-person' ? 'third-person' : 'first-person');
-                  audio.playClickSound();
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCameraMode(m => m === 'first-person' ? 'third-person' : 'first-person');
-                  audio.playClickSound();
-                }}
-                className="w-12 h-12 rounded-full bg-blue-600/30 border border-blue-400 text-white font-black text-[9px] flex items-center justify-center shadow-lg active:scale-95 pointer-events-auto"
-              >
-                CAM
-              </button>
-              <button 
-                onTouchStart={(e) => {
-                  e.stopPropagation();
-                  handleShoot();
-                }}
-                onMouseDown={(e) => {
-                  e.stopPropagation();
-                  handleShoot();
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleShoot();
-                }}
-                className="w-20 h-20 rounded-full bg-red-600/40 border-2 border-red-500 text-white font-black italic flex items-center justify-center text-xs shadow-lg shadow-red-500/20 active:scale-90 pointer-events-auto"
-              >
-                FIRE
-              </button>
-            </div>
-          </div>
+          <div 
+            className="absolute inset-y-0 right-0 w-[55%] pointer-events-auto touch-none z-30"
+            onTouchStart={(e) => {
+              const touch = e.touches[0];
+              lastLookTouchRef.current = { x: touch.clientX, y: touch.clientY };
+            }}
+            onTouchMove={(e) => {
+              if (!lastLookTouchRef.current) return;
+              const touch = e.touches[0];
+              const dx = touch.clientX - lastLookTouchRef.current.x;
+              const dy = touch.clientY - lastLookTouchRef.current.y;
+              
+              touchLookRef.current.yaw -= dx * 0.005 * sensitivity;
+              touchLookRef.current.pitch -= dy * 0.005 * sensitivity;
+              
+              lastLookTouchRef.current = { x: touch.clientX, y: touch.clientY };
+            }}
+            onTouchEnd={() => {
+              lastLookTouchRef.current = null;
+            }}
+          />
         )}
 
         {/* --- FULLSCREEN DAMAGE RED FLASH --- */}
