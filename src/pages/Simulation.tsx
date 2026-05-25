@@ -176,19 +176,35 @@ const checkCollision = (pos: THREE.Vector3) => {
 };
 
 // --- First-Person Weapon ---
-const Weapon: React.FC<{ isFiring: boolean }> = ({ isFiring }) => {
+const Weapon: React.FC<{ isFiring: boolean; isAiming: boolean }> = ({ isFiring, isAiming }) => {
   const meshRef = useRef<THREE.Group>(null!);
   
   useFrame((state) => {
     const { mouse } = state;
-    // Weapon sway
-    meshRef.current.position.x = THREE.MathUtils.lerp(meshRef.current.position.x, 0.45 + -mouse.x * 0.08, 0.1);
-    meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, -0.35 + mouse.y * 0.08, 0.1);
+    // Weapon sway & aim down sights positioning
+    
+    // Target positions
+    const targetX = isAiming ? 0 : 0.45;
+    const targetY = isAiming ? -0.13 : -0.35;
+    const targetZ = isAiming ? -0.4 : -0.75;
+    
+    // Target rotation (recoil kick)
+    const targetRotX = isFiring ? 0.15 : 0;
+    
+    // Apply sway only if not aiming
+    const swayX = isAiming ? 0 : -mouse.x * 0.08;
+    const swayY = isAiming ? 0 : mouse.y * 0.08;
+    
+    meshRef.current.position.x = THREE.MathUtils.lerp(meshRef.current.position.x, targetX + swayX, 0.15);
+    meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, targetY + swayY, 0.15);
+    
     if (isFiring) {
-      meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, -0.65, 0.5);
+      meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, targetZ + 0.1, 0.5); // kick back
     } else {
-      meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, -0.75, 0.15);
+      meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, targetZ, 0.15);
     }
+    
+    meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, targetRotX, 0.2);
   });
 
   return (
@@ -197,24 +213,54 @@ const Weapon: React.FC<{ isFiring: boolean }> = ({ isFiring }) => {
       {isFiring && (
         <pointLight position={[0, 0.05, -0.8]} intensity={6} color="#f59e0b" distance={6} />
       )}
+      
       {/* Gun Body */}
-      <mesh castShadow>
-        <boxGeometry args={[0.09, 0.16, 0.7]} />
-        <meshStandardMaterial color="#0f172a" metalness={0.9} roughness={0.1} />
+      <mesh castShadow position={[0, 0, 0]}>
+        <boxGeometry args={[0.08, 0.14, 0.5]} />
+        <meshStandardMaterial color="#0f172a" metalness={0.9} roughness={0.2} />
       </mesh>
+      
+      {/* Grip */}
+      <mesh castShadow position={[0, -0.12, 0.15]} rotation={[0.2, 0, 0]}>
+        <boxGeometry args={[0.06, 0.15, 0.08]} />
+        <meshStandardMaterial color="#1e293b" metalness={0.5} roughness={0.8} />
+      </mesh>
+      
+      {/* Magazine */}
+      <mesh castShadow position={[0, -0.12, -0.05]} rotation={[-0.1, 0, 0]}>
+        <boxGeometry args={[0.05, 0.18, 0.1]} />
+        <meshStandardMaterial color="#334155" metalness={0.7} />
+      </mesh>
+      
       {/* Long barrel */}
-      <mesh position={[0, 0.04, -0.4]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.015, 0.015, 0.8, 16]} />
+      <mesh position={[0, 0.03, -0.4]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.012, 0.015, 0.6, 16]} />
         <meshStandardMaterial color="#1e293b" metalness={1} roughness={0.1} />
       </mesh>
-      {/* Hologram Scope */}
-      <mesh position={[0, 0.1, -0.1]} castShadow>
-        <boxGeometry args={[0.03, 0.05, 0.25]} />
-        <meshStandardMaterial color="#374151" emissive="#00f3ff" emissiveIntensity={0.8} />
+      
+      {/* Muzzle Brake */}
+      <mesh position={[0, 0.03, -0.7]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.018, 0.018, 0.08, 16]} />
+        <meshStandardMaterial color="#0f172a" metalness={1} />
       </mesh>
+
+      {/* Hologram Scope / Red Dot */}
+      <group position={[0, 0.11, -0.1]}>
+        <mesh castShadow>
+          <boxGeometry args={[0.04, 0.06, 0.1]} />
+          <meshStandardMaterial color="#374151" />
+        </mesh>
+        {/* Scope Glass / Dot */}
+        <mesh position={[0, 0.01, -0.051]}>
+          <planeGeometry args={[0.015, 0.015]} />
+          <meshBasicMaterial color="#ef4444" transparent opacity={0.9} side={THREE.DoubleSide} />
+        </mesh>
+      </group>
     </group>
   );
 };
+
+
 
 // --- Glowing Tracer Mesh (Advanced Ballistic Simulation) ---
 const BulletTracer: React.FC<{ start: THREE.Vector3; direction: THREE.Vector3; color?: string }> = ({ start, direction, color = '#ef4444' }) => {
@@ -830,10 +876,11 @@ const SimulationContent: React.FC = () => {
   const [isAlarmActive, setIsAlarmActive] = useState(false);
   const [showHitMarker, setShowHitMarker] = useState(false);
   const [hitFlash, setHitFlash] = useState(false);
-  const [cameraMode, setCameraMode] = useState<'first-person' | 'third-person'>('third-person');
+  const [cameraMode, setCameraMode] = useState<'first-person' | 'third-person'>('first-person');
 
   // Input states (touch screens)
   const [isLocked, setIsLocked] = useState(false);
+  const [isAiming, setIsAiming] = useState(false);
   const [sensitivity, setSensitivity] = useState(() => parseFloat(localStorage.getItem('mouse_sensitivity') || '1.0'));
   // const [joystickActive, setJoystickActive] = useState(false);
   // const [joystickPos, setJoystickPos] = useState({ x: 0, y: 0 });
@@ -920,8 +967,7 @@ const SimulationContent: React.FC = () => {
 
   // Process player weapon firing (Newtonian Ballistics & Ejections)
   const handleShoot = () => {
-    if (ammo > 0 && !isDead && isStarted && !missionComplete) {
-      setAmmo(a => a - 1);
+    if (!isDead && isStarted && !missionComplete) {
       setIsFiring(true);
       setTimeout(() => setIsFiring(false), 60);
       audio.playShootSound();
@@ -959,7 +1005,7 @@ const SimulationContent: React.FC = () => {
 
   // Process hit marks on targets (Blood Particle Splashes)
   const handleHitEnemy = (id: string, type: 'enemy' | 'boss') => {
-    if (ammo <= 0 || isDead || !isStarted) return;
+    if (isDead || !isStarted) return;
     
     let hitPosition = new THREE.Vector3();
     setEnemies(prev => prev.map(enemy => {
@@ -994,7 +1040,7 @@ const SimulationContent: React.FC = () => {
 
   // Neural Forge target hit (Glowing Metal Spark Sparks)
   const handleHitDummy = (pos: THREE.Vector3) => {
-    if (ammo <= 0 || isDead) return;
+    if (isDead) return;
     setScore(s => s + 100);
     audio.playHitSound();
 
@@ -1088,13 +1134,19 @@ const SimulationContent: React.FC = () => {
   return (
       <div 
         className="fixed inset-0 bg-black overflow-hidden select-none" 
-        onMouseDown={() => {
-          if (isStarted && !isDead && !missionComplete && isLocked) handleShoot();
+        onMouseDown={(e) => {
+          if (!isStarted || isDead || missionComplete || !isLocked) return;
+          if (e.button === 0) handleShoot();
+          else if (e.button === 2) setIsAiming(true);
         }}
+        onMouseUp={(e) => {
+          if (e.button === 2) setIsAiming(false);
+        }}
+        onContextMenu={(e) => e.preventDefault()}
       >
         {/* Render Canvas */}
         <Canvas shadows>
-          <PerspectiveCamera makeDefault position={[0, 2, 5]} fov={75} />
+          <PerspectiveCamera makeDefault position={[0, 2, 5]} fov={isAiming && cameraMode === 'first-person' ? 40 : 75} />
           <fog attach="fog" args={[levelTheme.fogColor, 15, 60]} />
           
           <Sky sunPosition={[80, 25, 80]} />
@@ -1178,7 +1230,7 @@ const SimulationContent: React.FC = () => {
 
             {/* First-person Weapon HUD element */}
             {cameraMode === 'first-person' && isStarted && !isDead && !missionComplete && (
-              <Weapon isFiring={isFiring} />
+              <Weapon isFiring={isFiring} isAiming={isAiming} />
             )}
 
             {/* Environmental Setup */}
@@ -1186,7 +1238,7 @@ const SimulationContent: React.FC = () => {
             <Warehouse />
 
             {/* Pointer lock controls */}
-            <PointerLockControls ref={controlsRef} pointerSpeed={sensitivity} />
+            <PointerLockControls ref={controlsRef} pointerSpeed={isAiming ? sensitivity * 0.4 : sensitivity} />
 
             {/* Cyber Lights */}
             <spotLight position={[0, 18, 0]} angle={0.35} penumbra={1} intensity={2.5} castShadow color={levelTheme.spotlightColor} />
@@ -1233,6 +1285,13 @@ const SimulationContent: React.FC = () => {
         </div>
 
         {/* --- DYNAMIC STATS HUD --- */}
+        {/* Crosshair */}
+        {isStarted && !isDead && !missionComplete && cameraMode === 'first-person' && !isAiming && (
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none flex items-center justify-center">
+            <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee] opacity-80" />
+            <div className="absolute w-8 h-8 border border-cyan-500/30 rounded-full opacity-50" />
+          </div>
+        )}
         <div className="absolute top-20 sm:top-6 right-6 flex flex-col items-end gap-2 z-30 pointer-events-none font-mono">
           <div className="flex gap-2 items-center">
             <span className="text-[10px] text-gray-400 uppercase tracking-wider">Detection</span>
@@ -1306,7 +1365,7 @@ const SimulationContent: React.FC = () => {
                   <span className="text-[10px] text-gray-400 font-mono tracking-widest uppercase">LEVEL LOAD</span>
                   <span className="text-sm font-bold text-white">24%</span>
                 </div>
-                <span className="text-xl font-black text-white relative z-10">{ammo}</span>
+                <span className="text-xl font-black text-white relative z-10">∞</span>
               </div>
             </div>
 
