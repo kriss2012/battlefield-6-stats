@@ -89,15 +89,15 @@ const getLevelConfig = (missionId: string | null): LevelConfig => {
   }
 };
 
-const getTargetScore = (missionId: string | null): number => {
-  switch (missionId) {
-    case 'm0': return 300;
-    case 'm1': return 500;
-    case 'm2': return 800;
-    case 'm3': return 1200;
-    default: return 99999;
-  }
-};
+// const getTargetScore = (missionId: string | null): number => {
+//   switch (missionId) {
+//     case 'm0': return 300;
+//     case 'm1': return 500;
+//     case 'm2': return 800;
+//     case 'm3': return 1200;
+//     default: return 99999;
+//   }
+// };
 
 // --- Enemy State Interface ---
 interface EnemyState {
@@ -818,7 +818,7 @@ const SimulationContent: React.FC = () => {
   const mission = missions.find(m => m.id === missionId);
 
   // Gameplay variables
-  const [score, setScore] = useState(0);
+  const [, setScore] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
   const [ammo, setAmmo] = useState(30);
   const [health, setHealth] = useState(100);
@@ -874,7 +874,7 @@ const SimulationContent: React.FC = () => {
   const [spawnedCasings, setSpawnedCasings] = useState<{ id: number; pos: THREE.Vector3; vel: THREE.Vector3 }[]>([]);
   const [particles, setParticles] = useState<{ id: number; pos: THREE.Vector3; color: string }[]>([]);
 
-  const targetScore = getTargetScore(missionId);
+  // const _targetScore = getTargetScore(missionId);
   const levelTheme = getLevelConfig(missionId);
   const themeColor = levelTheme.gridColor;
 
