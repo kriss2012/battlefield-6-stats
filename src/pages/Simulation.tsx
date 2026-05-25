@@ -833,7 +833,6 @@ const SimulationContent: React.FC = () => {
   const [cameraMode, setCameraMode] = useState<'first-person' | 'third-person'>('third-person');
 
   // Input states (touch screens)
-  const [isTouch, setIsTouch] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [sensitivity, setSensitivity] = useState(() => parseFloat(localStorage.getItem('mouse_sensitivity') || '1.0'));
   const [joystickActive, setJoystickActive] = useState(false);
@@ -844,17 +843,7 @@ const SimulationContent: React.FC = () => {
     localStorage.setItem('mouse_sensitivity', sensitivity.toString());
   }, [sensitivity]);
 
-  // Touch screen detection via actual touch events
-  useEffect(() => {
-    const handleTouchStart = () => {
-      setIsTouch(true);
-      window.removeEventListener('touchstart', handleTouchStart);
-    };
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-    };
-  }, []);
+
 
   // Refs for canvas-loop communications
   const playerPosRef = useRef(new THREE.Vector3(0, 0, 5));
@@ -913,7 +902,7 @@ const SimulationContent: React.FC = () => {
     setMissionComplete(false);
     playerPosRef.current.set(0, 0, 5);
     
-    if (controlsRef.current && !isTouch) {
+    if (controlsRef.current) {
       controlsRef.current.lock();
     }
   };
@@ -923,8 +912,8 @@ const SimulationContent: React.FC = () => {
     if (isStarted && enemies.length > 0 && enemies.every(e => e.health <= 0) && !missionComplete) {
       setMissionComplete(true);
       audio.stopBackgroundMusic();
-      if (!isTouch && controlsRef.current) {
-        controlsRef.current.unlock();
+      if (controlsRef.current) {
+        controlsRef.current.lock();
       }
     }
   }, [enemies, isStarted, missionComplete, isTouch]);
@@ -1100,7 +1089,7 @@ const SimulationContent: React.FC = () => {
       <div 
         className="fixed inset-0 bg-black overflow-hidden select-none" 
         onMouseDown={() => {
-          if (isStarted && !isDead && !missionComplete && !isTouch && isLocked) handleShoot();
+          if (isStarted && !isDead && !missionComplete && isLocked) handleShoot();
         }}
       >
         {/* Render Canvas */}
@@ -1197,10 +1186,7 @@ const SimulationContent: React.FC = () => {
             <Warehouse />
 
             {/* Pointer lock controls */}
-            {!isTouch && <PointerLockControls ref={controlsRef} pointerSpeed={sensitivity} />}
-
-            {/* Touch Aim Look */}
-            {isTouch && <TouchLookController />}
+            <PointerLockControls ref={controlsRef} pointerSpeed={sensitivity} />
 
             {/* Cyber Lights */}
             <spotLight position={[0, 18, 0]} angle={0.35} penumbra={1} intensity={2.5} castShadow color={levelTheme.spotlightColor} />
@@ -1373,7 +1359,7 @@ const SimulationContent: React.FC = () => {
         )}
 
         {/* --- CLICK TO RESUME / PAUSE OVERLAY --- */}
-        {isStarted && !isDead && !missionComplete && !isTouch && !isLocked && (
+        {isStarted && !isDead && !missionComplete && !isLocked && (
           <div 
             onClick={() => {
               if (controlsRef.current) controlsRef.current.lock();
@@ -1439,23 +1425,21 @@ const SimulationContent: React.FC = () => {
               </div>
 
               {/* Calibration Slider inside Start Screen */}
-              {!isTouch && (
-                <div className="bg-black/30 border border-blue-500/20 p-4 rounded-xl mb-6 text-left">
-                  <div className="flex justify-between text-[10px] font-mono tracking-widest text-blue-400 uppercase mb-2 font-black">
-                    <span>⚙️ MOUSE SENSITIVITY CALIBRATION</span>
-                    <span>{sensitivity.toFixed(1)}x</span>
-                  </div>
-                  <input 
-                    type="range" 
-                    min="0.1" 
-                    max="4.0" 
-                    step="0.1" 
-                    value={sensitivity} 
-                    onChange={(e) => setSensitivity(parseFloat(e.target.value))}
-                    className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                  />
+              <div className="bg-black/30 border border-blue-500/20 p-4 rounded-xl mb-6 text-left">
+                <div className="flex justify-between text-[10px] font-mono tracking-widest text-blue-400 uppercase mb-2 font-black">
+                  <span>⚙️ MOUSE SENSITIVITY CALIBRATION</span>
+                  <span>{sensitivity.toFixed(1)}x</span>
                 </div>
-              )}
+                <input 
+                  type="range" 
+                  min="0.1" 
+                  max="4.0" 
+                  step="0.1" 
+                  value={sensitivity} 
+                  onChange={(e) => setSensitivity(parseFloat(e.target.value))}
+                  className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                />
+              </div>
 
               <button 
                 onClick={handleStart}
