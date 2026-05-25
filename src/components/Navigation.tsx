@@ -69,9 +69,9 @@ export default function Navigation() {
         className="fixed top-8 left-1/2 -translate-x-1/2 z-[201] flex items-center gap-2 w-[95%] max-w-[1280px]"
       >
         {/* Sector Identity */}
-        <div className="hidden xl:flex flex-col items-end mr-4 font-mono text-[9px] text-gray-500 tracking-[0.3em] shrink-0 uppercase">
-          <span>SYNC: SYNCHRONIZED</span>
-          <span className="text-blue-500/50 font-bold">ENCRYPTION: AES 256</span>
+        <div className="hidden xl:flex flex-col items-end mr-4 font-mono text-[9px] text-emerald-500 tracking-[0.3em] shrink-0 uppercase">
+          <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> SYNC: SINGLE</span>
+          <span className="text-cyan-400 font-bold">GL_LATENCY ENVY</span>
         </div>
 
         <div className="bg-neutral-900/60 backdrop-blur-2xl border border-white/10 p-1.5 rounded-2xl flex items-center justify-between shadow-2xl relative overflow-visible group flex-1">
@@ -197,12 +197,12 @@ export default function Navigation() {
         </div>
 
         {/* Telemetry Indicator */}
-        <div className="hidden xl:flex flex-col ml-4 font-mono text-[9px] text-gray-500 tracking-[0.3em] shrink-0">
+        <div className="hidden xl:flex flex-col ml-4 font-mono text-[9px] text-emerald-500 tracking-[0.3em] shrink-0 uppercase">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>SYNC_STABLE</span>
+            <span>SYNC: SINGLE</span>
           </div>
-          <span className="mt-0.5">MS_LATENCY: 12ms</span>
+          <span className="text-cyan-400 font-bold mt-0.5">GL_LATENCY ENVY</span>
         </div>
       </motion.nav>
 
