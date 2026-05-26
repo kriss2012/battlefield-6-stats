@@ -1,7 +1,32 @@
-import React, { useRef } from 'react';
+import React, { useRef, Suspense } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Box, Cylinder, Sphere, useFBX } from '@react-three/drei';
 import * as THREE from 'three';
+
+// --- FBX Rifle sub-component (Suspense-safe) ---
+const FBXRifleInner: React.FC = () => {
+  const rifleFbx = useFBX('./models/sm_rifle.fbx');
+  const cloned = React.useMemo(() => rifleFbx.clone(), [rifleFbx]);
+  return <primitive object={cloned} />;
+};
+
+const ProceduralRifle: React.FC<{ visorColor: string }> = ({ visorColor }) => (
+  <>
+    <Box args={[0.66, 0.12, 0.06]} castShadow><meshStandardMaterial color="#1e293b" metalness={0.9} roughness={0.2} /></Box>
+    <Box args={[0.14, 0.06, 0.04]} position={[0.08, 0.08, 0]}><meshStandardMaterial color="#0f172a" emissive={visorColor} emissiveIntensity={1} /></Box>
+    <Cylinder args={[0.022, 0.022, 0.36, 10]} position={[-0.45, 0.01, 0]} rotation={[0, 0, Math.PI / 2]} castShadow><meshStandardMaterial color="#111827" metalness={1} /></Cylinder>
+    <Box args={[0.06, 0.18, 0.05]} position={[-0.04, -0.12, 0]} rotation={[0, 0, -0.28]}><meshStandardMaterial color="#0f172a" /></Box>
+    <Box args={[0.06, 0.12, 0.04]} position={[-0.22, -0.08, 0]}><meshStandardMaterial color="#111827" /></Box>
+  </>
+);
+
+const WeaponMesh: React.FC<{ visorColor: string }> = ({ visorColor }) => (
+  <Suspense fallback={<ProceduralRifle visorColor={visorColor} />}>
+    <group position={[-0.2, 0.1, 0]} rotation={[0, Math.PI / 2, 0]} scale={0.01}>
+      <FBXRifleInner />
+    </group>
+  </Suspense>
+);
 
 interface CharacterModelProps {
   color?: string;
@@ -25,10 +50,6 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
   const modelRef = useRef<THREE.Group>(null!);
   const chestCoreRef = useRef<THREE.Mesh>(null!);
   const scannerRef = useRef<THREE.Group>(null!);
-  
-  // Load actual weapon FBX asset
-  const rifleFbx = useFBX('./models/sm_rifle.fbx');
-  const clonedRifle = React.useMemo(() => rifleFbx.clone(), [rifleFbx]);
   
   // Limbs for animation
   const leftArmPivot = useRef<THREE.Group>(null!);
