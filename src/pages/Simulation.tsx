@@ -17,6 +17,9 @@ import { missions } from '../utils/missionData';
 import { BACKEND_URL } from '../services/api';
 import { audio } from '../utils/audio';
 import CharacterModel from '../components/CharacterModel';
+import OrangeRobot from '../components/OrangeRobot';
+import AsianTemple from '../components/AsianTemple';
+import VintageComputer from '../components/VintageComputer';
 
 // --- Level Themes Config ---
 interface LevelConfig {
@@ -642,6 +645,11 @@ const Warehouse: React.FC = () => {
           <CharacterModel color="#1e3e62" type="player" isMoving={false} isFiring={false} scale={0.92} costume="Heavy Combat Suit" />
         </group>
       ))}
+
+      {/* Decorative Assets */}
+      <OrangeRobot position={[-25, 1, -10]} rotation={[0, 0.5, 0]} scale={1.5} />
+      <AsianTemple position={[25, 0, -10]} rotation={[0, -0.5, 0]} scale={0.8} />
+      <VintageComputer position={[0, 1.1, -10]} rotation={[0, Math.PI, 0]} scale={1.2} />
     </group>
   );
 };
