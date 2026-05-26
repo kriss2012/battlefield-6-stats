@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Cylinder } from '@react-three/drei';
-import * as THREE from 'three';
 
 const AsianTemple: React.FC<{ position?: [number, number, number], rotation?: [number, number, number], scale?: number }> = ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1 }) => {
   const redMat = <meshStandardMaterial color="#b91c1c" metalness={0.1} roughness={0.9} />;
