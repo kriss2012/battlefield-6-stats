@@ -27,7 +27,7 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
   const scannerRef = useRef<THREE.Group>(null!);
   
   // Load actual weapon FBX asset
-  const rifleFbx = useFBX('/models/sm_rifle.fbx');
+  const rifleFbx = useFBX('./models/sm_rifle.fbx');
   const clonedRifle = React.useMemo(() => rifleFbx.clone(), [rifleFbx]);
   
   // Limbs for animation
