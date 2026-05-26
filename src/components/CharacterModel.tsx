@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Box, Cylinder, Sphere } from '@react-three/drei';
+import { Box, Cylinder, Sphere, useFBX } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface CharacterModelProps {
@@ -25,6 +25,10 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
   const modelRef = useRef<THREE.Group>(null!);
   const chestCoreRef = useRef<THREE.Mesh>(null!);
   const scannerRef = useRef<THREE.Group>(null!);
+  
+  // Load actual weapon FBX asset
+  const rifleFbx = useFBX('/models/sm_rifle.fbx');
+  const clonedRifle = React.useMemo(() => rifleFbx.clone(), [rifleFbx]);
   
   // Limbs for animation
   const leftArmPivot = useRef<THREE.Group>(null!);
@@ -516,18 +520,10 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
                 <Cylinder args={[0.02, 0.02, 0.25, 8]} position={[-0.26, 0.02, 0]} rotation={[0, 0, Math.PI / 2]}><meshStandardMaterial color="#050505" metalness={0.6} /></Cylinder>
               </>
             ) : (
-              // Default Assault Rifle (Tactical with Holo Scope and suppressor)
-              <>
-                {/* Gun Body */}
-                <Box args={[0.66, 0.12, 0.06]} castShadow><meshStandardMaterial color="#1e293b" metalness={0.9} roughness={0.2} /></Box>
-                {/* Holographic Scope */}
-                <Box args={[0.14, 0.06, 0.04]} position={[0.08, 0.08, 0]}><meshStandardMaterial color="#0f172a" emissive={visorColor} emissiveIntensity={1} /></Box>
-                {/* Long Tactical Suppressed Barrel */}
-                <Cylinder args={[0.022, 0.022, 0.36, 10]} position={[-0.45, 0.01, 0]} rotation={[0, 0, Math.PI / 2]} castShadow><meshStandardMaterial color="#111827" metalness={1} /></Cylinder>
-                {/* Hand Grip & Mag */}
-                <Box args={[0.06, 0.18, 0.05]} position={[-0.04, -0.12, 0]} rotation={[0, 0, -0.28]}><meshStandardMaterial color="#0f172a" /></Box>
-                <Box args={[0.06, 0.12, 0.04]} position={[-0.22, -0.08, 0]}><meshStandardMaterial color="#111827" /></Box>
-              </>
+              // Use the imported sm_rifle.fbx model
+              <group position={[-0.2, 0.1, 0]} rotation={[0, Math.PI / 2, 0]} scale={0.01}>
+                <primitive object={clonedRifle} />
+              </group>
             )}
 
             {/* Firing Muzzle Flash */}
