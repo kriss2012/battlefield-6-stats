@@ -541,10 +541,8 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
                 <Cylinder args={[0.02, 0.02, 0.25, 8]} position={[-0.26, 0.02, 0]} rotation={[0, 0, Math.PI / 2]}><meshStandardMaterial color="#050505" metalness={0.6} /></Cylinder>
               </>
             ) : (
-              // Use the imported sm_rifle.fbx model
-              <group position={[-0.2, 0.1, 0]} rotation={[0, Math.PI / 2, 0]} scale={0.01}>
-                <primitive object={clonedRifle} />
-              </group>
+              // Use the sm_rifle.fbx model with Suspense fallback to procedural rifle
+              <WeaponMesh visorColor={visorColor} />
             )}
 
             {/* Firing Muzzle Flash */}
