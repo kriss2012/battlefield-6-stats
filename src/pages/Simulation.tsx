@@ -7,7 +7,8 @@ import {
   PerspectiveCamera,
   useKeyboardControls,
   KeyboardControls,
-  Plane
+  Plane,
+  Environment
 } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -413,14 +414,14 @@ const Guard: React.FC<{
     
     // Core detection vision cone
     let playerDetected = false;
-    if (dist < 18) {
+    if (dist < 40) {
       const guardToPlayer = playerPos.clone().sub(meshRef.current.position).normalize();
       const guardForward = new THREE.Vector3(0, 0, 1).applyQuaternion(meshRef.current.quaternion);
       const angle = guardForward.angleTo(guardToPlayer);
       
-      if (angle < Math.PI / 4.5) { // ~40 degree vision cone
-        detectionRef.current += delta * 2.2;
-        if (detectionRef.current >= 1.0) {
+      if (angle < Math.PI / 2) { // ~90 degree vision cone
+        detectionRef.current += delta * 3.0;
+        if (detectionRef.current >= 0.5) {
           playerDetected = true;
           onDetect();
         }
@@ -430,7 +431,7 @@ const Guard: React.FC<{
     }
 
     // Shoots back if alarm active or detected
-    if ((isAlarmActive || playerDetected) && dist < 22) {
+    if ((isAlarmActive || playerDetected) && dist < 40) {
       // Turn directly towards player
       meshRef.current.lookAt(playerPos.x, meshRef.current.position.y, playerPos.z);
       
@@ -866,7 +867,7 @@ const SimulationContent: React.FC = () => {
   // Gameplay variables
   const [, setScore] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
-  const [ammo, setAmmo] = useState(30);
+  const [ammo, setAmmo] = useState(999);
   const [health, setHealth] = useState(100);
   const [isDead, setIsDead] = useState(false);
   const [missionComplete, setMissionComplete] = useState(false);
@@ -944,7 +945,7 @@ const SimulationContent: React.FC = () => {
     setHealth(100);
     setIsDead(false);
     setScore(0);
-    setAmmo(30);
+    setAmmo(999);
     setIsAlarmActive(false);
     setMissionComplete(false);
     playerPosRef.current.set(0, 0, 5);
@@ -968,6 +969,8 @@ const SimulationContent: React.FC = () => {
   // Process player weapon firing (Newtonian Ballistics & Ejections)
   const handleShoot = () => {
     if (!isDead && isStarted && !missionComplete) {
+      if (ammo <= 0) return;
+      setAmmo(a => a - 1);
       setIsFiring(true);
       setTimeout(() => setIsFiring(false), 60);
       audio.playShootSound();
@@ -1150,7 +1153,7 @@ const SimulationContent: React.FC = () => {
           <fog attach="fog" args={[levelTheme.fogColor, 15, 60]} />
           
           <Sky sunPosition={[80, 25, 80]} />
-          <Stars radius={90} depth={45} count={4000} factor={3} saturation={0} fade speed={1.2} />
+          <Stars radius={90} depth={45} count={1000} factor={3} saturation={0} fade speed={1.2} />
 
           <Suspense fallback={null}>
             <ambientLight intensity={levelTheme.ambientIntensity} />
@@ -1234,7 +1237,7 @@ const SimulationContent: React.FC = () => {
             )}
 
             {/* Environmental Setup */}
-            {/* <Environment preset={levelTheme.ambientPreset} /> */}
+            <Environment preset={levelTheme.ambientPreset} />
             <Warehouse />
 
             {/* Pointer lock controls */}
@@ -1349,7 +1352,7 @@ const SimulationContent: React.FC = () => {
               <div className="flex flex-col gap-1">
                 <div className="text-[11px] text-cyan-400 font-bold uppercase tracking-widest flex items-center justify-between">
                   <span>SHIELD STATUS</span>
-                  <span className="text-cyan-600/50">100%</span>
+                  <span className="text-cyan-600/50">{health}%</span>
                 </div>
                 <div className="w-full h-2.5 bg-black/40 border border-cyan-500/20 overflow-hidden backdrop-blur-sm">
                   <div 
@@ -1372,6 +1375,10 @@ const SimulationContent: React.FC = () => {
             {/* Right HUD: Abilities Info */}
             <div className="absolute bottom-10 right-10 flex flex-col items-end gap-3 z-40 pointer-events-none">
               <div className="flex flex-col items-end gap-1 font-mono mb-2 bg-black/30 p-2 rounded-xl backdrop-blur-sm border border-white/5">
+                <div className="text-[10px] text-gray-400 tracking-widest uppercase flex justify-between w-40">
+                  <span>WEAPON AMMO</span>
+                  <span className="text-white font-bold">{ammo} / 999</span>
+                </div>
                 <div className="text-[10px] text-gray-400 tracking-widest uppercase flex justify-between w-40">
                   <span>SPECIAL ABILITY</span>
                   <span className="text-white font-bold">100%</span>
