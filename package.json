@@ -28,7 +28,8 @@
     },
     "files": [
       "dist/**/*",
-      "electron/**/*"
+      "electron/**/*",
+      "public/models/**/*"
     ]
   },
   "dependencies": {
