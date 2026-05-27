@@ -5,7 +5,7 @@ import * as THREE from 'three';
 
 // --- FBX Rifle sub-component (Suspense-safe) ---
 const FBXRifleInner: React.FC = () => {
-  const rifleFbx = useFBX('./models/sm_rifle.fbx');
+  const rifleFbx = useFBX('/models/sm_rifle.fbx');
   const cloned = React.useMemo(() => rifleFbx.clone(), [rifleFbx]);
   return <primitive object={cloned} />;
 };
