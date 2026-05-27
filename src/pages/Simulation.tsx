@@ -647,9 +647,9 @@ const Warehouse: React.FC = () => {
       ))}
 
       {/* Decorative Assets */}
-      <OrangeRobot position={[-25, 1, -10]} rotation={[0, 0.5, 0]} scale={1.5} />
+      <OrangeRobot position={[-25, 0.8, -10]} rotation={[0, 0.5, 0]} scale={1.5} />
       <AsianTemple position={[25, 0, -10]} rotation={[0, -0.5, 0]} scale={0.8} />
-      <VintageComputer position={[0, 1.1, -10]} rotation={[0, Math.PI, 0]} scale={1.2} />
+      <VintageComputer position={[0, 0, -10]} rotation={[0, Math.PI, 0]} scale={1.2} />
     </group>
   );
 };
@@ -721,8 +721,8 @@ const Player: React.FC<PlayerProps> = ({ cameraMode, playerPosRef, isMovingRef, 
   const groundY = 0.0;
 
   useFrame((state, delta) => {
-    // get jump key from mapping
-    const { forward, backward, left, right, jump } = getKeys() as any;
+    // get jump & sprint key from mapping
+    const { forward, backward, left, right, jump, sprint } = getKeys() as any;
     
     // Camera forward projected horizontally
     const camForward = new THREE.Vector3(0, 0, -1).applyQuaternion(state.camera.quaternion);
@@ -745,7 +745,8 @@ const Player: React.FC<PlayerProps> = ({ cameraMode, playerPosRef, isMovingRef, 
 
     if (isMoving) {
       direction.current.normalize();
-      velocity.current.addScaledVector(direction.current, delta * 30);
+      const speedMult = sprint ? 55 : 30; // Sprint multiplier
+      velocity.current.addScaledVector(direction.current, delta * speedMult);
     }
 
     // Velocity decay friction (X & Z)
@@ -1587,6 +1588,7 @@ const Simulation: React.FC = () => (
       { name: 'right', keys: ['ArrowRight', 'd', 'D'] },
       { name: 'toggleCamera', keys: ['v', 'V'] },
       { name: 'jump', keys: ['Space', ' '] },
+      { name: 'sprint', keys: ['ShiftLeft', 'ShiftRight'] },
     ]}
   >
     <SimulationContent />
