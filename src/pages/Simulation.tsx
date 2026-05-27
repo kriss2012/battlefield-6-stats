@@ -632,6 +632,16 @@ const Warehouse: React.FC = () => {
         <meshStandardMaterial color="#1e293b" roughness={0.8} metalness={0.4} />
       </mesh>
 
+      {/* Additional Tactical Obstacles */}
+      <mesh position={[-10, 1, 10]} castShadow receiveShadow rotation={[0, 0.3, 0]}>
+        <boxGeometry args={[3, 2, 2]} />
+        <meshStandardMaterial color="#334155" roughness={0.8} metalness={0.4} />
+      </mesh>
+      <mesh position={[12, 1.5, 5]} castShadow receiveShadow rotation={[0, -0.4, 0]}>
+        <boxGeometry args={[2, 3, 2.5]} />
+        <meshStandardMaterial color="#475569" roughness={0.8} metalness={0.4} />
+      </mesh>
+
       {/* Background Troopers Standing at Attention (Squads) */}
       {/* Left Row */}
       {[-32, -37, -42].map((z, idx) => (
@@ -708,11 +718,12 @@ interface PlayerProps {
   cameraMode: 'first-person' | 'third-person';
   playerPosRef: React.MutableRefObject<THREE.Vector3>;
   isMovingRef: React.MutableRefObject<boolean>;
+  isSprintingRef: React.MutableRefObject<boolean>;
   shakeRef: React.MutableRefObject<number>;
   touchMovementRef: React.MutableRefObject<{ forward: boolean; backward: boolean; left: boolean; right: boolean }>;
 }
 
-const Player: React.FC<PlayerProps> = ({ cameraMode, playerPosRef, isMovingRef, shakeRef, touchMovementRef }) => {
+const Player: React.FC<PlayerProps> = ({ cameraMode, playerPosRef, isMovingRef, isSprintingRef, shakeRef, touchMovementRef }) => {
   const [, getKeys] = useKeyboardControls();
   const velocity = useRef(new THREE.Vector3());
   const direction = useRef(new THREE.Vector3());
@@ -742,6 +753,7 @@ const Player: React.FC<PlayerProps> = ({ cameraMode, playerPosRef, isMovingRef, 
 
     const isMoving = direction.current.lengthSq() > 0;
     isMovingRef.current = isMoving;
+    isSprintingRef.current = isMoving && sprint;
 
     if (isMoving) {
       direction.current.normalize();
@@ -808,11 +820,12 @@ interface PlayerModelMeshProps {
   cameraMode: 'first-person' | 'third-person';
   playerPosRef: React.MutableRefObject<THREE.Vector3>;
   isMovingRef: React.MutableRefObject<boolean>;
+  isSprintingRef: React.MutableRefObject<boolean>;
   isFiring: boolean;
   color: string;
 }
 
-const PlayerCharacterModelMesh: React.FC<PlayerModelMeshProps> = ({ cameraMode, playerPosRef, isMovingRef, isFiring, color }) => {
+const PlayerCharacterModelMesh: React.FC<PlayerModelMeshProps> = ({ cameraMode, playerPosRef, isMovingRef, isSprintingRef, isFiring, color }) => {
   const groupRef = useRef<THREE.Group>(null!);
   const lastPos = useRef(new THREE.Vector3());
   const tiltX = useRef(0);
@@ -860,7 +873,7 @@ const PlayerCharacterModelMesh: React.FC<PlayerModelMeshProps> = ({ cameraMode, 
 
   return (
     <group ref={groupRef}>
-      <CharacterModel color={color} type="player" isMoving={isMovingRef.current} isFiring={isFiring} scale={0.95} />
+      <CharacterModel color={color} type="player" isMoving={isMovingRef.current} isSprinting={isSprintingRef.current} isFiring={isFiring} scale={0.95} />
     </group>
   );
 };
@@ -905,6 +918,7 @@ const SimulationContent: React.FC = () => {
   // Refs for canvas-loop communications
   const playerPosRef = useRef(new THREE.Vector3(0, 0, 5));
   const isMovingRef = useRef(false);
+  const isSprintingRef = useRef(false);
   const shakeRef = useRef(0);
   const controlsRef = useRef<any>(null);
   
@@ -1228,6 +1242,7 @@ const SimulationContent: React.FC = () => {
               cameraMode={cameraMode} 
               playerPosRef={playerPosRef} 
               isMovingRef={isMovingRef} 
+              isSprintingRef={isSprintingRef}
               shakeRef={shakeRef}
               touchMovementRef={touchMovementRef}
             />
@@ -1236,6 +1251,7 @@ const SimulationContent: React.FC = () => {
               cameraMode={cameraMode} 
               playerPosRef={playerPosRef} 
               isMovingRef={isMovingRef}
+              isSprintingRef={isSprintingRef}
               isFiring={isFiring} 
               color="#3b82f6" 
             />
