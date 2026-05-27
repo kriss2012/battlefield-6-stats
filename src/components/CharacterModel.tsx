@@ -32,6 +32,7 @@ interface CharacterModelProps {
   color?: string;
   type?: 'player' | 'enemy' | 'boss';
   isMoving?: boolean;
+  isSprinting?: boolean;
   isFiring?: boolean;
   scale?: number;
   gender?: 'male' | 'female';
@@ -42,6 +43,7 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
   color = '#3b82f6',
   type = 'player',
   isMoving = false,
+  isSprinting = false,
   isFiring = false,
   scale = 1.0,
   gender = 'male',
@@ -140,32 +142,32 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
     }
 
     if (isMoving) {
-      const speed = 10;
-      const angle = 0.65;
+      const speed = isSprinting ? 18 : 10;
+      const angle = isSprinting ? 0.95 : 0.65;
       const swing = Math.sin(time * speed) * angle;
 
       if (leftLegPivot.current) leftLegPivot.current.rotation.x = swing;
       if (rightLegPivot.current) rightLegPivot.current.rotation.x = -swing;
 
-      if (leftArmPivot.current) leftArmPivot.current.rotation.x = -swing * 0.7;
+      if (leftArmPivot.current) leftArmPivot.current.rotation.x = -swing * (isSprinting ? 0.9 : 0.7);
       if (rightArmPivot.current) {
         if (isFiring) {
-          rightArmPivot.current.rotation.x = -Math.PI / 2.2 + Math.sin(time * 35) * 0.04;
+          rightArmPivot.current.rotation.x = -Math.PI / 2.2 + Math.sin(time * 35) * 0.08;
           rightArmPivot.current.rotation.y = -0.1;
         } else {
-          rightArmPivot.current.rotation.x = swing * 0.7;
-          rightArmPivot.current.rotation.y = 0;
+          rightArmPivot.current.rotation.x = swing * (isSprinting ? 0.9 : 0.7);
+          rightArmPivot.current.rotation.y = isSprinting ? 0.2 : 0;
         }
       }
 
       if (modelRef.current) {
-        modelRef.current.position.y = Math.abs(Math.sin(time * speed * 2)) * 0.08;
+        modelRef.current.position.y = Math.abs(Math.sin(time * speed * 2)) * (isSprinting ? 0.14 : 0.08);
         // Lean slightly forward when moving
-        modelRef.current.rotation.x = 0.08;
+        modelRef.current.rotation.x = isSprinting ? 0.18 : 0.08;
       }
       if (headGroup.current) {
         headGroup.current.rotation.y = Math.sin(time * speed) * 0.05;
-        headGroup.current.rotation.x = 0.03;
+        headGroup.current.rotation.x = isSprinting ? 0.08 : 0.03;
       }
     } else {
       const breathe = Math.sin(time * 2.2);
@@ -198,9 +200,11 @@ const CharacterModel: React.FC<CharacterModelProps> = ({
     }
 
     if (isFiring && rightArmPivot.current) {
-      rightArmPivot.current.position.z = -0.06;
+      rightArmPivot.current.position.z = -0.06 + (Math.random() * 0.05 - 0.025);
+      if (leftArmPivot.current) leftArmPivot.current.rotation.z = Math.random() * 0.03;
     } else if (rightArmPivot.current) {
       rightArmPivot.current.position.z = 0;
+      if (leftArmPivot.current) leftArmPivot.current.rotation.z = 0;
     }
   });
 
