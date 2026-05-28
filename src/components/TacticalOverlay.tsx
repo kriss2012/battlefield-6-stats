@@ -1,6 +1,7 @@
 /**
  * Working: This file provides core functionality and UI rendering for its specific module.
  * Use: Imported and utilized across the application as part of the game's system logic.
+ * #by Kiri Team
  */
 import React, { useEffect, useState, useCallback } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
