@@ -1,6 +1,8 @@
 /**
  * Working: This file provides core functionality and UI rendering for its specific module.
  * Use: Imported and utilized across the application as part of the game's system logic.
+ * File: Footer.tsx
+ * Date: 2026-05-28
  * #by Kiri Team
  */
 import { Link } from 'react-router-dom';
