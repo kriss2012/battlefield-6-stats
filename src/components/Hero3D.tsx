@@ -3,6 +3,8 @@
  * @description Provides 3D visual components (NeuralCore and Hero3D) used in the hero section of the application.
  * These components create an interactive, animated 3D visualization representing an AI/neural core.
  * @usage Used on the landing page or hero sections to provide a visually striking, futuristic 3D centerpiece.
+ * File: Hero3D.tsx
+ * Date: 2026-05-28
  * #by Kiri Team
  */
 
