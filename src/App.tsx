@@ -1,3 +1,7 @@
+/**
+ * Working: This file provides core functionality and UI rendering for its specific module.
+ * Use: Imported and utilized across the application as part of the game's system logic.
+ */
 import { HashRouter as BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import ProtectedRoute from './components/ProtectedRoute';
