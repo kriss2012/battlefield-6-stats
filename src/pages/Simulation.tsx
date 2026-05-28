@@ -1,3 +1,7 @@
+/**
+ * Working: This file provides core functionality and UI rendering for its specific module.
+ * Use: Imported and utilized across the application as part of the game's system logic.
+ */
 import React, { useState, useRef, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { 
