@@ -1,9 +1,29 @@
+/**
+ * @file Hero3D.tsx
+ * @description Provides 3D visual components (NeuralCore and Hero3D) used in the hero section of the application.
+ * These components create an interactive, animated 3D visualization representing an AI/neural core.
+ * @usage Used on the landing page or hero sections to provide a visually striking, futuristic 3D centerpiece.
+ */
+
 import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { MeshDistortMaterial, Sphere, MeshWobbleMaterial, TorusKnot } from '@react-three/drei';
 import ThreeScene from './ThreeScene';
 import * as THREE from 'three';
 
+/**
+ * NeuralCore Component
+ * 
+ * Working:
+ * 1. Uses refs to maintain direct access to the Three.js mesh objects.
+ * 2. `useFrame` hook from @react-three/fiber is used to apply continuous rotation animations to the meshes on every frame render.
+ * 3. Renders a complex group of 3D objects:
+ *    - An inner sphere with MeshDistortMaterial for a fluid, pulsing effect.
+ *    - A wireframe shell sphere for a technical, grid-like appearance.
+ *    - An outer TorusKnot with MeshWobbleMaterial for a complex, wobbling orbital ring.
+ *    - A dynamic particle system created by mapping over an array to render small emissive spheres in a spiral pattern.
+ * @usage Embedded within a Canvas (usually via ThreeScene) to render the animated 3D core.
+ */
 const NeuralCore: React.FC = () => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const outerRef = useRef<THREE.Mesh>(null!);
