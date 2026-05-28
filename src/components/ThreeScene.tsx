@@ -1,3 +1,10 @@
+/**
+ * @file ThreeScene.tsx
+ * @description Provides a reusable 3D canvas environment using @react-three/fiber and @react-three/drei.
+ * It handles the base rendering setup, camera, lighting, shadows, post-processing effects, and environment mapping.
+ * @usage Use this component as a wrapper for any 3D models or scenes to ensure consistent rendering quality and effects.
+ */
+
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, Environment, Float, ContactShadows } from '@react-three/drei';
@@ -5,14 +12,34 @@ import { EffectComposer, Bloom, Noise, Vignette, ChromaticAberration } from '@re
 import { BlendFunction } from 'postprocessing';
 import * as THREE from 'three';
 
+/**
+ * Props for the ThreeScene component.
+ */
 interface ThreeSceneProps {
+  /** The 3D elements (meshes, models, groups) to render inside the scene */
   children: React.ReactNode;
+  /** Whether the camera should automatically rotate around the scene */
   autoRotate?: boolean;
+  /** Whether the user can zoom in and out using the mouse wheel */
   enableZoom?: boolean;
+  /** The intensity of the ambient light in the scene */
   intensity?: number;
+  /** The HDRI environment preset for realistic reflections and lighting */
   environment?: 'city' | 'apartment' | 'lobby' | 'night' | 'studio' | 'sunset' | 'warehouse';
 }
 
+/**
+ * ThreeScene Component
+ * 
+ * Working:
+ * 1. Initializes a Three.js Canvas with shadows and high device pixel ratio.
+ * 2. Sets up a default PerspectiveCamera.
+ * 3. Uses Suspense to handle asynchronous loading of 3D assets and environments.
+ * 4. Configures lighting (ambient, spot, point) and realistic contact shadows.
+ * 5. Wraps the children in a Float component for a subtle floating animation.
+ * 6. Applies post-processing effects (Bloom, Noise, Vignette, Chromatic Aberration) for a cinematic look.
+ * 7. Adds OrbitControls for user interaction.
+ */
 const ThreeScene: React.FC<ThreeSceneProps> = ({ 
   children, 
   autoRotate = false, 
