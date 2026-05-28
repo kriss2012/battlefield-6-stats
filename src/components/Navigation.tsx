@@ -1,3 +1,7 @@
+/**
+ * Working: This file provides core functionality and UI rendering for its specific module.
+ * Use: Imported and utilized across the application as part of the game's system logic.
+ */
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
