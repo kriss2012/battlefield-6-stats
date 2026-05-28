@@ -95,6 +95,15 @@ const NeuralCore: React.FC = () => {
   );
 };
 
+/**
+ * Hero3D Component
+ * 
+ * Working:
+ * 1. Wraps the NeuralCore in the ThreeScene environment to render the 3D scene.
+ * 2. Adds decorative HTML overlays for the "HUD" (Heads Up Display) elements to give a futuristic UI vibe.
+ * 3. Incorporates CSS blur, transitions, and hover effects on the background to enhance visual depth.
+ * @usage Renders the complete 3D Hero section including the 3D core and UI overlays.
+ */
 const Hero3D: React.FC = () => {
   return (
     <div className="w-full h-[500px] lg:h-[600px] relative group pointer-events-auto">
