@@ -3,6 +3,7 @@
  * @description Provides a reusable 3D canvas environment using @react-three/fiber and @react-three/drei.
  * It handles the base rendering setup, camera, lighting, shadows, post-processing effects, and environment mapping.
  * @usage Use this component as a wrapper for any 3D models or scenes to ensure consistent rendering quality and effects.
+ * #by Kiri Team
  */
 
 import React, { Suspense } from 'react';
