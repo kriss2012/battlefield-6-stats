@@ -1,6 +1,7 @@
 /**
  * Working: This file provides core functionality and UI rendering for its specific module.
  * Use: Imported and utilized across the application as part of the game's system logic.
+ * #by Kiri Team
  */
 import { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
