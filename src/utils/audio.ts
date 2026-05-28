@@ -1,3 +1,7 @@
+/**
+ * Working: This file provides core functionality and UI rendering for its specific module.
+ * Use: Imported and utilized across the application as part of the game's system logic.
+ */
 class AudioEngine {
   private ctx: AudioContext | null = null;
   private initialized = false;
