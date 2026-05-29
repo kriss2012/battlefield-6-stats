@@ -3,7 +3,7 @@
  * Use: Imported and utilized across the application as part of the game's system logic.
  * File: api.ts
  * Date: 2026-05-28
- * #by Kiri Team
+ * #Made WIth Love TO The Kiri Family
  */
 // BF6 API Service Configuration
 
