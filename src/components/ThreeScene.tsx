@@ -5,7 +5,7 @@
  * @usage Use this component as a wrapper for any 3D models or scenes to ensure consistent rendering quality and effects.
  * File: ThreeScene.tsx
  * Date: 2026-05-28
- * #by Kiri Team
+ * #Made WIth Love TO The Kiri Family
  */
 
 import React, { Suspense } from 'react';
