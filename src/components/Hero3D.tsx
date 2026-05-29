@@ -5,7 +5,7 @@
  * @usage Used on the landing page or hero sections to provide a visually striking, futuristic 3D centerpiece.
  * File: Hero3D.tsx
  * Date: 2026-05-28
- * #by Kiri Team
+ * #Made WIth Love TO The Kiri Family
  */
 
 import React, { useRef } from 'react';
