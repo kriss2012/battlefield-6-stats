@@ -22,19 +22,17 @@ walkSync(srcDir, (filePath) => {
     const fileName = path.basename(filePath);
 
     const targetString = `* #Made WIth Love TO The Kiri Family\n */`;
-    const replacementString = `* File: ${fileName}\n * Date: ${currentDate}\n * #by Kiri Team\n */`;
+    const replacementString = `* File: ${fileName}\n * Date: ${currentDate}\n * #Made WIth Love TO The Kiri Family\n */`;
 
     if (content.includes(targetString) && !content.includes(`* File: ${fileName}`)) {
       let newContent = content.replace(targetString, replacementString);
       fs.writeFileSync(filePath, newContent, 'utf8');
       console.log(`Added file name and date to: ${filePath}`);
-    } else if (content.includes('* #by Kiri Team\r\n */') && !content.includes(`* File: ${fileName}`)) {
-      // Handle windows line endings if they exist
-      const targetStringWin = `* #by Kiri Team\r\n */`;
-      const replacementStringWin = `* File: ${fileName}\r\n * Date: ${currentDate}\r\n * #by Kiri Team\r\n */`;
-      let newContent = content.replace(targetStringWin, replacementStringWin);
+    } else if (content.includes('* #by Kiri Team\r\n */') || content.includes('* #by Kiri Team\n */')) {
+      // Handle replacing the incorrect "#by Kiri Team" with the correct one
+      let newContent = content.replace(/\* #by Kiri Team\r?\n \*\//g, `* #Made WIth Love TO The Kiri Family\n */`);
       fs.writeFileSync(filePath, newContent, 'utf8');
-      console.log(`Added file name and date to (Win CRLF): ${filePath}`);
+      console.log(`Updated comment to Made With Love in: ${filePath}`);
     }
   }
 });
