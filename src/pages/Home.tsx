@@ -3,7 +3,7 @@
  * Use: Imported and utilized across the application as part of the game's system logic.
  * File: Home.tsx
  * Date: 2026-05-28
- * #by Kiri Team
+ * #Made WIth Love TO The Kiri Family
  */
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
