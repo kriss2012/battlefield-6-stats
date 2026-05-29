@@ -20,8 +20,8 @@ walkSync(srcDir, (filePath) => {
   if (filePath.endsWith('.ts') || filePath.endsWith('.tsx') || filePath.endsWith('.js') || filePath.endsWith('.jsx')) {
     let content = fs.readFileSync(filePath, 'utf8');
     const fileName = path.basename(filePath);
-    
-    const targetString = `* #by Kiri Team\n */`;
+
+    const targetString = `* #Made WIth Love TO The Kiri Family\n */`;
     const replacementString = `* File: ${fileName}\n * Date: ${currentDate}\n * #by Kiri Team\n */`;
 
     if (content.includes(targetString) && !content.includes(`* File: ${fileName}`)) {
