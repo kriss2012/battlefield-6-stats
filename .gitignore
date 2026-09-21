@@ -36,3 +36,16 @@ release/spectre-division-game-0.0.0-x64.nsis.7z
 *.7z
 *.7z
 *.mp4
+
+# Standards & hygiene
+.env.*.local
+*.pem
+*.key
+node_modules/
+dist/
+build/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
