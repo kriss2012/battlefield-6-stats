@@ -43,7 +43,7 @@
     "framer-motion": "^12.36.0",
     "lucide-react": "^0.577.0",
     "postprocessing": "^6.38.3",
-    "react": "^19.1.1",
+    "react": "^19.3.0",
     "react-dom": "^19.1.1",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.9.5",
@@ -54,7 +54,7 @@
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@types/node": "^24.6.0",
-    "@types/react": "^19.2.14",
+    "@types/react": "^19.3.0",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
